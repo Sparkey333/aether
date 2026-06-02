@@ -1,0 +1,42 @@
+{
+  "name": "aether",
+  "version": "0.1.0",
+  "description": "Aether — a geomancy engine for reading the land and the heavens: leylines, sacred/ancient/anomalous sites, a procedurally-synthesized planetary grid, and an autonomous Loom that seeks new patterns against an honest chance baseline. Ships as a Mac/iOS app.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "heartbeat:run": "node ./scripts/heartbeat.mjs",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:ios:init": "tauri ios init",
+    "tauri:ios:dev": "tauri ios dev"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "@deck.gl/core": "^9.0.27",
+    "@deck.gl/layers": "^9.0.27",
+    "@deck.gl/mapbox": "^9.0.27",
+    "better-sqlite3": "^11.5.0",
+    "gray-matter": "^4.0.3",
+    "maplibre-gl": "^4.7.1",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/geojson": "^7946.0.14",
+    "@types/node": "^22.9.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.15.0",
+    "eslint-config-next": "^15.1.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "_doc": "Seed leylines. Named traditional leys are C-traditional with authored polylines (no canonical dataset exists — see SOURCE_ATLAS gaps). Detected lines are written by the Loom, not stored here.",
+  "leylines": [
+    {
+      "id": "st-michael-mary",
+      "name": "St Michael & Mary Line",
+      "tier": "C-traditional",
+      "anchors": ["glastonbury-tor", "avebury"],
+      "path": [
+        [-5.7166, 50.0686],
+        [-2.6989, 51.1441],
+        [-1.8541, 51.4286],
+        [0.7, 52.05],
+        [1.75, 52.48]
+      ],
+      "note": "The classic SW→NE alignment through Glastonbury Tor and Avebury, after Michell/Miller/Broadhurst. Polyline is an authored interpretation; the dowsed 'currents' are unmeasurable."
+    }
+  ]
+}
