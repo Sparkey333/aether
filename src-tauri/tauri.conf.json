@@ -1,0 +1,53 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Aether",
+  "version": "0.1.0",
+  "identifier": "com.darkhearts.aether",
+  "build": {
+    "frontendDist": "../out",
+    "devUrl": "http://localhost:3000",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build:native"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Aether",
+        "label": "main",
+        "width": 1360,
+        "height": 880,
+        "minWidth": 920,
+        "minHeight": 660,
+        "resizable": true,
+        "fullscreen": false,
+        "transparent": false,
+        "decorations": true,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "backgroundColor": "#07080d"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' tauri: data: blob:; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' blob:; connect-src 'self' https: data: blob:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "category": "Education",
+    "copyright": "© 2026 DarkHearts",
+    "shortDescription": "Read the land and the heavens.",
+    "longDescription": "Aether is a geomancy engine — a local-first map of Earth's sacred, ancient, and anomalous places, a synthesized planetary grid, and an autonomous Loom that seeks alignments and nexus points while judging every one against chance. Every layer is kept; every layer is labeled by provenance. Toward Tesla's vision of global resonance.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "11.0"
+    }
+  }
+}

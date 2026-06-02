@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import poiData from "@/data/poi.seed.json";
 import leylineData from "@/data/leylines.seed.json";
 import { planetaryGrid } from "@/lib/engine";
+import { loadHypotheses } from "@/lib/loom";
 import { TIER_ORDER } from "@/lib/tiers";
 import type { Hypothesis, Leyline, POI, Tier } from "@/lib/types";
 import LayerPanel from "./LayerPanel";
@@ -43,6 +44,12 @@ export default function AtlasShell() {
   const [hyp, setHyp] = useState<HypFile | null>(null);
 
   useEffect(() => {
+    // Prefer the latest in-app pulse; fall back to the CLI-written file.
+    const local = loadHypotheses();
+    if (local) {
+      setHyp(local);
+      return;
+    }
     fetch("/data/hypotheses.json")
       .then((r) => r.json())
       .then(setHyp)

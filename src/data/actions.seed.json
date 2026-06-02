@@ -1,0 +1,65 @@
+{
+  "_doc": "Aether's Admin action board. The Dashboard renders these as interactive cards. kind: 'route' (in-app nav) | 'pulse' (run the Loom) | 'scroll' (jump to a section) | 'link' (external) | 'none'. Checked state persists in localStorage.",
+  "doNext": [
+    {
+      "id": "walk-atlas",
+      "title": "Walk the Atlas",
+      "detail": "Open the live map — click sites, toggle layers and provenance tiers.",
+      "kind": "route",
+      "target": "/atlas",
+      "cta": "Open Atlas"
+    },
+    {
+      "id": "pulse-loom",
+      "title": "Pulse the Loom",
+      "detail": "Run a heartbeat right here — every line judged against chance. No terminal.",
+      "kind": "pulse",
+      "cta": "Pulse now"
+    },
+    {
+      "id": "add-key",
+      "title": "Add your Anthropic key (optional)",
+      "detail": "Lets the Loom narrate findings with Claude. Stored locally on this device, never shipped in the app.",
+      "kind": "scroll",
+      "target": "settings",
+      "cta": "Open settings"
+    },
+    {
+      "id": "choose-organ",
+      "title": "Choose the next organ to build",
+      "detail": "Deepen the Atlas (real ingest + USGS substrate), open the Heavens (ephemeris + Star-of-Bethlehem), or begin the Aegis (counter-sigils). Tell Aetherius which.",
+      "kind": "none"
+    }
+  ],
+  "roadmap": [
+    {
+      "phase": "Phase 1 · deepen the Atlas",
+      "items": [
+        "De-cluster the alignment detector (collapse near-duplicate sites)",
+        "Ingest Pleiades + Wikidata + OSM + NRHP into a deduped Codex",
+        "USGS magnetic-anomaly / aquifer / fault overlays (the measured substrate)",
+        "Hand-draw & save your own leylines"
+      ]
+    },
+    {
+      "phase": "Phase 2 · the Heavens",
+      "items": ["3D globe + ephemeris (JPL/Skyfield)", "Star-of-Bethlehem mode (7–5 BC sky)"]
+    },
+    {
+      "phase": "Phase 5 · the Aegis",
+      "items": ["Catalog ritual & apotropaic geometry", "Generative counter-sigil workshop"]
+    },
+    {
+      "phase": "Phase 6 · ship",
+      "items": ["Tauri Mac + iOS build to the App Store", "Scheduled Loom + Claude narration"]
+    }
+  ],
+  "foundation": [
+    { "label": "JPL Horizons — ephemeris", "url": "https://ssd-api.jpl.nasa.gov/doc/horizons.html", "tier": "A-measured" },
+    { "label": "Pleiades — ancient places", "url": "https://pleiades.stoa.org/", "tier": "B-scholarly" },
+    { "label": "USGS magnetic anomaly", "url": "https://mrdata.usgs.gov/magnetic/", "tier": "A-measured" },
+    { "label": "OpenScriptures Strong's", "url": "https://github.com/openscriptures/strongs", "tier": "A-measured" },
+    { "label": "Becker-Hagens grid", "url": "https://vortexmaps.com/hagens-grid-google.php", "tier": "C-traditional" },
+    { "label": "Tesla Museum archive", "url": "https://tesla-museum.org/en/home/", "tier": "A-measured" }
+  ]
+}

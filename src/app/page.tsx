@@ -1,5 +1,5 @@
-import AtlasShell from "@/components/AtlasShell";
+import Dashboard from "@/components/Dashboard";
 
 export default function Page() {
-  return <AtlasShell />;
+  return <Dashboard />;
 }

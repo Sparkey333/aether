@@ -22,8 +22,48 @@ html, body {
   overflow: hidden;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* top navigation bar */
+.topnav {
+  flex: 0 0 46px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  /* left pad clears macOS traffic lights with the overlay title bar */
+  padding: 0 18px 0 80px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-solid);
+  -webkit-app-region: drag;
+}
+.nav-brand {
+  font-family: "Iowan Old Style", Georgia, serif;
+  letter-spacing: 0.22em;
+  font-size: 13px;
+  color: var(--gold);
+}
+.nav-tabs { display: flex; gap: 6px; -webkit-app-region: no-drag; }
+.nav-tab {
+  font-size: 13px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.nav-tab:hover { background: rgba(255, 255, 255, 0.05); color: var(--ink); }
+.nav-tab.active { background: rgba(138, 125, 255, 0.16); color: var(--ink); }
+
+.content {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
 .app {
-  position: fixed;
+  position: absolute;
   inset: 0;
   display: grid;
   grid-template-columns: 280px 1fr 320px;
@@ -131,3 +171,118 @@ html, body {
 
 .empty { font-size: 12px; color: var(--ink-dim); line-height: 1.6; }
 .kbd { font-family: ui-monospace, monospace; background: rgba(255,255,255,0.07); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+
+/* ── Dashboard ─────────────────────────────────────────────── */
+.dashboard {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 26px 34px 60px;
+  max-width: 1080px;
+}
+.dash-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.btn {
+  font-size: 13px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent); }
+.btn:disabled { opacity: 0.55; cursor: default; }
+.btn.primary {
+  background: linear-gradient(120deg, rgba(138, 125, 255, 0.28), rgba(235, 190, 90, 0.22));
+  border-color: rgba(138, 125, 255, 0.5);
+  color: #fff;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.stat {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.stat-value { font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1.1; }
+.stat-label { font-size: 12px; color: var(--ink-dim); margin-top: 6px; }
+.stat-hint { font-size: 10px; color: var(--ink-dim); margin-top: 4px; opacity: 0.8; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.card {
+  display: flex;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+}
+.card.done { opacity: 0.55; }
+.card.done .card-title { text-decoration: line-through; }
+.card-check input { accent-color: var(--accent); margin-top: 2px; }
+.card-body { flex: 1; }
+.card-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.card-detail { font-size: 12.5px; color: var(--ink-dim); line-height: 1.5; }
+.card .btn { margin-top: 12px; }
+
+.roadmap { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 28px; }
+.phase-title { font-size: 12px; color: var(--gold); letter-spacing: 0.04em; margin-bottom: 8px; }
+.road-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.road-item input { accent-color: var(--accent); margin-top: 3px; }
+.road-item.done span { text-decoration: line-through; color: var(--ink-dim); }
+
+.settings-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+}
+.key-row { display: flex; gap: 10px; margin-top: 14px; }
+.key-row input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 9px 12px;
+  color: var(--ink);
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+}
+.key-row input:focus { outline: none; border-color: var(--accent); }
+
+.foundation { display: flex; flex-wrap: wrap; gap: 10px; }
+.found-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 13px;
+}
+.found-link:hover { border-color: var(--accent); }
+
+section { margin-bottom: 28px; }
