@@ -207,7 +207,7 @@ export interface AlignParams {
   minMembers: number; // points required to call it a line
   minSpanKm: number; // ignore trivially-short pairs
 }
-export const DEFAULT_ALIGN: AlignParams = { tolKm: 25, minMembers: 4, minSpanKm: 300 };
+export const DEFAULT_ALIGN: AlignParams = { tolKm: 12, minMembers: 5, minSpanKm: 400 };
 
 export interface Alignment {
   id: string;
@@ -222,30 +222,81 @@ export interface GeoPoint {
   position: LngLat;
 }
 
-/** Find straight (great-circle) alignments through a point field. */
+export const DECLUSTER_KM = 40;
+
+export interface Cluster {
+  /** id of the representative point (a real POI id) */
+  id: string;
+  /** cluster centroid */
+  position: LngLat;
+  /** every original id folded into this cluster */
+  memberIds: string[];
+}
+
+/**
+ * Collapse near-duplicate points (within `radiusKm`) into single representative
+ * nodes. Without this, tight clusters — the four Sedona vortexes, the DC cluster —
+ * are trivially collinear with everything and inflate the alignment count, the
+ * dense-field artifact the Source Atlas warns about. The Loom runs on the
+ * declustered set so a "line" means distinct places, not the same spot counted
+ * four times.
+ */
+export function declusterPoints(points: GeoPoint[], radiusKm = DECLUSTER_KM): Cluster[] {
+  const used = new Array(points.length).fill(false);
+  const clusters: Cluster[] = [];
+  for (let i = 0; i < points.length; i++) {
+    if (used[i]) continue;
+    used[i] = true;
+    const members = [points[i]];
+    for (let j = i + 1; j < points.length; j++) {
+      if (!used[j] && haversine(points[i].position, points[j].position) <= radiusKm) {
+        used[j] = true;
+        members.push(points[j]);
+      }
+    }
+    const lon = members.reduce((s, m) => s + m.position[0], 0) / members.length;
+    const lat = members.reduce((s, m) => s + m.position[1], 0) / members.length;
+    clusters.push({ id: points[i].id, position: [lon, lat], memberIds: members.map((m) => m.id) });
+  }
+  return clusters;
+}
+
+/**
+ * Find straight (great-circle) alignments through a point field.
+ *
+ * Vectorized: every point is converted once to a unit vector, then membership is
+ * a dot-product test against the plane normal of each candidate pair — far
+ * cheaper than recomputing bearings/haversines per check (the O(n³) loop runs
+ * thousands of times under the Monte-Carlo baseline, so this matters).
+ */
 export function findAlignments(points: GeoPoint[], pr: AlignParams = DEFAULT_ALIGN): Alignment[] {
+  const n = points.length;
+  const V = points.map((p) => toCart(p.position));
+  const tolAng = pr.tolKm / R; // angular cross-track tolerance
+  const minSpanAng = pr.minSpanKm / R;
   const out: Alignment[] = [];
   const seen = new Set<string>();
-  for (let i = 0; i < points.length; i++) {
-    for (let j = i + 1; j < points.length; j++) {
-      const a = points[i];
-      const b = points[j];
-      const span = haversine(a.position, b.position);
-      if (span < pr.minSpanKm) continue;
-      const members = [a.id, b.id];
-      for (let k = 0; k < points.length; k++) {
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const Vi = V[i];
+      const Vj = V[j];
+      const angAB = Math.acos(clamp(dot(Vi, Vj)));
+      if (angAB < minSpanAng) continue;
+      const nrm = norm(cross(Vi, Vj)); // great-circle plane normal
+      const members = [points[i].id, points[j].id];
+      for (let k = 0; k < n; k++) {
         if (k === i || k === j) continue;
-        const p = points[k];
-        if (crossTrack(p.position, a.position, b.position) <= pr.tolKm) {
-          const at = alongTrack(p.position, a.position, b.position);
-          if (at >= -pr.tolKm && at <= span + pr.tolKm) members.push(p.id);
-        }
+        const Vk = V[k];
+        if (Math.abs(Math.asin(clamp(dot(Vk, nrm)))) > tolAng) continue; // cross-track gate
+        const angAP = Math.acos(clamp(dot(Vi, Vk)));
+        const angBP = Math.acos(clamp(dot(Vj, Vk)));
+        if (angAP <= angAB + tolAng && angBP <= angAB + tolAng) members.push(points[k].id);
       }
       if (members.length >= pr.minMembers) {
         const key = [...members].sort().join("|");
         if (!seen.has(key)) {
           seen.add(key);
-          out.push({ id: `al_${out.length}`, aId: a.id, bId: b.id, memberIds: members, count: members.length });
+          out.push({ id: `al_${out.length}`, aId: points[i].id, bId: points[j].id, memberIds: members, count: members.length });
         }
       }
     }

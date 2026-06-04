@@ -5,6 +5,8 @@
 import {
   bboxOf,
   confidenceFromZ,
+  declusterPoints,
+  DECLUSTER_KM,
   findAlignments,
   haversine,
   monteCarloBaseline,
@@ -14,24 +16,36 @@ import {
 } from "./engine";
 import type { Hypothesis, POI } from "./types";
 
-const PARAMS: AlignParams = { tolKm: 50, minMembers: 3, minSpanKm: 500 };
+const PARAMS: AlignParams = { tolKm: 12, minMembers: 5, minSpanKm: 400 };
 const STORAGE_KEY = "aether.hypotheses.v1";
+// Alignment detection is O(n³); cap the working set so an in-app pulse stays snappy.
+// The map still shows every site — only the pattern hunt is capped (and we say so).
+const MAX_LOOM_NODES = 120;
+const TRIALS = 70;
 
 export interface PulseResult {
   generatedAt: string;
   engine: string;
   baseline: { mean: number; sd: number; trials: number };
   overallZ: number;
+  analyzed: number;
+  total: number;
   hypotheses: Hypothesis[];
 }
 
 /** One heartbeat: hunt alignments + nexus, judged against a chance baseline. */
 export function runPulse(pois: POI[]): PulseResult {
-  const posOf = new Map<string, [number, number]>(pois.map((p) => [p.id, [p.lon, p.lat]]));
-  const points: GeoPoint[] = pois.map((p) => ({ id: p.id, position: posOf.get(p.id)! }));
+  // Decluster first: tight clusters (Sedona vortexes, the DC cluster) collapse to
+  // one node so they don't inflate the alignment count. Then cap the working set
+  // (callers pass the curated seed first, so it is always analyzed).
+  const rawPoints: GeoPoint[] = pois.map((p) => ({ id: p.id, position: [p.lon, p.lat] }));
+  const clustersAll = declusterPoints(rawPoints, DECLUSTER_KM);
+  const clusters = clustersAll.slice(0, MAX_LOOM_NODES);
+  const posOf = new Map<string, [number, number]>(clusters.map((c) => [c.id, c.position]));
+  const points: GeoPoint[] = clusters.map((c) => ({ id: c.id, position: c.position }));
 
   const aligns = findAlignments(points, PARAMS);
-  const baseline = monteCarloBaseline(points.length, bboxOf(points), PARAMS, 200);
+  const baseline = monteCarloBaseline(points.length, bboxOf(points), PARAMS, TRIALS);
   const now = new Date().toISOString();
   const overallZ = zScore(aligns.length, baseline);
 
@@ -82,6 +96,8 @@ export function runPulse(pois: POI[]): PulseResult {
       trials: baseline.trials,
     },
     overallZ: +overallZ.toFixed(2),
+    analyzed: points.length,
+    total: pois.length,
     hypotheses: [...alignmentHyps, ...nexusHyps],
   };
 }

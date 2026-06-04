@@ -5,7 +5,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import type { Layer } from "@deck.gl/core";
-import { ScatterplotLayer, PathLayer } from "@deck.gl/layers";
+import { ScatterplotLayer, PathLayer, GeoJsonLayer } from "@deck.gl/layers";
 import { TIERS } from "@/lib/tiers";
 import type { Leyline, POI } from "@/lib/types";
 import type { PlanetaryGrid } from "@/lib/engine";
@@ -19,8 +19,7 @@ interface Props {
   onSelect: (p: POI) => void;
 }
 
-// No-key dark raster basemap (CARTO over OSM) — befits the Atlas, and keeps v1
-// free of tokens. Swap for vector/PMTiles later (see ROADMAP).
+// No-key dark raster basemap (CARTO over OSM).
 const BASEMAP = {
   version: 8,
   sources: {
@@ -38,10 +37,22 @@ const BASEMAP = {
   layers: [{ id: "carto", type: "raster", source: "carto" }],
 } as const;
 
+// Measured substrate (Tier A). Validated live endpoints; see docs/SOURCE_ATLAS.md.
+const MAGNETIC_TILES =
+  "https://mrdata.usgs.gov/mapcache/wmts/1.0.0/magnetic/default/GoogleMapsCompatible/{z}/{y}/{x}.png";
+const QUAKES_URL =
+  "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson";
+const FAULTS_URL =
+  "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&outFields=fault_name&f=geojson&resultRecordCount=2000";
+
+type QuakeFeature = { properties?: { mag?: number } };
+
 export default function AtlasMap({ pois, leylines, grid, show, onSelect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
+  const showRef = useRef(show);
+  showRef.current = show;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -55,6 +66,26 @@ export default function AtlasMap({ pois, leylines, grid, show, onSelect }: Props
     const overlay = new MapboxOverlay({ interleaved: false, layers: [] });
     map.addControl(overlay as unknown as maplibregl.IControl);
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+
+    // USGS magnetic-anomaly raster (tints the basemap; deck layers draw above it).
+    map.on("load", () => {
+      if (!map.getSource("usgs-magnetic")) {
+        map.addSource("usgs-magnetic", {
+          type: "raster",
+          tiles: [MAGNETIC_TILES],
+          tileSize: 256,
+          attribution: "USGS — North American magnetic anomaly",
+        });
+        map.addLayer({
+          id: "usgs-magnetic",
+          type: "raster",
+          source: "usgs-magnetic",
+          paint: { "raster-opacity": 0.55 },
+          layout: { visibility: showRef.current.magnetic ? "visible" : "none" },
+        });
+      }
+    });
+
     mapRef.current = map;
     overlayRef.current = overlay;
     return () => {
@@ -64,10 +95,46 @@ export default function AtlasMap({ pois, leylines, grid, show, onSelect }: Props
     };
   }, []);
 
+  // Toggle the magnetic raster.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.getLayer("usgs-magnetic")) return;
+    map.setLayoutProperty("usgs-magnetic", "visibility", show.magnetic ? "visible" : "none");
+  }, [show.magnetic]);
+
+  // Deck overlays.
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
     const layers: Layer[] = [];
+
+    if (show.faults) {
+      layers.push(
+        new GeoJsonLayer({
+          id: "faults",
+          data: FAULTS_URL,
+          stroked: true,
+          filled: false,
+          getLineColor: [120, 230, 160, 150],
+          getLineWidth: 1,
+          lineWidthUnits: "pixels",
+        }),
+      );
+    }
+
+    if (show.quakes) {
+      layers.push(
+        new GeoJsonLayer({
+          id: "quakes",
+          data: QUAKES_URL,
+          pointType: "circle",
+          stroked: false,
+          getPointRadius: (f: QuakeFeature) => Math.max(2, (f.properties?.mag ?? 1) * 1.4),
+          pointRadiusUnits: "pixels",
+          getFillColor: [80, 200, 255, 130],
+        }),
+      );
+    }
 
     if (show.grid) {
       const segs = grid.circles.flatMap((c) => c.segments.map((s) => ({ path: s })));
@@ -118,9 +185,9 @@ export default function AtlasMap({ pois, leylines, grid, show, onSelect }: Props
           pickable: true,
           getPosition: (d: POI) => [d.lon, d.lat],
           getFillColor: (d: POI) => [...TIERS[d.tier].rgb, 235] as [number, number, number, number],
-          getRadius: 6,
+          getRadius: 5,
           radiusUnits: "pixels",
-          radiusMinPixels: 4,
+          radiusMinPixels: 3,
           stroked: true,
           getLineColor: [8, 10, 18, 220],
           lineWidthUnits: "pixels",

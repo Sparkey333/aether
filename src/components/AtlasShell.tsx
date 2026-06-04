@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import poiData from "@/data/poi.seed.json";
+import ingestedData from "@/data/poi.ingested.json";
 import leylineData from "@/data/leylines.seed.json";
 import { planetaryGrid } from "@/lib/engine";
 import { loadHypotheses } from "@/lib/loom";
@@ -15,7 +16,12 @@ import LoomFeed from "./LoomFeed";
 // MapLibre touches `window`, so the Atlas is client-only.
 const AtlasMap = dynamic(() => import("./AtlasMap"), { ssr: false });
 
-const ALL_POIS = (poiData as unknown as { pois: POI[] }).pois;
+// Curated seed first (so the Loom's capped working set always includes it),
+// then the ingested Wikidata sites.
+const ALL_POIS: POI[] = [
+  ...(poiData as unknown as { pois: POI[] }).pois,
+  ...(ingestedData as unknown as { pois: POI[] }).pois,
+];
 const ALL_LEYS = (leylineData as unknown as { leylines: Leyline[] }).leylines;
 
 export interface LayerToggles {
@@ -23,6 +29,9 @@ export interface LayerToggles {
   leylines: boolean;
   grid: boolean;
   gridNodes: boolean;
+  magnetic: boolean;
+  faults: boolean;
+  quakes: boolean;
 }
 
 interface HypFile {
@@ -38,6 +47,9 @@ export default function AtlasShell() {
     leylines: true,
     grid: true,
     gridNodes: false,
+    magnetic: false,
+    faults: false,
+    quakes: false,
   });
   const [tiers, setTiers] = useState<Set<Tier>>(new Set(TIER_ORDER));
   const [selected, setSelected] = useState<POI | null>(null);

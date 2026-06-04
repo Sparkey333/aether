@@ -20,6 +20,12 @@ const LAYERS: [keyof LayerToggles, string][] = [
   ["gridNodes", "Grid nodes · 62"],
 ];
 
+const SUBSTRATE: [keyof LayerToggles, string][] = [
+  ["magnetic", "Magnetic anomaly · USGS"],
+  ["faults", "Fault lines · USGS"],
+  ["quakes", "Earthquakes · live · USGS"],
+];
+
 export default function LayerPanel({ show, setShow, tiers, toggleTier, poiCount, nodeCount }: Props) {
   return (
     <aside className="panel">
@@ -34,6 +40,19 @@ export default function LayerPanel({ show, setShow, tiers, toggleTier, poiCount,
             checked={show[key]}
             onChange={() => setShow((s) => ({ ...s, [key]: !s[key] }))}
           />
+          <span>{label}</span>
+        </label>
+      ))}
+
+      <div className="section-title">Substrate · measured (Tier A)</div>
+      {SUBSTRATE.map(([key, label]) => (
+        <label key={key} className="row">
+          <input
+            type="checkbox"
+            checked={show[key]}
+            onChange={() => setShow((s) => ({ ...s, [key]: !s[key] }))}
+          />
+          <span className="swatch" style={{ background: TIERS["A-measured"].hex }} />
           <span>{label}</span>
         </label>
       ))}

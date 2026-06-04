@@ -3,13 +3,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import poiData from "@/data/poi.seed.json";
+import ingestedData from "@/data/poi.ingested.json";
 import actionsData from "@/data/actions.seed.json";
 import { planetaryGrid } from "@/lib/engine";
 import { loadHypotheses, runPulse, saveHypotheses, type PulseResult } from "@/lib/loom";
 import { TIERS } from "@/lib/tiers";
 import type { POI, Tier } from "@/lib/types";
 
-const ALL_POIS = (poiData as unknown as { pois: POI[] }).pois;
+const ALL_POIS: POI[] = [
+  ...(poiData as unknown as { pois: POI[] }).pois,
+  ...(ingestedData as unknown as { pois: POI[] }).pois,
+];
 
 interface ActionItem {
   id: string;
@@ -118,7 +122,9 @@ export default function Dashboard() {
         <Stat
           label="Observed vs chance (z)"
           value={pulse ? pulse.overallZ.toFixed(1) : "—"}
-          hint={pulse ? `last pulse ${lastPulse}` : "run a pulse to populate"}
+          hint={
+            pulse ? `analyzed ${pulse.analyzed} of ${pulse.total} sites · ${lastPulse}` : "run a pulse to populate"
+          }
         />
       </div>
 

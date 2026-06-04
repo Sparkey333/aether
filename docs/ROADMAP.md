@@ -14,15 +14,20 @@ interpretive layers rest on top. Provenance first, always.
 
 ## Phase 1 — The Atlas, deepened
 
-- [ ] **De-cluster the detector.** Collapse near-duplicate points (the 4 Sedona
-      vortexes, the DC cluster) into single nodes before alignment scoring, so
-      tight clusters stop inflating line counts. *(known v1 artifact)*
-- [ ] **Real ingest.** Pull and merge Pleiades + Wikidata (SPARQL) + OSM
-      (Overpass `historic=*`/`place_of_worship`) + NRHP into a deduped SQLite
-      Codex with crosswalk IDs.
-- [ ] **Substrate overlays.** USGS magnetic-anomaly WMS, USGS faults + live
-      earthquake GeoJSON, NOAA WMM, principal aquifers — the measured (Tier A)
-      backbone "earth energy" claims get tested against.
+- [x] **De-cluster the detector.** Near-duplicate points collapse to one node
+      (≤40 km) before alignment scoring (`declusterPoints`). Done — also
+      vectorized the detector (~20× faster) and tightened params (≤12 km
+      corridor, ≥5 members).
+- [x] **Real ingest (Wikidata).** `scripts/ingest.mjs` pulls ~1,263 sites from
+      WDQS — archaeological/megalithic (Tier B) + sacred mountains/wells/
+      pilgrimage (Tier C). *Still to do:* Pleiades + OSM (Overpass) + NRHP, and a
+      density-matched null model for the Loom.
+- [x] **Substrate overlays (Tier A).** USGS magnetic-anomaly raster (WMTS),
+      live earthquake GeoJSON, and Quaternary fault lines — toggleable in the
+      Atlas. *Still to do:* NOAA WMM, principal aquifers.
+- [ ] **Loom coverage.** Spatial index / viewport-scoped pulse so the hunt
+      covers all ~430 declustered nodes, not a capped 120–140. Add a
+      density-preserving null so z reflects alignment, not clustering.
 - [ ] **Draw tools.** Let the priest draw and save leylines by hand; terrain
       horizon from a DEM (OpenTopography / USGS 3DEP).
 - [ ] **County/city zoom.** Vector tiles / PMTiles for fast parcel-scale reading.

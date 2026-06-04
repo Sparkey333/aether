@@ -55,6 +55,11 @@ export default function LoomFeed({ data, pois }: Props) {
       <div className="legend-note">
         Confidence rises only when a pattern beats what a random field of the same size would throw
         by chance. Honest lines, not wishful ones.
+        <br />
+        <br />
+        Caveat: the null model is <em>uniform-random</em>, so part of a high z reflects that real
+        sites cluster geographically, not pure alignment. A density-matched null is the next
+        refinement.
       </div>
     </aside>
   );

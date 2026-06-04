@@ -54,30 +54,44 @@ const alongTrack = (p, a, b) => {
   return Math.acos(clamp(Math.cos(d13) / Math.cos(dxt))) * R;
 };
 
-const PARAMS = { tolKm: 50, minMembers: 3, minSpanKm: 500 };
+const PARAMS = { tolKm: 12, minMembers: 5, minSpanKm: 400 };
 
+// Vectorized: unit vectors + dot-product gates (mirrors src/lib/engine.ts).
+const unit = ([lon, lat]) => {
+  const f = lat * D2R, l = lon * D2R, cf = Math.cos(f);
+  return [cf * Math.cos(l), cf * Math.sin(l), Math.sin(f)];
+};
 function findAlignments(points, pr = PARAMS) {
+  const n = points.length;
+  const V = points.map((p) => unit(p.position));
+  const tolAng = pr.tolKm / R;
+  const minSpanAng = pr.minSpanKm / R;
   const out = [];
   const seen = new Set();
-  for (let i = 0; i < points.length; i++) {
-    for (let j = i + 1; j < points.length; j++) {
-      const a = points[i], b = points[j];
-      const span = haversine(a.position, b.position);
-      if (span < pr.minSpanKm) continue;
-      const members = [a.id, b.id];
-      for (let k = 0; k < points.length; k++) {
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const Vi = V[i], Vj = V[j];
+      const angAB = Math.acos(clamp(Vi[0] * Vj[0] + Vi[1] * Vj[1] + Vi[2] * Vj[2]));
+      if (angAB < minSpanAng) continue;
+      let nx = Vi[1] * Vj[2] - Vi[2] * Vj[1];
+      let ny = Vi[2] * Vj[0] - Vi[0] * Vj[2];
+      let nz = Vi[0] * Vj[1] - Vi[1] * Vj[0];
+      const nm = Math.hypot(nx, ny, nz) || 1;
+      nx /= nm; ny /= nm; nz /= nm;
+      const members = [points[i].id, points[j].id];
+      for (let k = 0; k < n; k++) {
         if (k === i || k === j) continue;
-        const p = points[k];
-        if (crossTrack(p.position, a.position, b.position) <= pr.tolKm) {
-          const at = alongTrack(p.position, a.position, b.position);
-          if (at >= -pr.tolKm && at <= span + pr.tolKm) members.push(p.id);
-        }
+        const Vk = V[k];
+        if (Math.abs(Math.asin(clamp(Vk[0] * nx + Vk[1] * ny + Vk[2] * nz))) > tolAng) continue;
+        const angAP = Math.acos(clamp(Vi[0] * Vk[0] + Vi[1] * Vk[1] + Vi[2] * Vk[2]));
+        const angBP = Math.acos(clamp(Vj[0] * Vk[0] + Vj[1] * Vk[1] + Vj[2] * Vk[2]));
+        if (angAP <= angAB + tolAng && angBP <= angAB + tolAng) members.push(points[k].id);
       }
       if (members.length >= pr.minMembers) {
         const key = [...members].sort().join("|");
         if (!seen.has(key)) {
           seen.add(key);
-          out.push({ aId: a.id, bId: b.id, memberIds: members, count: members.length, span });
+          out.push({ aId: points[i].id, bId: points[j].id, memberIds: members, count: members.length, span: angAB * R });
         }
       }
     }
@@ -112,17 +126,52 @@ function monteCarloBaseline(n, bbox, pr = PARAMS, trials = 300) {
 const zScore = (obs, base) => (base.sd < 1e-9 ? (obs > base.mean ? 99 : 0) : (obs - base.mean) / base.sd);
 const confidenceFromZ = (z) => 1 / (1 + Math.exp(-(z - 1) * 0.9));
 
+const DECLUSTER_KM = 40;
+function declusterPoints(pts, radiusKm = DECLUSTER_KM) {
+  const used = new Array(pts.length).fill(false);
+  const clusters = [];
+  for (let i = 0; i < pts.length; i++) {
+    if (used[i]) continue;
+    used[i] = true;
+    const members = [pts[i]];
+    for (let j = i + 1; j < pts.length; j++) {
+      if (!used[j] && haversine(pts[i].position, pts[j].position) <= radiusKm) {
+        used[j] = true;
+        members.push(pts[j]);
+      }
+    }
+    const lon = members.reduce((s, m) => s + m.position[0], 0) / members.length;
+    const lat = members.reduce((s, m) => s + m.position[1], 0) / members.length;
+    clusters.push({ id: pts[i].id, position: [lon, lat], memberIds: members.map((m) => m.id) });
+  }
+  return clusters;
+}
+
 // ── pulse ────────────────────────────────────────────────────────────────────
 
+// Load the curated seed plus any ingested sites (poi.ingested.json), if present.
 const poiFile = JSON.parse(readFileSync(join(ROOT, "src/data/poi.seed.json"), "utf8"));
-const pois = poiFile.pois;
-const points = pois.map((p) => ({ id: p.id, position: [p.lon, p.lat] }));
+let pois = poiFile.pois;
+try {
+  const ingested = JSON.parse(readFileSync(join(ROOT, "src/data/poi.ingested.json"), "utf8"));
+  if (Array.isArray(ingested.pois)) pois = [...pois, ...ingested.pois];
+} catch {
+  /* no ingested file yet */
+}
 
-console.log(`☉ Loom pulse — ${points.length} sites in the Codex`);
+const MAX_LOOM_NODES = 140; // alignment detection is O(n³) — cap the working set
+const rawPoints = pois.map((p) => ({ id: p.id, position: [p.lon, p.lat] }));
+const clustersAll = declusterPoints(rawPoints);
+const clusters = clustersAll.slice(0, MAX_LOOM_NODES);
+const points = clusters.map((c) => ({ id: c.id, position: c.position }));
+
+console.log(
+  `☉ Loom pulse — ${pois.length} sites in the Codex; ${clustersAll.length} after declustering ≤${DECLUSTER_KM}km; analyzing ${points.length}${clustersAll.length > points.length ? ` (capped from ${clustersAll.length} for this pulse)` : ""}`,
+);
 
 const aligns = findAlignments(points);
 const box = bboxOf(points);
-const baseline = monteCarloBaseline(points.length, box);
+const baseline = monteCarloBaseline(points.length, box, PARAMS, 150);
 console.log(`  observed alignments: ${aligns.length}`);
 console.log(`  chance baseline: ${baseline.mean.toFixed(2)} ± ${baseline.sd.toFixed(2)} over ${baseline.trials} random fields`);
 

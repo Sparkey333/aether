@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "ingest": "node ./scripts/ingest.mjs",
     "heartbeat:run": "node ./scripts/heartbeat.mjs",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
