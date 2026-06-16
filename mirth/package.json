@@ -7,5 +7,8 @@
   "scripts": {
     "pulse": "node ./scripts/loom.mjs",
     "mirth:pulse": "node ./scripts/loom.mjs"
+  },
+  "optionalDependencies": {
+    "@anthropic-ai/sdk": "^0.69.0"
   }
 }

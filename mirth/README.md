@@ -18,6 +18,22 @@ npm run pulse        # one beat of the Mirth Loom — no install required
 Zero dependencies. It reads the seeds in `data/`, runs a pulse, and writes
 `out/set.json` — the sibling of Aether's `public/data/hypotheses.json`.
 
+### Optional: open the writers' room (real voice)
+
+The Loom writes joke-*shaped* objects on its own. To give the Foundling a real
+voice, plug in the LLM writers' room — same pipeline, same scoring, real wit:
+
+```bash
+npm install                 # adds the official @anthropic-ai/sdk (optional dep)
+cp .env.example .env        # then put your ANTHROPIC_API_KEY in it
+set -a; . ./.env; set +a    # export it
+npm run pulse               # now the room writes the bits (model: claude-opus-4-8)
+```
+
+Without the key or the install, the pulse still runs — it just narrates
+`writers' room: templates` and uses the zero-dep engine. The room only changes
+the **words**; the honest scoring and tiering are byte-for-byte identical.
+
 ## What a pulse does
 
 1. **Generate** — subjects × frames → raw premises (tier **D**).
@@ -48,16 +64,19 @@ only judge of the rest.
 - **Honest and real:** the pipeline, the era-fusion combinator, the
   Monte-Carlo surprise baseline, the tier promotion, the set sequencing, the
   kept shelf, the hard refusal to self-grade funny.
-- **Scaffold-grade on purpose:** the *wording* of the bits. Phase 1 is the
-  **engine**; the actual writing plugs in at `craftBit()` via an optional LLM
-  writers'-room layer (Aether already ships `@anthropic-ai/sdk`). See
-  `docs/MIRTH.md`, Phase 1.5 — the scoring and tiering stay identical.
+- **The voice is pluggable:** the *wording* comes either from the zero-dep
+  template engine (joke-shaped, deliberately rough) or, when you open the
+  writers' room (`scripts/writer.mjs`), from `claude-opus-4-8`. Either way the
+  Loom decides the tier from the *domains*, before any words exist — so the
+  writers' room can never talk a bit into a higher tier. It writes; the room
+  still judges.
 
 ## Map
 
 | Path | What lives there |
 |---|---|
 | `scripts/loom.mjs` | the Mirth Loom — generate · fuse · score · sequence · shelf |
+| `scripts/writer.mjs` | the writers' room — optional `@anthropic-ai/sdk` voice layer |
 | `data/techniques.seed.json` | the Technique Lexicon (ancient + modern moves) |
 | `data/premises.seed.json` | subjects, pivots, frames, the domain space |
 | `data/persona.seed.json` | the familiar's stage-0 form and move-pool |

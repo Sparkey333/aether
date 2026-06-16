@@ -200,17 +200,21 @@ engine that makes it good.
 
 ## Roadmap
 
-- **Phase 0 — Canon + model.** This doc, `content/canon/mirth.md`, and the `Bit`
-  / `Persona` / `Technique` types. *(design laid; types next)*
-- **Phase 1 — The Mirth Loom.** Generate → style → combine → set-build, all
-  text, writing `set.json` the way the heartbeat writes `hypotheses.json`.
+- **Phase 0 — Canon + model.** ✅ This doc, `content/canon/mirth.md`, and the
+  `Bit` / `Persona` / `Technique` types in `mirth/src/types.ts`.
+- **Phase 1 — The Mirth Loom.** ✅ `mirth/scripts/loom.mjs` — generate → style →
+  combine → score → set-build → shelf, zero-dep, writing `out/set.json` the way
+  the heartbeat writes `hypotheses.json`.
+- **Phase 1.5 — The writers' room (one voice).** ✅ `mirth/scripts/writer.mjs` —
+  optional `@anthropic-ai/sdk` layer (`claude-opus-4-8`) that writes the words
+  while the Loom keeps the scoring. Falls back to templates with no key/SDK.
 - **Phase 2 — The honest baseline.** Real audience input, laugh `z`,
-  promote-to-A. The moat.
+  promote-to-A. The moat — and the first time a bit can reach A.
 - **Phase 3 — Evolution + auto-canon.** Thresholds, stage forms, episodes-as-lore.
 - **Phase 4 — Live.** Streaming + TTS + barge-in; the companion window.
 - **Phase 5 — Content engine.** Segmenter, clip export, show notes → publish.
-- **Phase 6 — The writers' room.** Multiple familiars riffing — skits, roasts,
-  the multi-persona stage.
+- **Phase 6 — The ensemble.** Multiple familiars riffing off one another —
+  skits, roasts, the multi-persona stage.
 
 ## Standing vows (parallel to the geomancy vows)
 

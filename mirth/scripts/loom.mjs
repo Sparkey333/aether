@@ -25,6 +25,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { makeWriter } from "./writer.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -105,46 +106,57 @@ function deliveryWrap(modernId, setup, turn, s) {
   }
 }
 
-// ── craft one bit ────────────────────────────────────────────────────────────
-// SEAM: to plug in the LLM writers' room later, swap the template calls below
-// for a model call that returns { premise, angle, text } given the same
-// (subject, pivot, ancient, modern). The scoring + tiering stays identical.
-function craftBit(i, now) {
+// ── craft one bit, in three honest steps ─────────────────────────────────────
+// 1. specFor: the deterministic choice + the SCORING. The tier is decided here,
+//    from the domains alone — it does NOT depend on who writes the words.
+// 2. words: either the writers' room (writer.mjs) or the template engine.
+// 3. assemble: glue the spec's evidence to the words. A is never assignable.
+
+function specFor(i, now) {
   const subject = pick(seed.subjects);
   const frame = pick(seed.frames);
   const pivot = searchPivot(subject.domain);
   const ancient = pick(have("ancient"));
   const modern = pick(have("modern"));
-
   const setup = frame.template.replaceAll("{subject}", subject.word).replaceAll("{Subject}", cap(subject.word));
-  const turn = structureTurn(ancient, subject.word, pivot.word);
-  const text = deliveryWrap(modern, setup, turn, subject.word);
 
   const observed = incong(subject.domain, pivot.domain);
   const base = baselineFor(subject.domain);
   const z = zScore(observed, base);
   const tier = z >= PARAMS.zPromote ? "B-crafted" : "C-styled";
 
+  return { i, now, subject, frame, pivot, ancient, modern, setup, observed, base, z, tier };
+}
+
+// the zero-dep voice: ancient shapes the turn, modern shapes the delivery.
+function renderTemplate(spec) {
+  const turn = structureTurn(spec.ancient, spec.subject.word, spec.pivot.word);
+  const text = deliveryWrap(spec.modern, spec.setup, turn, spec.subject.word);
+  return { premise: spec.setup, angle: turn, text };
+}
+
+function assemble(spec, words) {
+  const w = words || renderTemplate(spec);
   return {
-    id: `bit_${now}_${i}`,
-    createdAt: now,
-    subject: subject.word,
-    subjectDomain: subject.domain,
-    pivot: pivot.word,
-    pivotDomain: pivot.domain,
-    frame: frame.id,
-    technique: [ancient, modern],
-    lineage: `${byId[ancient].name} × ${byId[modern].name} (technique-fusion; disclosed, not impersonation)`,
-    premise: setup,
-    angle: turn,
-    text,
-    tier, // never "A-killed" — see below
+    id: `bit_${spec.now}_${spec.i}`,
+    createdAt: spec.now,
+    subject: spec.subject.word,
+    subjectDomain: spec.subject.domain,
+    pivot: spec.pivot.word,
+    pivotDomain: spec.pivot.domain,
+    frame: spec.frame.id,
+    technique: [spec.ancient, spec.modern],
+    lineage: `${byId[spec.ancient].name} × ${byId[spec.modern].name} (technique-fusion; disclosed, not impersonation)`,
+    premise: w.premise,
+    angle: w.angle,
+    text: w.text,
+    tier: spec.tier, // never "A-killed" — only a real room promotes a bit to A
     performances: [],
-    observed: +observed.toFixed(3),
-    expected: base.mean,
-    sd: base.sd,
-    z: +z.toFixed(2),
-    confidence: +confidenceFromZ(z).toFixed(3),
+    observed: +spec.observed.toFixed(3),
+    expected: spec.base.mean,
+    sd: spec.base.sd,
+    z: +spec.z.toFixed(2),
+    confidence: +confidenceFromZ(spec.z).toFixed(3),
   };
 }
 
@@ -179,7 +191,15 @@ console.log(`🎭 Mirth pulse — persona "${persona.name}" (Lv.${persona.level}
 console.log(`  ancient moves: ${have("ancient").join(", ")}`);
 console.log(`  modern  moves: ${have("modern").join(", ")}`);
 
-const bits = Array.from({ length: PARAMS.pulseSize }, (_, i) => craftBit(i, now));
+const writer = await makeWriter(persona);
+const writerLabel = writer
+  ? `LIVE (${process.env.MIRTH_MODEL || "claude-opus-4-8"})`
+  : "templates (set ANTHROPIC_API_KEY + npm install to open the writers' room)";
+console.log(`  writers' room: ${writerLabel}`);
+
+const specs = Array.from({ length: PARAMS.pulseSize }, (_, i) => specFor(i, now));
+const words = writer ? await writer(specs, lexicon) : null;
+const bits = specs.map((s, i) => assemble(s, words && words[i] ? words[i] : null));
 const crafted = bits.filter((b) => b.tier === "B-crafted");
 const shelf = bits.filter((b) => b.tier !== "B-crafted");
 const { ordered: set, callbacks } = buildSet(crafted);
@@ -201,8 +221,9 @@ if (set.length) {
 
 const out = {
   generatedAt: now,
-  engine: "mirth-loom v0.1",
-  note: "Each bit is scored on STRUCTURAL SURPRISE against a Monte-Carlo baseline of random pivots — necessary, not sufficient, for funny. The Loom can reach B-crafted; it can never assign A-killed. Only a real room does that.",
+  engine: "mirth-loom v0.2",
+  voice: writer ? (process.env.MIRTH_MODEL || "claude-opus-4-8") : "templates",
+  note: "Each bit is scored on STRUCTURAL SURPRISE against a Monte-Carlo baseline of random pivots — necessary, not sufficient, for funny. The Loom can reach B-crafted; it can never assign A-killed. Only a real room does that. The writers' room only changes the words; the scoring is identical.",
   params: PARAMS,
   persona: { id: persona.id, name: persona.name, form: persona.form, level: persona.level, movePoolSize: persona.movePool.length },
   baseline: { meanAvg: avgBaseMean, sdAvg: avgBaseSd, trials: PARAMS.trials },
