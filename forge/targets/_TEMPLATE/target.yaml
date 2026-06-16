@@ -1,0 +1,13 @@
+# Forge study target (overwritten by new-target.sh when scaffolded from a URL)
+name: _TEMPLATE
+url: ""
+tier: medium          # spark | small | medium | large | massive | niche-engineering
+created: ""
+status: recon         # recon | plan | build | verify | eval | promoted | shelved
+provider: claude-code
+score:
+  fidelity:           # 0–100 — how faithfully did the clone reproduce the target?
+  speed:              # 0–100 — how fast, relative to effort budget?
+  effort:             # 0–100 — how little hand-holding did it need? (higher = less)
+notes: |
+  One-line aim: what are you trying to learn or reproduce from this project?

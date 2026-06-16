@@ -1,0 +1,12 @@
+# --- cloned repos: big, and they carry their own .git — never commit them ---
+clones/*
+!clones/.gitkeep
+!clones/README.md
+
+# --- local generational backups (the accidental-overwrite safety net) ---
+# The canonical files already live in git; this vault is a belt-and-suspenders
+# local net that may hold sensitive/personal data, so it stays OUT of version
+# control. Restore from it with `forge restore <file>`.
+backups/*
+!backups/.gitkeep
+!backups/README.md

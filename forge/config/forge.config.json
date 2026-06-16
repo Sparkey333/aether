@@ -1,0 +1,28 @@
+{
+  "$schema": "./forge.config.schema (informal)",
+  "name": "The Forge",
+  "purpose": "A cloning lab + masterclass for setting Claude Code (and alt AI providers) on their way, training your own files/preferences, and cloning software from medium to massive.",
+  "backup": {
+    "vault": "backups",
+    "//levels": "Minimum generations kept per sensitive file. Spec asked for >= 3. Higher is safer; older generations beyond this are pruned.",
+    "levels": 5,
+    "//sensitive_globs_file": "Line-based glob list (relative to forge root) of files treated as sensitive/personalized/time-valuable.",
+    "sensitive_globs_file": "config/sensitive.globs",
+    "//snapshot_on_change_only": "Skip a snapshot when content is byte-identical to the newest one (avoids churn).",
+    "snapshot_on_change_only": true
+  },
+  "cloning": {
+    "//ladder": "The scale ladder the Forge trains you up. See doctrine/CLONING_LADDER.md.",
+    "ladder": ["spark", "small", "medium", "large", "massive", "niche-engineering"],
+    "clones_dir": "clones",
+    "targets_dir": "targets"
+  },
+  "experiments": {
+    "dir": "experiments"
+  },
+  "providers": {
+    "//note": "The technique is provider-agnostic; primary is Claude Code. See doctrine/PROVIDERS.md.",
+    "primary": "claude-code",
+    "alternates": ["cursor", "aider", "codex-cli", "gemini-cli", "continue"]
+  }
+}

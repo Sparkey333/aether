@@ -1,0 +1,8 @@
+# Forge experiment (overwritten by new-experiment.sh) — one change, one measurement.
+slug: _TEMPLATE
+created: ""
+changed: ""          # which preset/prompt/setting did you touch? (path)
+provider: claude-code
+target: ""           # which target(s) did you test against?
+baseline: ""         # the experiment/run this is compared to (or "cold start")
+verdict:             # keep | revert | inconclusive

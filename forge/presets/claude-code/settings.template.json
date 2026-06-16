@@ -1,0 +1,32 @@
+{
+  "$comment": "Forge preset settings for Claude Code. Copy into your project .claude/settings.json (merge with what's there). The PreToolUse hook snapshots any sensitive file before Write/Edit can overwrite it. Tighten/loosen the permission allowlist per rung.",
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run build:*)",
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(rm:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/forge/presets/claude-code/hooks/pre-write-backup.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

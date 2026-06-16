@@ -1,0 +1,37 @@
+# Sensitive / personalized / time-valuable files — the Forge backs these up
+# at least N generations deep (config/forge.config.json -> backup.levels, default 5).
+#
+# One glob per line, relative to the forge root (the dir containing this config/).
+# Lines starting with '#' and blank lines are ignored.
+# Globs use shell globbing: '*' within a path segment, '**' for any depth.
+#
+# Rule of thumb: if losing it to an accidental overwrite would cost you real
+# time, irreplaceable thought, or something personal — list it here.
+
+# --- your own trained files & preferences (the heart of it) ---
+profiles/**
+
+# --- the knobs that define how the Forge behaves ---
+config/**
+
+# --- your reusable Claude Code / provider setups ---
+presets/**
+
+# --- the method & doctrine you refine over time ---
+doctrine/**
+
+# --- per-target intelligence you accumulate (recon, plans, evals, logs) ---
+targets/**/RECON.md
+targets/**/PLAN.md
+targets/**/EVAL.md
+targets/**/LOG.md
+targets/**/target.yaml
+
+# --- experiment records (hypotheses + results you don't want to lose) ---
+experiments/**/HYPOTHESIS.md
+experiments/**/RESULT.md
+experiments/**/run.yaml
+
+# Add your own below, e.g.:
+# secrets/**
+# notes/**
