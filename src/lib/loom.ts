@@ -3,13 +3,13 @@
 // Dashboard and the Atlas's Loom feed both read the latest pulse.
 
 import {
-  bboxOf,
   confidenceFromZ,
   declusterPoints,
   DECLUSTER_KM,
+  densityMatchedBaseline,
   findAlignments,
   haversine,
-  monteCarloBaseline,
+  zAgainst,
   zScore,
   type AlignParams,
   type GeoPoint,
@@ -20,8 +20,9 @@ const PARAMS: AlignParams = { tolKm: 12, minMembers: 5, minSpanKm: 400 };
 const STORAGE_KEY = "aether.hypotheses.v1";
 // Alignment detection is O(n³); cap the working set so an in-app pulse stays snappy.
 // The map still shows every site — only the pattern hunt is capped (and we say so).
-const MAX_LOOM_NODES = 120;
-const TRIALS = 70;
+// The CLI heartbeat (scripts/heartbeat.mjs) runs the full, uncapped pulse.
+const MAX_LOOM_NODES = 160;
+const TRIALS = 30;
 
 export interface PulseResult {
   generatedAt: string;
@@ -45,13 +46,16 @@ export function runPulse(pois: POI[]): PulseResult {
   const points: GeoPoint[] = clusters.map((c) => ({ id: c.id, position: c.position }));
 
   const aligns = findAlignments(points, PARAMS);
-  const baseline = monteCarloBaseline(points.length, bboxOf(points), PARAMS, TRIALS);
+  // The honest null: a random field with the SAME clustering as the real sites,
+  // so z reflects alignment, not the fact that sacred places clump together.
+  const baseline = densityMatchedBaseline(points, PARAMS, TRIALS);
   const now = new Date().toISOString();
   const overallZ = zScore(aligns.length, baseline);
 
   const alignmentHyps: Hypothesis[] = aligns.slice(0, 12).map((a, i) => {
     const span = haversine(posOf.get(a.aId)!, posOf.get(a.bId)!);
-    const lineZ = zScore(a.count >= 4 ? aligns.length + 2 : aligns.length, baseline);
+    // Does this line have more members than the *longest* line the null throws?
+    const lineZ = zAgainst(a.count, baseline.maxMean ?? 0, baseline.maxSd ?? 0);
     return {
       id: `al_${now}_${i}`,
       kind: "alignment",
@@ -59,9 +63,9 @@ export function runPulse(pois: POI[]): PulseResult {
       memberIds: a.memberIds,
       tier: "C-traditional",
       confidence: +confidenceFromZ(lineZ).toFixed(3),
-      observed: aligns.length,
-      expected: +baseline.mean.toFixed(2),
-      sd: +baseline.sd.toFixed(2),
+      observed: a.count,
+      expected: +(baseline.maxMean ?? 0).toFixed(2),
+      sd: +(baseline.maxSd ?? 0).toFixed(2),
       z: +lineZ.toFixed(2),
       note: `${a.count}-point alignment spanning ${Math.round(span)} km.`,
     };
@@ -73,23 +77,27 @@ export function runPulse(pois: POI[]): PulseResult {
     .filter(([, c]) => c >= 2)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 6)
-    .map(([id, c], i) => ({
-      id: `nx_${now}_${i}`,
-      kind: "nexus",
-      createdAt: now,
-      memberIds: [id],
-      tier: "C-traditional",
-      confidence: +confidenceFromZ(c - 1).toFixed(3),
-      observed: c,
-      expected: 1,
-      sd: 1,
-      z: +(c - 1).toFixed(2),
-      note: `${pois.find((p) => p.id === id)?.name ?? id} sits on ${c} alignment lines — a candidate nexus.`,
-    }));
+    .map(([id, c], i) => {
+      // A busy node only counts if it beats the busiest node of the clustered null.
+      const nz = zAgainst(c, baseline.nodeMaxMean ?? 0, baseline.nodeMaxSd ?? 0);
+      return {
+        id: `nx_${now}_${i}`,
+        kind: "nexus",
+        createdAt: now,
+        memberIds: [id],
+        tier: "C-traditional",
+        confidence: +confidenceFromZ(nz).toFixed(3),
+        observed: c,
+        expected: +(baseline.nodeMaxMean ?? 0).toFixed(1),
+        sd: +(baseline.nodeMaxSd ?? 0).toFixed(1),
+        z: +nz.toFixed(2),
+        note: `${pois.find((p) => p.id === id)?.name ?? id} sits on ${c} alignment lines (chance field's busiest node: ~${(baseline.nodeMaxMean ?? 0).toFixed(0)}).`,
+      };
+    });
 
   return {
     generatedAt: now,
-    engine: "aether-loom v0.1 (in-app)",
+    engine: "aether-loom v0.2 (in-app)",
     baseline: {
       mean: +baseline.mean.toFixed(4),
       sd: +baseline.sd.toFixed(4),

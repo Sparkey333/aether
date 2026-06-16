@@ -53,13 +53,15 @@ export default function LoomFeed({ data, pois }: Props) {
       )}
 
       <div className="legend-note">
-        Confidence rises only when a pattern beats what a random field of the same size would throw
-        by chance. Honest lines, not wishful ones.
+        Confidence rises only when a pattern beats what a random field <em>with the same
+        clustering</em> would throw by chance. Honest lines, not wishful ones.
         <br />
         <br />
-        Caveat: the null model is <em>uniform-random</em>, so part of a high z reflects that real
-        sites cluster geographically, not pure alignment. A density-matched null is the next
-        refinement.
+        The null is now <em>density-matched</em>: it resamples a random field that preserves how
+        these sites cluster, so z measures alignment, not the fact that sacred places clump
+        together. (A uniform-random null — which counts clustering as signal — is kept only for
+        contrast.) Each line is judged against the null&apos;s <em>longest</em> line; each nexus
+        against its <em>busiest</em> node.
       </div>
     </aside>
   );

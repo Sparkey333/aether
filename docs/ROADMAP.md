@@ -25,9 +25,19 @@ interpretive layers rest on top. Provenance first, always.
 - [x] **Substrate overlays (Tier A).** USGS magnetic-anomaly raster (WMTS),
       live earthquake GeoJSON, and Quaternary fault lines — toggleable in the
       Atlas. *Still to do:* NOAA WMM, principal aquifers.
-- [ ] **Loom coverage.** Spatial index / viewport-scoped pulse so the hunt
-      covers all ~430 declustered nodes, not a capped 120–140. Add a
-      density-preserving null so z reflects alignment, not clustering.
+- [x] **Loom coverage + an honest null.** The CLI heartbeat now hunts over **all**
+      ~431 declustered nodes (the arbitrary 140-cap is gone), and the inner loop
+      was de-trig'd (~4× faster) to pay for it. The null is now
+      **density-matched**: it resamples a random field with the *same clustering*
+      as the real sites (Gaussian-KDE jitter at the field's median
+      nearest-neighbour distance), so z measures alignment, not clumping. Per-line
+      significance is judged against the null's *longest* line, and each nexus
+      against its *busiest* node. *The honest verdict at global scale:* with this
+      catalog and these params the alignments and nexus are **fully explained by
+      clustering** (overall z ≈ −1 vs the density-matched null; the uniform null's
+      z ≈ +500 was the artifact). *Still to do:* a spatial index / viewport-scoped
+      pulse for real-time in-app coverage (the in-app pulse is still capped, and
+      says so).
 - [ ] **Draw tools.** Let the priest draw and save leylines by hand; terrain
       horizon from a DEM (OpenTopography / USGS 3DEP).
 - [ ] **County/city zoom.** Vector tiles / PMTiles for fast parcel-scale reading.

@@ -37,8 +37,11 @@ engine work; it writes `public/data/hypotheses.json`, which the Atlas reads.
 - **The planetary grid**: the Becker-Hagens icosa-dodeca grid (62 nodes, 15
   great circles), *synthesized* in [`src/lib/engine.ts`](src/lib/engine.ts) and
   anchored at Giza, because no canonical ley dataset exists to download.
-- **The Loom**: alignment + nexus detection with a **Monte-Carlo chance
-  baseline** ([`scripts/heartbeat.mjs`](scripts/heartbeat.mjs)).
+- **The Loom**: alignment + nexus detection over *all* declustered nodes, judged
+  against a **density-matched null** — a random field with the *same clustering*
+  as the real sites — so confidence reflects alignment, not clumping
+  ([`scripts/heartbeat.mjs`](scripts/heartbeat.mjs)). At global scale it reports,
+  honestly, that the current catalog's lines are explained by clustering.
 - **Provenance filter**: toggle any tier on/off across every layer.
 
 ## Map of the repo

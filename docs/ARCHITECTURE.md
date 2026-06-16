@@ -12,14 +12,26 @@ The fastest way to ruin a leyline map is to draw every line that *could* exist.
 A dense enough field of points throws straight lines by pure chance
 (Broadbent/Behrend; see the Source Atlas §1). So Aether never reports an
 alignment alone — it reports it **against a Monte-Carlo null baseline**: scatter
-the same number of random points in the same region, count the alignments that
-arise, repeat hundreds of times. A pattern earns confidence only when it beats
-that chance distribution.
+the same number of random points, count the alignments that arise, repeat many
+times. A pattern earns confidence only when it beats that chance distribution.
 
-This is implemented in `src/lib/engine.ts` (`monteCarloBaseline`, `zScore`,
-`confidenceFromZ`) and run each pulse by `scripts/heartbeat.mjs`. It is the
-engineering form of the provenance doctrine: *confidence is earned, never
-assumed.*
+But *which* random field? A **uniform** one is too easy a bar: real sacred sites
+**cluster** (Europe, the US Southwest), and a clumpy field throws straight lines
+for free — so beating a uniform null mostly measures clustering, not alignment.
+Aether's null is therefore **density-matched**: it resamples a random field with
+the *same clustering* as the real sites (a Gaussian-KDE jitter of the real
+points at the field's median nearest-neighbour distance), destroying any
+organized linear structure while preserving density. z then reflects alignment
+*beyond* clustering. The three significance questions are each posed against this
+null: overall (alignment count), per-line (vs the null's *longest* line), and
+nexus (vs the null's *busiest* node).
+
+This is implemented in `src/lib/engine.ts` (`densityMatchedBaseline`,
+`monteCarloBaseline` kept for contrast, `zScore`, `zAgainst`, `confidenceFromZ`)
+and run each pulse by `scripts/heartbeat.mjs`. It is the engineering form of the
+provenance doctrine: *confidence is earned, never assumed.* (At global scale the
+current catalog's alignments are fully explained by clustering — and the engine
+says so, plainly, rather than drawing a wishful line.)
 
 ---
 

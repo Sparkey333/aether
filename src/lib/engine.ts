@@ -273,24 +273,28 @@ export function findAlignments(points: GeoPoint[], pr: AlignParams = DEFAULT_ALI
   const n = points.length;
   const V = points.map((p) => toCart(p.position));
   const tolAng = pr.tolKm / R; // angular cross-track tolerance
+  const sinTol = Math.sin(tolAng); // gate on the chord so the hot loop needs no asin
   const minSpanAng = pr.minSpanKm / R;
   const out: Alignment[] = [];
   const seen = new Set<string>();
   for (let i = 0; i < n; i++) {
+    const Vi = V[i];
     for (let j = i + 1; j < n; j++) {
-      const Vi = V[i];
       const Vj = V[j];
       const angAB = Math.acos(clamp(dot(Vi, Vj)));
       if (angAB < minSpanAng) continue;
       const nrm = norm(cross(Vi, Vj)); // great-circle plane normal
+      // angAP ≤ angAB+tol ⟺ cos(angAP) ≥ cos(angAB+tol): compare cosines, skip the acos.
+      const cosLimit = Math.cos(angAB + tolAng);
       const members = [points[i].id, points[j].id];
       for (let k = 0; k < n; k++) {
         if (k === i || k === j) continue;
         const Vk = V[k];
-        if (Math.abs(Math.asin(clamp(dot(Vk, nrm)))) > tolAng) continue; // cross-track gate
-        const angAP = Math.acos(clamp(dot(Vi, Vk)));
-        const angBP = Math.acos(clamp(dot(Vj, Vk)));
-        if (angAP <= angAB + tolAng && angBP <= angAB + tolAng) members.push(points[k].id);
+        const d = dot(Vk, nrm); // sin(cross-track distance)
+        if (d > sinTol || d < -sinTol) continue; // cross-track gate
+        if (dot(Vi, Vk) < cosLimit) continue; // along-track, measured from a
+        if (dot(Vj, Vk) < cosLimit) continue; // along-track, measured from b
+        members.push(points[k].id);
       }
       if (members.length >= pr.minMembers) {
         const key = [...members].sort().join("|");
@@ -335,13 +339,23 @@ export interface Baseline {
   mean: number;
   sd: number;
   trials: number;
+  /** which null model produced this baseline */
+  model?: "uniform-random" | "density-matched-kde";
+  /** density-matched only: KDE jitter bandwidth (km) = field's median NN distance */
+  bandwidthKm?: number;
+  /** mean ± sd of the *longest* line per null field (the per-line yardstick) */
+  maxMean?: number;
+  maxSd?: number;
+  /** mean ± sd of the *busiest node* per null field (the nexus yardstick) */
+  nodeMaxMean?: number;
+  nodeMaxSd?: number;
 }
 
 /**
- * Monte-Carlo null: scatter `n` random points in `bbox` `trials` times and
- * count how many alignments arise by chance. This is what an observed count is
- * judged against — the difference between a real pattern and a dense-field
- * artifact.
+ * Monte-Carlo null (uniform-random): scatter `n` points uniformly in `bbox`
+ * `trials` times and count the alignments chance throws. Kept as the naive
+ * reference — but note it ignores that real sites *cluster*, so it overstates
+ * significance. Prefer `densityMatchedBaseline` for the honest number.
  */
 export function monteCarloBaseline(
   n: number,
@@ -363,13 +377,119 @@ export function monteCarloBaseline(
   }
   const mean = sum / trials;
   const variance = Math.max(0, sumSq / trials - mean * mean);
-  return { mean, sd: Math.sqrt(variance), trials };
+  return { mean, sd: Math.sqrt(variance), trials, model: "uniform-random" };
+}
+
+/** Median great-circle distance (km) from each point to its nearest neighbour. */
+export function medianNearestNeighborKm(points: GeoPoint[]): number {
+  const nn: number[] = [];
+  for (let i = 0; i < points.length; i++) {
+    let best = Infinity;
+    for (let j = 0; j < points.length; j++) {
+      if (i === j) continue;
+      const d = haversine(points[i].position, points[j].position);
+      if (d < best) best = d;
+    }
+    if (best < Infinity) nn.push(best);
+  }
+  nn.sort((a, b) => a - b);
+  const m = nn.length;
+  if (!m) return 0;
+  return m % 2 ? nn[(m - 1) / 2] : (nn[m / 2 - 1] + nn[m / 2]) / 2;
+}
+
+/** One standard-normal sample (Box–Muller). */
+function gauss(rand: () => number): number {
+  let u = 0;
+  let v = 0;
+  while (u === 0) u = rand();
+  while (v === 0) v = rand();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+/**
+ * Draw `n` points from a Gaussian KDE of `points`: pick a real node, jitter it by
+ * a Gaussian of width `hKm` on the local tangent plane. Preserves the field's
+ * clustering (density) while destroying any organized linear structure.
+ */
+export function densityField(
+  points: GeoPoint[],
+  n: number,
+  hKm: number,
+  rand: () => number = Math.random,
+): GeoPoint[] {
+  const out: GeoPoint[] = [];
+  for (let k = 0; k < n; k++) {
+    const s = points[(rand() * points.length) | 0].position;
+    const east = gauss(rand) * hKm;
+    const north = gauss(rand) * hKm;
+    let lat = s[1] + (north / R) * R2D;
+    let lon = s[0] + (east / (R * Math.cos(s[1] * D2R))) * R2D;
+    lat = Math.max(-89.9, Math.min(89.9, lat));
+    lon = ((((lon + 180) % 360) + 360) % 360) - 180;
+    out.push({ id: `r${k}`, position: [lon, lat] });
+  }
+  return out;
+}
+
+/**
+ * The honest null. Instead of asking "is this field more aligned than a *flat*
+ * random one?" (which a clustered field beats for free), it asks "is this field
+ * more aligned than a random field with the *same clustering*?" Resamples from a
+ * Gaussian KDE of the real points (bandwidth = the field's own median
+ * nearest-neighbour distance) and records, per field: the alignment count, the
+ * longest line, and the busiest node — the yardsticks for overall, per-line, and
+ * nexus significance respectively.
+ */
+export function densityMatchedBaseline(
+  points: GeoPoint[],
+  pr: AlignParams = DEFAULT_ALIGN,
+  trials = 60,
+  rand: () => number = Math.random,
+): Baseline {
+  const h = medianNearestNeighborKm(points);
+  let sum = 0, sumSq = 0, sumMax = 0, sumMaxSq = 0, sumDeg = 0, sumDegSq = 0;
+  for (let t = 0; t < trials; t++) {
+    const al = findAlignments(densityField(points, points.length, h, rand), pr);
+    const c = al.length;
+    const mx = al.length ? al[0].count : 0; // findAlignments sorts desc by count
+    const deg: Record<string, number> = {};
+    let dmax = 0;
+    for (const a of al) for (const id of a.memberIds) {
+      const v = (deg[id] || 0) + 1;
+      deg[id] = v;
+      if (v > dmax) dmax = v;
+    }
+    sum += c; sumSq += c * c;
+    sumMax += mx; sumMaxSq += mx * mx;
+    sumDeg += dmax; sumDegSq += dmax * dmax;
+  }
+  const mean = sum / trials;
+  const maxMean = sumMax / trials;
+  const nodeMaxMean = sumDeg / trials;
+  return {
+    mean,
+    sd: Math.sqrt(Math.max(0, sumSq / trials - mean * mean)),
+    trials,
+    model: "density-matched-kde",
+    bandwidthKm: h,
+    maxMean,
+    maxSd: Math.sqrt(Math.max(0, sumMaxSq / trials - maxMean * maxMean)),
+    nodeMaxMean,
+    nodeMaxSd: Math.sqrt(Math.max(0, sumDegSq / trials - nodeMaxMean * nodeMaxMean)),
+  };
 }
 
 /** z-score of an observed count against a chance baseline. */
 export function zScore(observed: number, base: Baseline): number {
   if (base.sd < 1e-9) return observed > base.mean ? 99 : 0;
   return (observed - base.mean) / base.sd;
+}
+
+/** z-score of an observed value against an explicit mean/sd (e.g. per-line, nexus). */
+export function zAgainst(observed: number, mean: number, sd: number): number {
+  if (sd < 1e-9) return observed > mean ? 99 : 0;
+  return (observed - mean) / sd;
 }
 
 /** Map a z-score to a 0..1 confidence (logistic; z≈2 → ~0.75, z≈4 → ~0.93). */
