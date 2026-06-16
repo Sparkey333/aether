@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TransparentZ — the honest gamification engine (concept)</title>
+<style>
+  /* ── Palette lifted straight from Aether's real four-tier system (src/lib/tiers.ts) ── */
+  :root{
+    --A:#50c8ff;   /* A · Measured     → Clean Run   (unhacked completion)   */
+    --B:#78e6a0;   /* B · Scholarly    → Community Hack (popular hacks)        */
+    --C:#ebbe5a;   /* C · Traditional  → Official Canon (official hacks: goal) */
+    --D:#e66e8c;   /* D · Folklore     → Shadow Run  (off-canon, flagged)      */
+    --ink:#e8ecf6;
+    --muted:#9aa6c2;
+    --bg0:#070912;
+    --bg1:#0c1020;
+    --card:rgba(255,255,255,.045);
+    --card-line:rgba(255,255,255,.10);
+    --good:#5ce0a8;
+    --warn:#ffd166;
+    --bad:#ff6b8b;
+    --radius:18px;
+    --maxw:1180px;
+    font-synthesis:none;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;color:var(--ink);
+    font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;
+    background:
+      radial-gradient(1200px 700px at 12% -8%, rgba(80,200,255,.14), transparent 60%),
+      radial-gradient(1000px 680px at 92% 4%, rgba(235,190,90,.12), transparent 58%),
+      radial-gradient(900px 700px at 60% 110%, rgba(230,110,140,.12), transparent 55%),
+      linear-gradient(180deg,var(--bg1),var(--bg0));
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* drifting starfield — "drift slowing the currents of a river to a ripple" */
+  .stars{position:fixed;inset:0;z-index:-1;opacity:.5;
+    background-image:
+      radial-gradient(1.4px 1.4px at 20% 30%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 70% 60%, #cfe3ff, transparent),
+      radial-gradient(1px 1px at 40% 80%, #fff, transparent),
+      radial-gradient(1.3px 1.3px at 85% 22%, #ffe9c0, transparent),
+      radial-gradient(1px 1px at 55% 12%, #fff, transparent);
+    background-size:520px 520px,460px 460px,640px 640px,560px 560px,400px 400px;
+    animation:drift 140s linear infinite;}
+  @keyframes drift{to{background-position:520px 0,-460px 0,640px 0,-560px 0,400px 0}}
+  a{color:var(--A);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  section{padding:46px 0;border-top:1px solid rgba(255,255,255,.06)}
+  h1,h2,h3{line-height:1.1;letter-spacing:-.01em;margin:0 0 .4em}
+  h2{font-size:clamp(22px,3.4vw,30px)}
+  .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .lede{color:var(--muted);max-width:70ch}
+  .grid{display:grid;gap:18px}
+  @media(min-width:720px){.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:repeat(3,1fr)}.cols-4{grid-template-columns:repeat(4,1fr)}}
+  .card{background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);
+    padding:18px 18px;backdrop-filter:blur(8px);transition:transform .25s,border-color .25s,box-shadow .25s}
+  .card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.22)}
+  .pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;
+    padding:4px 10px;border-radius:999px;border:1px solid var(--card-line);background:rgba(255,255,255,.05)}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;box-shadow:0 0 10px currentColor}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .btn{cursor:pointer;border:1px solid var(--card-line);background:rgba(255,255,255,.06);
+    color:var(--ink);padding:9px 14px;border-radius:11px;font-weight:600;font-size:14px;transition:.2s}
+  .btn:hover{background:rgba(255,255,255,.12)}
+  .btn.lit{border-color:var(--A);box-shadow:0 0 0 1px var(--A) inset, 0 0 22px rgba(80,200,255,.25)}
+
+  /* ── HERO ── */
+  header.hero{padding:64px 0 30px;position:relative}
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+  .title{font-size:clamp(40px,8vw,86px);font-weight:800;letter-spacing:-.03em;margin:0}
+  .title .z{background:linear-gradient(90deg,var(--A),var(--C) 55%,var(--D));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 40px rgba(235,190,90,.25)}
+  .tag{font-size:clamp(16px,2.4vw,21px);color:var(--muted);margin:14px 0 0;max-width:60ch}
+  .stamp{display:inline-flex;align-items:center;gap:9px;margin-top:22px;padding:8px 14px;border-radius:12px;
+    border:1px dashed var(--C);color:var(--C);font-weight:700;letter-spacing:.04em;
+    transform:rotate(-2deg);background:rgba(235,190,90,.06)}
+  .stamp small{color:var(--muted);font-weight:500;letter-spacing:0}
+
+  /* ── TIER LADDER ── */
+  .tier{position:relative;overflow:hidden}
+  .tier::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--tc)}
+  .tier .mult{font-size:30px;font-weight:800;color:var(--tc)}
+  .tier h3{display:flex;align-items:center;gap:9px}
+  .tier .src{font-size:12px;color:var(--muted);margin-top:10px;border-top:1px dashed var(--card-line);padding-top:10px}
+
+  /* ── FORGE (calculator) ── */
+  .forge{display:grid;gap:22px}
+  @media(min-width:860px){.forge{grid-template-columns:1.3fr .9fr}}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  select,input[type=range]{width:100%}
+  select{background:#0e1426;color:var(--ink);border:1px solid var(--card-line);border-radius:10px;padding:10px}
+  input[type=range]{accent-color:var(--C)}
+  .readout{display:grid;place-items:center;text-align:center;gap:6px}
+  .ring{--p:0;width:200px;height:200px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(closest-side,#0b1020 79%,transparent 80% 100%),
+      conic-gradient(var(--rc,var(--C)) calc(var(--p)*1%), rgba(255,255,255,.08) 0);
+    transition:--p .6s ease;position:relative}
+  @property --p{syntax:'<number>';inherits:false;initial-value:0}
+  .ring .pts{font-size:34px;font-weight:800}
+  .ring .lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .zverdict{font-weight:700;margin-top:6px}
+
+  /* ── pricing ── */
+  .price{display:flex;flex-direction:column;gap:12px}
+  .price .amt{font-size:34px;font-weight:800}
+  .price ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+  .price.feature{border-color:var(--C);box-shadow:0 0 0 1px var(--C) inset,0 10px 40px rgba(235,190,90,.10)}
+
+  /* ── redundancy matrix ── */
+  table.rdx{width:100%;border-collapse:collapse;font-size:14px}
+  table.rdx th,table.rdx td{text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top}
+  table.rdx th{color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .tag-svc{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--card-line)}
+  .svc-on{color:var(--good);border-color:rgba(92,224,168,.4)}
+  .svc-off{color:var(--muted);opacity:.55;text-decoration:line-through}
+  .privacy-banner{margin-top:16px;padding:12px 16px;border-radius:12px;border:1px solid var(--card-line);
+    color:var(--muted);font-size:14px}
+  body.privacy{--bg0:#04060a;--bg1:#080b14}
+  body.privacy .cloud{opacity:.35}
+
+  /* ── shadow easter egg (the "couple of the worst ways, which is just the best") ── */
+  body.shadow{--A:#7d8cff;--C:#ff5fae;--D:#ff3b6b;--ink:#ffd9e6}
+  body.shadow .title .z{filter:hue-rotate(40deg) saturate(1.4)}
+  body.shadow .stars{animation-duration:18s;opacity:.8}
+  body.shadow::after{content:"⚠ SHADOW FILES ENGAGED — off-canon, flagged, never hidden";
+    position:fixed;bottom:0;left:0;right:0;background:#160008;color:#ff7aa5;
+    font:600 12px/2.4 ui-monospace,monospace;text-align:center;letter-spacing:.18em;z-index:50;
+    border-top:1px solid #ff3b6b;text-shadow:0 0 12px #ff3b6b}
+  .foot{padding:40px 0 90px;color:var(--muted);font-size:14px}
+  .note{font-size:13px;color:var(--muted);border-left:2px solid var(--C);padding-left:12px;margin-top:14px}
+  .kbd{font:600 12px ui-monospace,monospace;border:1px solid var(--card-line);border-bottom-width:2px;border-radius:6px;padding:1px 6px;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero wrap">
+  <div class="badge-row">
+    <span class="pill"><span class="dot" style="color:var(--A)"></span>Clean Run</span>
+    <span class="pill"><span class="dot" style="color:var(--B)"></span>Community Hack</span>
+    <span class="pill"><span class="dot" style="color:var(--C)"></span>Official Canon</span>
+    <span class="pill"><span class="dot" style="color:var(--D)"></span>Shadow Run</span>
+  </div>
+  <h1 class="title">Transparent<span class="z">Z</span></h1>
+  <p class="tag">One honest point system for finishing games. Every point you earn
+  carries the proof that you earned it — the same <span class="mono">z-score</span> engine that
+  already keeps Aether's Loom honest, pointed at play instead of leylines.</p>
+  <div class="stamp">✦ TransparentZ&nbsp;Stamped&nbsp;<small>— confidence is earned, never assumed</small></div>
+  <p class="note" style="max-width:64ch">
+    Concept pitch &amp; visual brief, generated <span class="mono">2026-06-16</span>. This is a mockup to
+    <em>look at and react to</em> — color, spirit, and shape first. Nothing here is wired to a real backend yet.
+  </p>
+</header>
+
+<!-- ════════════════ DECODED ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">What I think you actually asked for</p>
+  <h2>Trim everything down to one goal: <span style="color:var(--C)">gamify finishing games</span>.</h2>
+  <div class="grid cols-2" style="margin-top:18px">
+    <div class="card">
+      <h3>The decode</h3>
+      <ul class="lede" style="padding-left:18px">
+        <li><b>Earn points for completing games</b> — first <b>unhacked</b> originals, then <b>popular community hacks</b>, with <b>official releases</b> as the prestige goal.</li>
+        <li>Each game ships as <b>a lesson</b> in an online course; lessons link to <b>open-source / homebrew GitHub</b> repos.</li>
+        <li><b>Free-forever</b> path always exists; <b>paid</b> path gives clean, prebuilt files + a private test-build app.</li>
+        <li>Your saved <b>“workflowz”</b> auto-apply on the backend; everything <b>TransparentZ-stamped</b>.</li>
+        <li>Money via <b>subscription</b> or <b>one-time ownership</b> — fair, not greedy.</li>
+        <li>And the redundancy question: <b>when is a 2nd/3rd backup worth it?</b> (answered below ↓)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What the research actually found in <span class="mono">aether/</span></h3>
+      <p class="lede">Honest answer: <b>no ROM/hack/gamification system exists in this repo yet</b>, and there's no <b>“Riku / Gatekeeper”</b> or <b>“Orrery”</b> here to consult —
+      those (like <span class="mono">Pyramid&nbsp;Temples</span> &amp; <span class="mono">Jarvis</span> in the README) are siblings that aren't checked out.</p>
+      <p class="lede">But the <b>spirit you're chasing already lives here</b>, just aimed elsewhere:</p>
+      <ul class="lede" style="padding-left:18px">
+        <li><span class="mono">src/lib/tiers.ts</span> — a <b>four-tier honesty system</b> (A/B/C/D) with these exact colors. → becomes your <b>completion tiers</b>.</li>
+        <li><span class="mono">engine.ts → zScore / confidenceFromZ / monteCarloBaseline</span> — “a pattern earns confidence only when it beats chance.” → becomes <b>anti-cheat: a run earns points only when it beats a fraud baseline.</b></li>
+        <li>The doctrine <i>“keep every layer, label every layer”</i> → <b>TransparentZ</b> itself.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ TIER LADDER ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">The completion tiers · repurposed from your real provenance palette</p>
+  <h2>Four ways to “finish.” All kept. All labeled. None hidden.</h2>
+  <div class="grid cols-4" style="margin-top:18px">
+    <div class="card tier" style="--tc:var(--A)">
+      <div class="mult">×1.0</div>
+      <h3><span class="dot" style="color:var(--A)"></span>Clean Run</h3>
+      <p class="lede">Finish the <b>unhacked original</b>, untouched. The measured baseline — the hardest proof, the cleanest points.</p>
+      <div class="src">maps to <span class="mono">A · Measured · #50c8ff</span></div>
+    </div>
+    <div class="card tier" style="--tc:var(--B)">
+      <div class="mult">×1.4</div>
+      <h3><span class="dot" style="color:var(--B)"></span>Community Hack</h3>
+      <p class="lede">Beat a <b>popular community hack</b> (open-source / freely shared). Scholarly tier: vetted, sourced, credited to its makers.</p>
+      <div class="src">maps to <span class="mono">B · Scholarly · #78e6a0</span></div>
+    </div>
+    <div class="card tier" style="--tc:var(--C)">
+      <div class="mult">×2.0</div>
+      <h3><span class="dot" style="color:var(--C)"></span>Official Canon ★</h3>
+      <p class="lede">The <b>goal</b>: officially-blessed releases. Prestige multiplier, the gold badge, the leaderboard crown.</p>
+      <div class="src">maps to <span class="mono">C · Traditional · #ebbe5a</span></div>
+    </div>
+    <div class="card tier" style="--tc:var(--D)">
+      <div class="mult">×0.6</div>
+      <h3><span class="dot" style="color:var(--D)"></span>Shadow Run</h3>
+      <p class="lede">Off-canon / unverifiable / “the worst ways” (lol). Still counted, <b>still shown</b> — just flagged and worth less. The tier is metadata, never a delete key.</p>
+      <div class="src">maps to <span class="mono">D · Folklore · #e66e8c</span></div>
+    </div>
+  </div>
+  <p class="note">Why this is the right backbone: you already wrote &amp; shipped this exact 4-tier logic. Re-using it means the new app and Aether
+  <b>share muscle memory</b> (your stated stack goal) instead of inventing a parallel system to maintain.</p>
+</section>
+
+<!-- ════════════════ THE FORGE (interactive) ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">Points Forge · interactive</p>
+  <h2>Drag the sliders — watch points + the honesty stamp move.</h2>
+  <div class="forge card" style="margin-top:18px">
+    <div>
+      <div class="field">
+        <label for="tier">Completion tier</label>
+        <select id="tier">
+          <option value="1.0" data-c="--A">Clean Run — unhacked original (×1.0)</option>
+          <option value="1.4" data-c="--B">Community Hack — popular hack (×1.4)</option>
+          <option value="2.0" data-c="--C" selected>Official Canon — official release (×2.0)</option>
+          <option value="0.6" data-c="--D">Shadow Run — off-canon (×0.6)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="diff">Difficulty / length — <span id="diffv" class="mono">60</span></label>
+        <input id="diff" type="range" min="5" max="100" value="60" />
+      </div>
+      <div class="field">
+        <label for="proof">Proof strength (how verifiable the run is) — <span id="proofv" class="mono">75</span>%</label>
+        <input id="proof" type="range" min="0" max="100" value="75" />
+      </div>
+      <div class="field">
+        <label>Verification method (redundancy = higher z)</label>
+        <div class="badge-row" id="vmethods">
+          <button class="btn lit" data-w="1.0">Local replay file</button>
+          <button class="btn" data-w="0.7">Cloud attest</button>
+          <button class="btn" data-w="0.5">Peer witness</button>
+        </div>
+      </div>
+    </div>
+    <div class="readout">
+      <div class="ring" id="ring"><div><div class="pts" id="pts">0</div><div class="lbl">points</div></div></div>
+      <div class="zverdict" id="zv">z = —</div>
+      <div class="lede" style="font-size:13px">A run only banks points when its <b>z</b> beats the fraud baseline.
+      Stack more verification methods → higher z → the points <b>count</b>.</div>
+    </div>
+  </div>
+  <p class="note">This mirrors <span class="mono">confidenceFromZ()</span> 1:1. In Aether a leyline must beat random chance; here a run must beat
+  a cheater's expected score. Same engine, same honesty — that's the <b>Z</b> in TransparentZ.</p>
+</section>
+
+<!-- ════════════════ COURSE / LESSONS ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">Every game is a lesson · the course layer</p>
+  <h2>Open-source games → GitHub repos → graded lessons.</h2>
+  <div class="grid cols-3" style="margin-top:18px">
+    <div class="card">
+      <span class="pill" style="color:var(--good)">FREE FOREVER</span>
+      <h3 style="margin-top:10px">Lesson 01 · Build &amp; Beat</h3>
+      <p class="lede">Clone an open-source / homebrew game from its repo, compile it yourself, finish it. You learn the toolchain <em>and</em> bank Clean-Run points.</p>
+      <p class="lede mono" style="font-size:12px">github.com/&lt;open-source-game&gt; → lesson</p>
+    </div>
+    <div class="card">
+      <span class="pill" style="color:var(--C)">PAID · CLEAN FILES</span>
+      <h3 style="margin-top:10px">Lesson 02 · Prebuilt &amp; Private</h3>
+      <p class="lede">Skip the build pain: get verified clean prebuilt files + a <b>private test-build app</b>. Same lesson, faster path, super-safe artifacts.</p>
+      <p class="lede mono" style="font-size:12px">signed build · checksum · sandboxed</p>
+    </div>
+    <div class="card">
+      <span class="pill" style="color:var(--A)">WORKFLOWZ</span>
+      <h3 style="margin-top:10px">Lesson 03 · Auto-applied</h3>
+      <p class="lede">Your saved <b>workflowz</b> live deep on the backend and auto-apply per lesson — patches, settings, save-states — so each learner starts from your blessed setup.</p>
+      <p class="lede mono" style="font-size:12px">private · per-user · replayable</p>
+    </div>
+  </div>
+  <p class="note">⚖ <b>Stay on the clean side of the line:</b> scope this to <b>open-source, homebrew, and freely-licensed</b> games only.
+  Don't host or distribute copyrighted commercial ROMs — that's the difference between “TransparentZ, super-safe” and a takedown.
+  “Official” = officially-released/blessed builds, not pirated commercial carts.</p>
+</section>
+
+<!-- ════════════════ MONETIZATION ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">Make money · not greedy</p>
+  <h2>Three doors. Pick yours.</h2>
+  <div class="grid cols-3" style="margin-top:18px">
+    <div class="card price">
+      <span class="pill" style="color:var(--good)">FREE</span>
+      <div class="amt">$0</div>
+      <ul>
+        <li>Full points engine, every tier</li>
+        <li>Build-it-yourself lessons</li>
+        <li>Local verification &amp; privacy mode</li>
+        <li>Always — never paywalled away</li>
+      </ul>
+    </div>
+    <div class="card price feature">
+      <span class="pill" style="color:var(--C)">SUBSCRIPTION ★</span>
+      <div class="amt">$6<span style="font-size:15px;color:var(--muted)">/mo</span></div>
+      <ul>
+        <li>Clean prebuilt files + private test app</li>
+        <li>Cloud sync + cross-device leaderboard</li>
+        <li>Workflowz auto-apply</li>
+        <li>Priority verification lanes</li>
+      </ul>
+    </div>
+    <div class="card price">
+      <span class="pill" style="color:var(--A)">OWNERSHIP</span>
+      <div class="amt">$79<span style="font-size:15px;color:var(--muted)"> once</span></div>
+      <ul>
+        <li>One-time buy — for people like you</li>
+        <li>Lifetime app + offline-first everything</li>
+        <li>Own your data &amp; workflowz exports</li>
+        <li>No subscription, no lock-in</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ REDUNDANCY ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">Your redundancy question, answered</p>
+  <h2>When is a 2nd (or 3rd) backup worth it?</h2>
+  <p class="lede">Rule of thumb: <b>add a backup only where a single point of failure breaks a promise.</b>
+  TransparentZ makes 3 promises — <i>points are real</i>, <i>the app keeps working</i>, <i>privacy is honored</i> — so those get redundancy. Everything else can fail loudly and that's fine.</p>
+
+  <div class="grid cols-3" style="margin:18px 0">
+    <div class="card"><h3 style="color:var(--A)">1 method</h3><p class="lede">Convenience features (cosmetics, fancy charts). If it's down, shrug. No backup. Don't gold-plate.</p></div>
+    <div class="card"><h3 style="color:var(--C)">2 methods</h3><p class="lede">Anything a user <b>paid for</b> or that holds <b>their data</b> (saves, points, builds). Primary + one fallback. The sweet spot for almost everything.</p></div>
+    <div class="card"><h3 style="color:var(--D)">3 methods</h3><p class="lede">Only the <b>trust core</b>: verification + the points ledger. Cheating-proof &amp; outage-proof &amp; privacy-proof needs primary + cloud + local-offline.</p></div>
+  </div>
+
+  <table class="rdx">
+    <thead><tr><th>Capability</th><th>Primary</th><th>Backup 1</th><th>Backup 2</th><th>Worth it?</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>Run verification</b> (anti-cheat)</td>
+        <td class="cloud"><span class="tag-svc svc-on">Cloud attest</span></td>
+        <td><span class="tag-svc svc-on">Signed local replay</span></td>
+        <td><span class="tag-svc svc-on">Peer witness</span></td>
+        <td style="color:var(--good)">3 — trust core</td>
+      </tr>
+      <tr>
+        <td><b>Points ledger</b></td>
+        <td class="cloud"><span class="tag-svc svc-on">Server DB</span></td>
+        <td><span class="tag-svc svc-on">Local SQLite (Tauri)</span></td>
+        <td>—</td>
+        <td style="color:var(--good)">2 — your data</td>
+      </tr>
+      <tr>
+        <td><b>Clean file delivery</b></td>
+        <td class="cloud"><span class="tag-svc svc-on">CDN</span></td>
+        <td><span class="tag-svc svc-on">Git LFS mirror</span></td>
+        <td>—</td>
+        <td style="color:var(--good)">2 — paid promise</td>
+      </tr>
+      <tr>
+        <td><b>Leaderboard live feed</b></td>
+        <td class="cloud"><span class="tag-svc svc-on">Realtime socket</span></td>
+        <td><span class="tag-svc svc-on">Cached snapshot</span></td>
+        <td>—</td>
+        <td style="color:var(--warn)">2 — degrade gracefully</td>
+      </tr>
+      <tr>
+        <td><b>Cosmetic charts</b></td>
+        <td class="cloud"><span class="tag-svc svc-on">Live API</span></td>
+        <td>—</td>
+        <td>—</td>
+        <td style="color:var(--muted)">1 — don't bother</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:18px">
+    <button class="btn" id="privacyBtn">🔒 Toggle Ultimate Privacy / Offline mode</button>
+    <div class="privacy-banner" id="privacyMsg">
+      <b>Cloud on.</b> Full speed, full sync. Click above to see graceful downgrade.
+    </div>
+  </div>
+  <p class="note">The trick: design so the <b>local-offline path is always a complete product on its own</b> (this matches Aether's
+  “local-first” pattern from Jarvis). Then cloud is pure upside, “downed service” is a slowdown not an outage, and
+  “ultimate privacy” is just <em>turning the cloud off</em> — not a separate codebase.</p>
+</section>
+
+<!-- ════════════════ RECOMMENDATION ════════════════ -->
+<section class="wrap">
+  <p class="eyebrow">My recommendation</p>
+  <h2>Clean up → combine → trim to one goal.</h2>
+  <div class="grid cols-2" style="margin-top:18px">
+    <div class="card">
+      <h3>Combine</h3>
+      <p class="lede">Don't build a second tier system or a second honesty engine. <b>Reuse Aether's</b> <span class="mono">tiers.ts</span> palette and
+      <span class="mono">zScore/confidenceFromZ</span> as a tiny shared package. One source of truth, two apps.</p>
+    </div>
+    <div class="card">
+      <h3>Trim</h3>
+      <p class="lede">For v1, ship <b>only</b>: the 4 completion tiers, the Points Forge, local verification, and the free build-it-yourself lesson.
+      Cloud sync, subscriptions, leaderboards, and Backup-2/3 come <b>after</b> the core feels good.</p>
+    </div>
+  </div>
+  <p class="note">One main goal, said plainly: <b>“Finish games honestly, earn points you can prove, and learn the toolchain doing it.”</b>
+  Everything else is a dial you turn up later.</p>
+</section>
+
+<footer class="wrap foot">
+  <p><b>Doctrine, borrowed from Aether:</b> keep every layer, label every layer, let nothing borrow authority it has not earned.</p>
+  <p>Press <span class="kbd">S</span> for the Shadow files. (“a couple of the worst ways, which is just the best.” You were warned. lolz.)</p>
+</footer>
+
+<script>
+  // ── Points Forge ──
+  const tierSel=document.getElementById('tier'),diff=document.getElementById('diff'),proof=document.getElementById('proof');
+  const diffv=document.getElementById('diffv'),proofv=document.getElementById('proofv');
+  const pts=document.getElementById('pts'),ring=document.getElementById('ring'),zv=document.getElementById('zv');
+  let vWeight=1.0;
+  const vBtns=[...document.querySelectorAll('#vmethods .btn')];
+  vBtns.forEach(b=>b.addEventListener('click',()=>{
+    if(b.classList.contains('lit')) b.classList.remove('lit'); else b.classList.add('lit');
+    vWeight=vBtns.filter(x=>x.classList.contains('lit')).reduce((s,x)=>s+parseFloat(x.dataset.w),0)||0.2;
+    recalc();
+  }));
+  // sum of lit verification weights at start
+  vWeight=vBtns.filter(x=>x.classList.contains('lit')).reduce((s,x)=>s+parseFloat(x.dataset.w),0);
+
+  function recalc(){
+    const mult=parseFloat(tierSel.value);
+    const d=+diff.value, p=+proof.value/100;
+    diffv.textContent=d; proofv.textContent=proof.value;
+    // points = difficulty × tier multiplier × proof, rounded to a satisfying number
+    const points=Math.round(d*mult*(0.4+0.6*p)*10);
+    // z-score flavor: more verification redundancy + proof → higher z (beats fraud baseline ~ z>2)
+    const z=(vWeight*1.15 + p*1.6).toFixed(2);
+    const counts=z>=2;
+    pts.textContent=counts?points.toLocaleString():'—';
+    const conf=Math.min(99,Math.round((z/3.2)*100));
+    ring.style.setProperty('--p',conf);
+    // recolor ring to the chosen tier
+    const cssVar=tierSel.options[tierSel.selectedIndex].dataset.c;
+    ring.style.setProperty('--rc',`var(${cssVar})`);
+    zv.innerHTML = counts
+      ? `z = ${z} · <span style="color:var(--good)">banked ✓</span>`
+      : `z = ${z} · <span style="color:var(--bad)">below baseline — add verification</span>`;
+  }
+  [tierSel,diff,proof].forEach(el=>el.addEventListener('input',recalc));
+  recalc();
+
+  // ── Privacy / offline toggle ──
+  const pBtn=document.getElementById('privacyBtn'),pMsg=document.getElementById('privacyMsg');
+  pBtn.addEventListener('click',()=>{
+    document.body.classList.toggle('privacy');
+    const on=document.body.classList.contains('privacy');
+    document.querySelectorAll('.cloud .tag-svc').forEach(t=>t.classList.toggle('svc-off',on));
+    pMsg.innerHTML=on
+      ? '<b style="color:var(--good)">Privacy mode.</b> Cloud paths off. Verification falls back to <b>signed local replay</b>, points to <b>local SQLite</b>, files to your <b>own mirror</b>. Slower, fully private, still a complete product.'
+      : '<b>Cloud on.</b> Full speed, full sync. Click above to see graceful downgrade.';
+    pBtn.classList.toggle('lit',on);
+  });
+
+  // ── Shadow files easter egg ──
+  addEventListener('keydown',e=>{ if(e.key.toLowerCase()==='s'&&!/input|select|textarea/i.test(e.target.tagName)) document.body.classList.toggle('shadow'); });
+</script>
+</body>
+</html>
