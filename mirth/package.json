@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "pulse": "node ./scripts/loom.mjs",
-    "mirth:pulse": "node ./scripts/loom.mjs"
+    "mirth:pulse": "node ./scripts/loom.mjs",
+    "react": "node ./scripts/react.mjs",
+    "rehearse": "node ./scripts/rehearse.mjs",
+    "promote": "node ./scripts/promote.mjs"
   },
   "optionalDependencies": {
     "@anthropic-ai/sdk": "^0.69.0"

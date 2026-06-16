@@ -26,6 +26,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { makeWriter } from "./writer.mjs";
+import { sigId, loadCatalog, saveCatalog, tierCounts } from "./store.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -138,7 +139,7 @@ function renderTemplate(spec) {
 function assemble(spec, words) {
   const w = words || renderTemplate(spec);
   return {
-    id: `bit_${spec.now}_${spec.i}`,
+    id: sigId(spec), // stable across pulses — identity is the idea, not the words
     createdAt: spec.now,
     subject: spec.subject.word,
     subjectDomain: spec.subject.domain,
@@ -239,4 +240,16 @@ const out = {
 
 mkdirSync(join(ROOT, "out"), { recursive: true });
 writeFileSync(join(ROOT, "out/set.json"), JSON.stringify(out, null, 2));
+
+// Remember the work: merge this pulse's bits into the persistent corpus. New
+// ideas are added at their structural tier; bits already promoted (A-killed by a
+// real room) are left untouched — the shelf is a seed bank, never overwritten.
+const CATALOG = join(ROOT, "out/catalog.json");
+const cat = loadCatalog(CATALOG, persona);
+let added = 0;
+for (const b of bits) if (!cat.bits[b.id]) { cat.bits[b.id] = b; added++; }
+saveCatalog(CATALOG, cat);
+const tc = tierCounts(cat);
+console.log(`  corpus: ${Object.keys(cat.bits).length} bits (+${added} new) — A:${tc["A-killed"]} B:${tc["B-crafted"]} C:${tc["C-styled"]} | setList: ${cat.persona.setList.length}/${cat.persona.evolution.killedNeeded} to evolve`);
 console.log(`🎤 pulse complete → mirth/out/set.json  (${set.length} in the set, ${shelf.length} on the shelf)`);
+console.log(`   perform a bit to a real room, then:  npm run promote   (only the room grants A)`);

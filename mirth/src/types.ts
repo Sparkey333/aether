@@ -17,12 +17,32 @@ export interface Technique {
   note: string;
 }
 
-/** One real performance of a bit. Laughs are the only thing that promotes to A. */
+/** One performance of a bit. Real laughs promote to A; synthetic ones never do. */
 export interface Performance {
   at: string;
-  venue: "chat" | "set" | "recording" | "stage";
+  venue: "chat" | "set" | "recording" | "stage" | "rehearsal";
   laughs: number;
   audienceSize: number;
+  /** true for rehearsal/laugh-track input — recorded, kept, but ignored for A. */
+  synthetic?: boolean;
+}
+
+/** The room's verdict on a bit — the honest laugh baseline, the only path to A. */
+export interface RoomReading {
+  realPerformances: number;
+  observed: number;   // this bit's mean laugh-rate
+  expected: number;   // the room's baseline laugh-rate
+  sd: number;
+  z: number;          // how far above the room's baseline it landed
+  confidence: number;
+  judgedAt: string;
+}
+
+/** The persistent corpus — the seed bank that survives across pulses. */
+export interface Catalog {
+  updatedAt: string;
+  persona: Persona & { readyToEvolve: boolean };
+  bits: Record<string, Bit & { room?: RoomReading }>;
 }
 
 /** A unit of comedy. Echoes Aether's Hypothesis: always carries its evidence. */

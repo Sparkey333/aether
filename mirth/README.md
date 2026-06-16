@@ -45,6 +45,33 @@ the **words**; the honest scoring and tiering are byte-for-byte identical.
 5. **Sequence** — build a tight set: opener → build → closer, callbacks wired.
 6. **Shelf** — keep every near-miss (tier **C**). The shelf is a seed bank.
 
+## The loop (pulse → perform → promote)
+
+The Loom generates and structures; only a real room can call a bit funny. The
+cycle:
+
+```bash
+npm run pulse                              # practice: write/fuse/score bits → out/catalog.json
+node scripts/react.mjs --list              # see the corpus + bit ids
+node scripts/react.mjs <bitId> 18 25 set   # log a REAL room: 18 of 25 laughed
+npm run promote                            # run the laugh baseline → promote to A
+```
+
+`out/catalog.json` is the persistent corpus (the seed bank). `react.mjs` logs a
+real room's response; `npm run promote` computes the **laugh baseline** and
+promotes only the bits whose real laugh-`z` beats it across `≥2` rooms. Two
+refusals are load-bearing and visible in the output:
+
+- **Synthetic reactions never count.** `npm run rehearse` writes a fake laugh
+  track (`synthetic:true`); the promoter records it but grants it nothing. A
+  laugh track is tier-D cosplaying as tier-A.
+- **One good night isn't proof.** A bit that beats the bar in a single room is
+  held back until more rooms agree.
+
+Each A-killed bit joins the persona's set list, earns XP, and moves it toward an
+**evolution** — at the threshold, `readyToEvolve` flips (Phase 3 writes the new
+stage form into canon).
+
 ## The tier ladder
 
 | Tier | Meaning | Who grants it |
@@ -77,11 +104,15 @@ only judge of the rest.
 |---|---|
 | `scripts/loom.mjs` | the Mirth Loom — generate · fuse · score · sequence · shelf |
 | `scripts/writer.mjs` | the writers' room — optional `@anthropic-ai/sdk` voice layer |
-| `data/techniques.seed.json` | the Technique Lexicon (ancient + modern moves) |
-| `data/premises.seed.json` | subjects, pivots, frames, the domain space |
-| `data/persona.seed.json` | the familiar's stage-0 form and move-pool |
-| `src/types.ts` | `Bit` / `Persona` / `Technique` / `MirthSet` types |
-| `out/set.json` | the pulse output (gitignored; regenerated each beat) |
+| `scripts/react.mjs` | log a **real** room's response (the only path to A) |
+| `scripts/rehearse.mjs` | a **synthetic** room — recorded, but never promotes to A |
+| `scripts/promote.mjs` | the laugh baseline → promote-to-A, XP, evolution gate |
+| `scripts/store.mjs` | stable bit ids, the corpus, the honest math (shared) |
+| `data/*.seed.json` | the Technique Lexicon, premises/pivots/domains, the persona |
+| `src/types.ts` | `Bit` / `Persona` / `Technique` / `Performance` / `Catalog` types |
+| `out/catalog.json` | the persistent corpus + persona state (gitignored) |
+| `out/performances.jsonl` | the room log — real and synthetic reactions (gitignored) |
+| `out/set.json` · `out/setlist.json` | per-pulse set · the A-killed set list (gitignored) |
 
 ## The vows
 
@@ -92,7 +123,8 @@ only judge of the rest.
 
 ## Where it's going
 
-Phase 2 adds the real audience input and the laugh `z` that finally lets a bit
-reach **A**. Phase 3 adds evolution: clear the threshold of A-killed bits and the
-familiar evolves a new stage form, auto-written into canon — the record that
-becomes the show. Full roadmap in [`docs/MIRTH.md`](../docs/MIRTH.md).
+Phase 2 is **built** — real audience input, the laugh baseline, and the
+promote-to-A path that finally lets a bit reach the top tier (and refuses the
+fakes). Phase 3 is next: clear the threshold of A-killed bits and the familiar
+**evolves** a new stage form, auto-written into canon — the record that becomes
+the show. Full roadmap in [`docs/MIRTH.md`](../docs/MIRTH.md).

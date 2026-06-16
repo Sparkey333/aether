@@ -208,9 +208,13 @@ engine that makes it good.
 - **Phase 1.5 — The writers' room (one voice).** ✅ `mirth/scripts/writer.mjs` —
   optional `@anthropic-ai/sdk` layer (`claude-opus-4-8`) that writes the words
   while the Loom keeps the scoring. Falls back to templates with no key/SDK.
-- **Phase 2 — The honest baseline.** Real audience input, laugh `z`,
-  promote-to-A. The moat — and the first time a bit can reach A.
-- **Phase 3 — Evolution + auto-canon.** Thresholds, stage forms, episodes-as-lore.
+- **Phase 2 — The honest baseline.** ✅ A persistent corpus (`out/catalog.json`,
+  stable bit ids), `react.mjs` (real rooms) + `rehearse.mjs` (synthetic, refused),
+  and `promote.mjs` — the laugh baseline, promote-to-A, XP, and the evolution
+  gate. The moat: synthetic applause grants nothing, one room isn't proof, and A
+  is the only tier no machine can assign.
+- **Phase 3 — Evolution + auto-canon.** Threshold → new stage form, auto-written
+  into `content/canon/` as a new entry. The episodes-as-lore. *(next)*
 - **Phase 4 — Live.** Streaming + TTS + barge-in; the companion window.
 - **Phase 5 — Content engine.** Segmenter, clip export, show notes → publish.
 - **Phase 6 — The ensemble.** Multiple familiars riffing off one another —
