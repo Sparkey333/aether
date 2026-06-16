@@ -1,0 +1,11 @@
+{
+  "name": "mirth",
+  "version": "0.1.0",
+  "description": "Mirth — the Jester. A comedic familiar that practices on its own pulse, fuses comic techniques across eras, scores bits for structural surprise against a Monte-Carlo baseline, and never calls a bit funny without a real room. Standalone; echoes Aether's honest-baseline doctrine.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "pulse": "node ./scripts/loom.mjs",
+    "mirth:pulse": "node ./scripts/loom.mjs"
+  }
+}

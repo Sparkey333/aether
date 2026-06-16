@@ -1,0 +1,19 @@
+{
+  "note": "The Technique Lexicon — the move-pool. Ancient structures and frames fused with modern delivery. This is the Bach-and-Metallica engine: the combinator pairs one ancient move with one modern move. Studied technique only; never the impersonation of a living person.",
+  "techniques": [
+    { "id": "rule-of-three", "name": "The Rule of Three", "era": "ancient", "kind": "structure", "note": "Two to set the pattern, the third to break it." },
+    { "id": "misdirection", "name": "Misdirection / Pull-Back-and-Reveal", "era": "ancient", "kind": "structure", "note": "Point the room one way; the truth was the other way the whole time." },
+    { "id": "mechanical-encrustation", "name": "The Mechanical Encrusted on the Living (Bergson)", "era": "ancient", "kind": "frame", "note": "We laugh when the living thing behaves like a machine." },
+    { "id": "sacred-clown-reversal", "name": "The Sacred-Clown Reversal", "era": "ancient", "kind": "frame", "note": "The fool inverts the sacred and the absurd to tell the truth sideways." },
+    { "id": "parabasis", "name": "The Parabasis", "era": "ancient", "kind": "structure", "note": "Greek Old Comedy: drop the act and address the room directly." },
+    { "id": "lazzi", "name": "Lazzi", "era": "ancient", "kind": "bit", "note": "Commedia dell'arte's portable comic routines, snapped into any scene." },
+    { "id": "observational", "name": "Observational", "era": "modern", "kind": "frame", "note": "You ever notice…" },
+    { "id": "one-liner", "name": "The One-Liner", "era": "modern", "kind": "delivery", "note": "One sentence, one detonation." },
+    { "id": "act-out", "name": "The Act-Out", "era": "modern", "kind": "delivery", "note": "Become the thing; quote it to its face." },
+    { "id": "deadpan-list", "name": "The Deadpan List", "era": "modern", "kind": "structure", "note": "Flat enumeration; the affect is the joke." },
+    { "id": "callback", "name": "The Callback", "era": "modern", "kind": "structure", "note": "Pay off an earlier bit; the room feels clever." },
+    { "id": "anti-comedy", "name": "Anti-Comedy", "era": "modern", "kind": "delivery", "note": "Refuse the punchline; the refusal is the punchline." },
+    { "id": "absurdist-runner", "name": "The Absurdist Runner", "era": "modern", "kind": "structure", "note": "Escalate past logic until it loops." },
+    { "id": "roast", "name": "The Roast", "era": "modern", "kind": "frame", "note": "Affection delivered as ordnance." }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "note": "The familiar's stage-0 form. It starts with a partial move-pool; the rest of the Lexicon is headroom it can learn. setList is empty and STAYS empty until a real room promotes bits to A-killed — evolution cannot be self-granted.",
+  "id": "foundling",
+  "name": "The Foundling",
+  "form": 0,
+  "level": 1,
+  "practiceXp": 0,
+  "movePool": [
+    "rule-of-three",
+    "misdirection",
+    "mechanical-encrustation",
+    "observational",
+    "one-liner",
+    "act-out",
+    "deadpan-list"
+  ],
+  "setList": [],
+  "evolution": {
+    "killedNeeded": 5,
+    "nextForm": "(unrevealed — earned in a room, then written into canon)",
+    "note": "Evolves a new stage form after 5 bits reach A-killed. Each evolution writes a canon entry; the canon is the show."
+  },
+  "voice": "Warm, fast, fearless, allergic to the laugh track. Bombs honestly and learns."
+}

@@ -1,0 +1,12 @@
+# dependencies (Phase 1 is dependency-free; the writer layer comes later)
+/node_modules
+
+# generated Loom output (regenerated each pulse)
+/out/
+
+# env
+.env*.local
+.env
+
+# misc
+.DS_Store
