@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Serious Civil — Engi-Nerd Mode</title>
+  <meta name="description" content="A civil engineering bench that does the statics honestly and tells you the truth even when it stings. Engi-Nerd Mode: rigor as a power level." />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="masthead">
+      <h1 class="title">Serious<br><span class="civil">Civil</span></h1>
+      <div class="mode-badge">⚡ Engi-Nerd Mode · engaged</div>
+      <p class="subtitle">
+        A bench for honest statics. It does the math straight, and it tells you the
+        truth even when the truth stings — because <b>a beam does not care about your feelings.</b>
+        Rigor is the only thing that raises your power level. Not volume. Not vibes.
+      </p>
+    </header>
+
+    <!-- POWER LEVEL -->
+    <section id="power" class="power" aria-live="polite">
+      <div class="label">Engi-Nerd Power Level</div>
+      <div id="pl-value" class="value">0</div>
+      <div class="tier">Tier: <span id="pl-tier">DORMANT</span></div>
+      <div class="bar"><span id="pl-bar"></span></div>
+      <div id="pl-line" class="line">Feed me real numbers.</div>
+    </section>
+
+    <div class="grid">
+      <!-- INPUT -->
+      <section class="panel">
+        <h2>The Design</h2>
+
+        <div class="unit-toggle" role="group" aria-label="units">
+          <button id="btn-imperial" class="active" type="button">IMPERIAL</button>
+          <button id="btn-si" type="button">SI / METRIC</button>
+        </div>
+
+        <label class="field">
+          <span>Load case</span>
+          <select id="loadcase"></select>
+        </label>
+
+        <label class="field">
+          <span>Material</span>
+          <select id="material"></select>
+        </label>
+
+        <label class="field">
+          <span id="u-span">Span (ft)</span>
+          <input id="span" type="number" step="any" value="16" />
+        </label>
+
+        <label id="field-pload" class="field">
+          <span id="u-pload">Point load (lbf)</span>
+          <input id="pload" type="number" step="any" value="12000" />
+        </label>
+
+        <label id="field-udl" class="field" style="display:none">
+          <span id="u-udl">Uniform load (lbf/ft)</span>
+          <input id="udl" type="number" step="any" value="300" />
+        </label>
+
+        <div class="row2">
+          <label class="field">
+            <span id="u-width">Width b (in)</span>
+            <input id="width" type="number" step="any" value="3" />
+          </label>
+          <label class="field">
+            <span id="u-height">Height h (in)</span>
+            <input id="height" type="number" step="any" value="8" />
+          </label>
+        </div>
+      </section>
+
+      <!-- OUTPUT -->
+      <section class="panel">
+        <h2>The Honest Read</h2>
+        <div id="results" class="results"></div>
+        <div id="verdict" class="verdict"></div>
+      </section>
+    </div>
+
+    <div class="disclaimer">
+      <b>Read this and mean it.</b> Serious Civil is a teaching and sketch bench —
+      first-order Euler–Bernoulli statics on a rectangular section. It does not
+      account for buckling, shear stress, torsion, fatigue, connections, lateral
+      stability, dynamic loads, or your local building code. <b>It will never be a
+      substitute for a licensed Professional Engineer who stamps the drawing and
+      owns the result.</b> Use it to build intuition and check yourself — not to
+      pour anything someone stands under.
+    </div>
+
+    <footer class="sig">
+      Forged in <span class="white-light">white light, in truth and love</span>.<br>
+      Dark as burned. Not beaten. Far from stone.<br>
+      Part of the constellation. Keep your units straight and your conscience straighter.
+    </footer>
+  </div>
+
+  <script src="assets/engine.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
