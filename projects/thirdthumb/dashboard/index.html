@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ThirdThumb · GhostHands — Mash Console</title>
+<style>
+  :root{
+    --bg:#0a0b10; --panel:#12141d; --panel2:#171a26; --line:#242838;
+    --txt:#e8ebf5; --dim:#9aa3bd; --accent:#7c5cff; --accent2:#26d0ce;
+    --good:#3ddc97; --warn:#ffb454; --shiny:#ffd34e; --bad:#ff5d73;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 70% -10%,#1a1430 0,var(--bg) 55%);
+       color:var(--txt);font-family:var(--sans);min-height:100vh}
+  header{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line)}
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo h1{font-size:18px;margin:0;letter-spacing:.4px}
+  .logo small{display:block;color:var(--dim);font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+  .badge{margin-left:auto;font-size:11px;color:var(--dim);border:1px solid var(--line);
+         padding:5px 10px;border-radius:999px}
+  .badge b{color:var(--good)}
+  main{display:grid;grid-template-columns:300px 1fr 320px;gap:16px;padding:18px;max-width:1320px;margin:0 auto}
+  @media(max-width:1100px){main{grid-template-columns:1fr}}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+         border-radius:14px;padding:16px}
+  .panel h2{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);margin:0 0 14px}
+  label{display:block;font-size:12px;color:var(--dim);margin:14px 0 6px}
+  select,input[type=range]{width:100%}
+  select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px}
+  .rngrow{display:flex;align-items:center;gap:10px}
+  .rngrow output{font-family:var(--mono);color:var(--accent2);min-width:64px;text-align:right;font-size:13px}
+  .toggle{display:flex;align-items:center;justify-content:space-between;margin:12px 0;font-size:13px}
+  .switch{position:relative;width:42px;height:24px}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#2a2f42;border-radius:999px;transition:.2s;cursor:pointer}
+  .slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked+.slider{background:var(--accent)}
+  .switch input:checked+.slider:before{transform:translateX(18px)}
+  .btns{display:flex;gap:10px;margin-top:18px}
+  button{flex:1;border:0;border-radius:10px;padding:12px;font-weight:600;cursor:pointer;font-size:14px}
+  .start{background:linear-gradient(90deg,var(--accent),#9d7bff);color:#fff}
+  .stop{background:#2a2f42;color:var(--txt)}
+  .ghostbtn{background:transparent;border:1px solid var(--line);color:var(--dim);flex:none;padding:12px 14px}
+  /* stage */
+  .stage{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:230px;
+         border:1px solid var(--line);border-radius:14px;background:#0d0f17;position:relative;overflow:hidden;margin-bottom:16px}
+  .ring{position:absolute;width:260px;height:260px;border-radius:50%;
+        background:radial-gradient(circle,rgba(124,92,255,.18),transparent 65%);filter:blur(6px)}
+  .ghost{transform-origin:50% 70%}
+  .ghost.press{animation:press .12s ease}
+  @keyframes press{50%{transform:translateY(7px) scale(.97)}}
+  .pulse{position:absolute;bottom:18px;font-family:var(--mono);font-size:13px;color:var(--accent2)}
+  .pill{position:absolute;top:14px;left:14px;font-size:11px;color:var(--dim);
+        border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:680px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  .metric{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .metric .k{font-size:11px;color:var(--dim);letter-spacing:.6px;text-transform:uppercase}
+  .metric .v{font-family:var(--mono);font-size:24px;margin-top:6px}
+  .metric .v.s{color:var(--shiny)}
+  .spark{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+  canvas{width:100%;height:90px;display:block}
+  .odds .bar{height:10px;background:#2a2f42;border-radius:999px;overflow:hidden;margin:8px 0}
+  .odds .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--shiny))}
+  .row{display:flex;justify-content:space-between;font-size:13px;margin:7px 0;color:var(--dim)}
+  .row b{color:var(--txt);font-family:var(--mono)}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+  th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);color:var(--dim)}
+  td{color:var(--txt);font-family:var(--mono)}
+  .mini{font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5}
+  .note{font-size:11px;color:var(--warn);margin-top:12px;line-height:1.5}
+  a{color:var(--accent2)}
+  .linkbtn{display:block;text-align:center;background:#2a2f42;color:var(--txt);border-radius:9px;padding:9px;margin-top:8px;text-decoration:none;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <!-- ghost-thumb mascot -->
+    <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#9d7bff"/><stop offset="1" stop-color="#26d0ce"/></linearGradient></defs>
+      <path d="M32 6c-11 0-20 9-20 20v28l6-5 6 5 6-5 6 5 6-5 6 5V26C52 15 43 6 32 6z" fill="url(#g)"/>
+      <circle cx="25" cy="26" r="3.4" fill="#0a0b10"/><circle cx="39" cy="26" r="3.4" fill="#0a0b10"/>
+      <rect x="27" y="34" width="10" height="13" rx="5" fill="#0a0b10" opacity=".85"/>
+    </svg>
+    <div><h1>ThirdThumb</h1><small>GhostHands · Mash Console</small></div>
+  </div>
+  <div class="badge">● <b>local-first</b> · no account · your data stays on this machine</div>
+</header>
+
+<main>
+  <!-- ============ CONTROLS ============ -->
+  <section class="panel">
+    <h2>Mash Profile</h2>
+    <label for="profile">Game preset</label>
+    <select id="profile">
+      <option value="shiny">Pokémon — wild shiny hunt (mash A, hold B)</option>
+      <option value="egg">Pokémon — egg hatch / breeding loop</option>
+      <option value="jrpg">JRPG grind — confirm spam</option>
+      <option value="idle">Mobile idle / gacha tapper</option>
+      <option value="custom">Custom</option>
+    </select>
+
+    <label>A-button mash rate <span style="float:right;color:var(--dim)">presses/sec</span></label>
+    <div class="rngrow"><input id="arate" type="range" min="1" max="20" step="0.5" value="4"><output id="arateO">4.0</output></div>
+
+    <label>B-tap cadence <span style="float:right;color:var(--dim)">every N sec (0=off)</span></label>
+    <div class="rngrow"><input id="brate" type="range" min="0" max="10" step="0.5" value="2"><output id="brateO">2.0</output></div>
+
+    <label>Seconds per encounter <span style="float:right;color:var(--dim)">for odds model</span></label>
+    <div class="rngrow"><input id="enc" type="range" min="2" max="40" step="1" value="8"><output id="encO">8</output></div>
+
+    <div class="toggle"><span>Move in grass (D-pad weave)</span>
+      <label class="switch"><input id="move" type="checkbox" checked><span class="slider"></span></label></div>
+    <div class="toggle"><span>Shiny Charm equipped</span>
+      <label class="switch"><input id="charm" type="checkbox"><span class="slider"></span></label></div>
+    <div class="toggle"><span>Humanize timing (±jitter)</span>
+      <label class="switch"><input id="jit" type="checkbox" checked><span class="slider"></span></label></div>
+
+    <div class="btns">
+      <button id="go" class="start">▶ Start mashing</button>
+      <button id="reset" class="ghostbtn">Reset</button>
+    </div>
+    <div class="note" id="legal">⚠ Single-player / accessibility use. Auto-fire can violate online/competitive
+      Terms of Service — keep it off in ranked play.</div>
+  </section>
+
+  <!-- ============ STAGE + METRICS ============ -->
+  <section>
+    <div class="stage">
+      <span class="pill" id="state">idle</span>
+      <div class="ring"></div>
+      <svg id="ghost" class="ghost" width="120" height="120" viewBox="0 0 64 64">
+        <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#9d7bff"/><stop offset="1" stop-color="#26d0ce"/></linearGradient></defs>
+        <path d="M32 6c-11 0-20 9-20 20v28l6-5 6 5 6-5 6 5 6-5 6 5V26C52 15 43 6 32 6z" fill="url(#g2)" opacity=".95"/>
+        <circle cx="25" cy="26" r="3.4" fill="#0a0b10"/><circle cx="39" cy="26" r="3.4" fill="#0a0b10"/>
+        <rect x="27" y="34" width="10" height="13" rx="5" fill="#0a0b10" opacity=".85"/>
+      </svg>
+      <div class="pulse" id="pulse">press A to begin · the ghost will take it from here</div>
+    </div>
+
+    <div class="grid4">
+      <div class="metric"><div class="k">Session</div><div class="v" id="mTime">00:00</div></div>
+      <div class="metric"><div class="k">Total presses</div><div class="v" id="mPress">0</div></div>
+      <div class="metric"><div class="k">Actions / min</div><div class="v" id="mApm">0</div></div>
+      <div class="metric"><div class="k">Est. encounters</div><div class="v" id="mEnc">0</div></div>
+    </div>
+
+    <div class="spark"><div class="k" style="font-size:11px;color:var(--dim)">APM (last 60s)</div>
+      <canvas id="spark" width="600" height="90"></canvas></div>
+
+    <div class="spark odds">
+      <div class="k" style="font-size:11px;color:var(--dim)">Shiny probability this session</div>
+      <div class="bar"><i id="oddsBar"></i></div>
+      <div class="row"><span>Per-encounter odds</span><b id="oPer">1 / 4096</b></div>
+      <div class="row"><span>Chance of ≥1 shiny so far</span><b id="oCum" class="">0.0%</b></div>
+      <div class="row"><span>Expected encounters for 50% odds</span><b id="o50">—</b></div>
+      <div class="mini">Odds use the real Gen-6+ model: full odds <b>1/4096</b>, Shiny Charm <b>3/4096</b>.
+        P(≥1) = 1 − (1 − p)<sup>N</sup>. This widget is the data layer — every session is logged below.</div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORY / DATA ============ -->
+  <section class="panel">
+    <h2>Session Log</h2>
+    <table><thead><tr><th>When</th><th>Dur</th><th>Presses</th><th>Enc</th></tr></thead>
+      <tbody id="hist"><tr><td colspan="4" style="color:var(--dim)">No sessions yet.</td></tr></tbody></table>
+    <button id="export" class="linkbtn" style="border:0;cursor:pointer;width:100%">⤓ Export sessions (JSON)</button>
+    <a class="linkbtn" id="yt" href="#" target="_blank">▶ Watch the build series · Subscribe</a>
+    <div class="mini">Data is saved to this browser's local storage only (the Aether local-first pattern).
+      In the desktop build this becomes a real file you own. Export anytime; nothing leaves your machine.</div>
+  </section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const PRESETS={
+  shiny:{arate:4,brate:2,enc:8,move:true},
+  egg:{arate:6,brate:0,enc:30,move:false},
+  jrpg:{arate:8,brate:0,enc:6,move:false},
+  idle:{arate:12,brate:0,enc:40,move:false},
+  custom:null
+};
+let running=false,t0=0,raf=0,tick=0,nextA=0,nextB=0,nextMove=0,
+    presses=0,encounters=0,apmBuf=[],pressWindow=[];
+
+function cfg(){return{
+  arate:+$('arate').value, brate:+$('brate').value, enc:+$('enc').value,
+  move:$('move').checked, charm:$('charm').checked, jit:$('jit').checked
+};}
+function perOdds(){return $('charm').checked?3/4096:1/4096;}
+function jitter(v){return $('jit').checked? v*(0.82+Math.random()*0.36) : v;}
+
+['arate','brate','enc'].forEach(id=>{
+  const o=$(id+'O'); const f=()=>o.textContent=(id==='enc'?(+$(id).value):(+$(id).value).toFixed(1));
+  $(id).addEventListener('input',()=>{f(); $('profile').value='custom';}); f();
+});
+['move','charm','jit'].forEach(id=>$(id).addEventListener('change',()=>{ if(id!=='charm')$('profile').value='custom'; paint();}));
+
+$('profile').addEventListener('change',e=>{
+  const p=PRESETS[e.target.value]; if(!p)return;
+  $('arate').value=p.arate; $('brate').value=p.brate; $('enc').value=p.enc; $('move').checked=p.move;
+  $('arateO').textContent=p.arate.toFixed(1); $('brateO').textContent=p.brate.toFixed(1); $('encO').textContent=p.enc;
+  paint();
+});
+
+function loop(now){
+  if(!running)return;
+  const el=(now-t0)/1000;
+  const c=cfg();
+  // A mashing
+  if(now>=nextA){ fire('A'); nextA=now+jitter(1000/Math.max(c.arate,.1)); }
+  // B taps
+  if(c.brate>0 && now>=nextB){ fire('B'); nextB=now+jitter(c.brate*1000); }
+  // movement weave
+  if(c.move && now>=nextMove){ fire('▸'); nextMove=now+jitter(450); }
+  // encounters
+  const expEnc=Math.floor(el/Math.max(c.enc,1));
+  if(expEnc>encounters){ encounters=expEnc; }
+  // metrics ~5fps
+  if(now-tick>200){ tick=now; paintLive(el); }
+  raf=requestAnimationFrame(loop);
+}
+function fire(label){
+  presses++; pressWindow.push(performance.now());
+  const gh=$('ghost'); gh.classList.remove('press'); void gh.offsetWidth; gh.classList.add('press');
+  $('pulse').textContent='tap '+label+'  ·  '+presses+' total';
+}
+function paintLive(el){
+  $('mTime').textContent=fmt(el);
+  $('mPress').textContent=presses.toLocaleString();
+  const cut=performance.now()-60000; pressWindow=pressWindow.filter(t=>t>cut);
+  const apm=Math.round(pressWindow.length*(60000/Math.min(60000,Math.max(1000,performance.now()-t0))));
+  $('mApm').textContent=apm;
+  $('mEnc').textContent=encounters.toLocaleString();
+  apmBuf.push(apm); if(apmBuf.length>120)apmBuf.shift(); drawSpark();
+  paintOdds();
+}
+function paintOdds(){
+  const p=perOdds(), N=encounters;
+  const cum=1-Math.pow(1-p,N);
+  $('oPer').textContent='1 / '+Math.round(1/p);
+  $('oCum').textContent=(cum*100).toFixed(N>0?2:1)+'%';
+  $('oCum').className=cum>0.5?'':''; $('oCum').style.color=cum>0.5?'var(--shiny)':'var(--txt)';
+  $('oddsBar').style.width=Math.min(100,cum*100)+'%';
+  $('o50').textContent=Math.ceil(Math.log(0.5)/Math.log(1-p)).toLocaleString()+' enc.';
+}
+function paint(){ paintOdds(); }
+function drawSpark(){
+  const c=$('spark'),x=c.getContext('2d'),w=c.width,h=c.height; x.clearRect(0,0,w,h);
+  if(apmBuf.length<2)return; const mx=Math.max(10,...apmBuf);
+  x.beginPath(); apmBuf.forEach((v,i)=>{const px=i/(apmBuf.length-1)*w, py=h-(v/mx)*(h-8)-4; i?x.lineTo(px,py):x.moveTo(px,py);});
+  x.strokeStyle='#26d0ce'; x.lineWidth=2; x.stroke();
+  x.lineTo(w,h); x.lineTo(0,h); x.closePath();
+  x.fillStyle='rgba(38,208,206,.12)'; x.fill();
+}
+function fmt(s){s=Math.floor(s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+
+$('go').addEventListener('click',()=>{
+  running=!running;
+  $('go').textContent=running?'⏸ Stop':'▶ Start mashing';
+  $('go').className=running?'stop':'start';
+  $('state').textContent=running?'mashing':'idle';
+  if(running){ const now=performance.now(); t0=now; nextA=nextB=nextMove=now; tick=now; raf=requestAnimationFrame(loop); }
+  else{ cancelAnimationFrame(raf); save(); }
+});
+$('reset').addEventListener('click',()=>{
+  running=false;cancelAnimationFrame(raf);presses=0;encounters=0;apmBuf=[];pressWindow=[];
+  $('go').textContent='▶ Start mashing';$('go').className='start';$('state').textContent='idle';
+  $('pulse').textContent='press A to begin · the ghost will take it from here';
+  paintLive(0);
+});
+
+// ---- session persistence (local-first) ----
+const KEY='thirdthumb.sessions';
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}}
+function save(){
+  if(presses<1)return;
+  const s=load(); s.unshift({ts:Date.now(),dur:Math.floor((performance.now()-t0)/1000),presses,encounters,
+    profile:$('profile').value,charm:$('charm').checked});
+  localStorage.setItem(KEY,JSON.stringify(s.slice(0,200))); renderHist();
+}
+function renderHist(){
+  const s=load(),b=$('hist');
+  if(!s.length){b.innerHTML='<tr><td colspan=4 style="color:var(--dim)">No sessions yet.</td></tr>';return;}
+  b.innerHTML=s.slice(0,12).map(r=>`<tr><td>${new Date(r.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</td>
+    <td>${fmt(r.dur)}</td><td>${r.presses.toLocaleString()}</td><td>${r.encounters}</td></tr>`).join('');
+}
+$('export').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(load(),null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='thirdthumb-sessions.json';a.click();
+});
+
+renderHist(); paintLive(0); paintOdds();
+</script>
+</body>
+</html>
