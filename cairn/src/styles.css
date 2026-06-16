@@ -1,0 +1,659 @@
+/* Cairn — the skin. Dark, narrow, edgy; tuned for a ~360px right-edge sidebar.
+   The accent recolors to whichever familiar you bonded with (--accent set on
+   .app / .card). Keep this layer light — it is meant to be re-skinned. */
+
+:root {
+  --bg: #0a0b10;
+  --bg2: #0e1018;
+  --panel: #12141d;
+  --panel2: #161927;
+  --line: #1e2233;
+  --text: #d7dae6;
+  --muted: #7e8398;
+  --faint: #565b70;
+  --accent: #7aa2ff;
+  --ink: #9aa0b4;
+  --danger: #e0566b;
+  --radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(120% 80% at 80% -10%, #15182400 0%, var(--bg) 60%), var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 7px;
+}
+
+.boot {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--faint);
+  font-size: 22px;
+}
+
+/* ---------------- main layout ---------------- */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--panel), transparent);
+}
+
+.topbar .avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 45%, transparent));
+}
+
+.who {
+  flex: 1;
+  min-width: 0;
+}
+.who .name {
+  font-weight: 650;
+  letter-spacing: 0.2px;
+}
+.who .name .glyph,
+.glyph {
+  color: var(--accent);
+}
+.who .status {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.tally {
+  font-size: 11px;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: 999px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+/* ---------------- the log ---------------- */
+
+.log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log.empty {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--muted);
+  gap: 4px;
+  padding: 24px;
+}
+.log .muted {
+  color: var(--faint);
+}
+
+.moment {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 8px;
+  padding: 8px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  transition: border-color 0.2s, opacity 0.2s;
+  animation: rise 0.28s ease;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.moment .m-glyph {
+  color: var(--accent);
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.85;
+  padding-top: 1px;
+}
+
+.m-text {
+  display: flex;
+  flex-direction: column;
+}
+.m-line {
+  color: var(--text);
+}
+.m-detail {
+  color: var(--muted);
+  font-size: 11.5px;
+  margin-top: 2px;
+  word-break: break-word;
+}
+.m-adverb {
+  color: var(--accent);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.m-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+  gap: 6px;
+}
+.m-ago {
+  color: var(--faint);
+  font-size: 10.5px;
+  white-space: nowrap;
+}
+.m-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.m-actions button {
+  font-size: 10.5px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 2px 7px;
+  transition: 0.15s;
+}
+.m-actions button:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.m-actions button.primary {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+.m-actions button.ghost {
+  opacity: 0.6;
+}
+
+/* status texture */
+.moment.st-open {
+  border-left: 2px solid var(--accent);
+}
+.moment.st-done {
+  opacity: 0.5;
+}
+.moment.st-done .m-line {
+  text-decoration: line-through;
+  text-decoration-color: var(--faint);
+}
+.moment.st-dismissed {
+  opacity: 0.4;
+}
+
+/* ---------------- the dock ---------------- */
+
+.dock {
+  border-top: 1px solid var(--line);
+  background: linear-gradient(0deg, var(--panel), transparent);
+  padding: 8px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gateways .gw-label,
+.lens-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.gw-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.gw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  transition: 0.15s;
+}
+.gw-chip:hover {
+  border-color: var(--accent);
+}
+.gw-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lens {
+  display: flex;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 2px;
+  gap: 2px;
+}
+.lens button {
+  flex: 1;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 4px 0;
+  border-radius: 7px;
+  transition: 0.15s;
+}
+.lens button.on {
+  background: color-mix(in srgb, var(--accent) 18%, var(--panel));
+  color: var(--text);
+}
+
+.compose-row {
+  display: flex;
+  gap: 6px;
+}
+.compose-row input {
+  flex: 1;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--text);
+  padding: 8px 10px;
+  outline: none;
+  transition: 0.15s;
+}
+.compose-row input:focus {
+  border-color: var(--accent);
+}
+.compose-row .send {
+  width: 38px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--accent);
+  font-size: 15px;
+}
+.compose-row .send:hover {
+  border-color: var(--accent);
+}
+
+.astask {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  user-select: none;
+}
+.astask input {
+  accent-color: var(--accent);
+}
+
+.undobar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.undobar button {
+  font-size: 11px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 4px 9px;
+}
+.undobar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.undobar button:not(:disabled):hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.mockflag {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--faint);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+/* ---------------- starter select ---------------- */
+
+.starter {
+  height: 100%;
+  overflow-y: auto;
+  padding: 26px 16px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.starter-head {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.kicker {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.starter-head h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 6px 0 4px;
+}
+.starter-head .sub {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card {
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  background: linear-gradient(180deg, var(--panel), var(--bg2));
+  transition: 0.2s;
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  grid-template-rows: auto auto auto auto;
+  column-gap: 12px;
+  align-items: center;
+}
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -16px color-mix(in srgb, var(--accent) 70%, black);
+}
+.card-art {
+  grid-row: 1 / 5;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--accent) 50%, transparent));
+}
+.card-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.card-role {
+  color: var(--accent);
+  font-size: 11px;
+}
+.card-tag {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+}
+.card-blurb {
+  grid-column: 1 / 3;
+  color: var(--muted);
+  font-size: 11.5px;
+  margin-top: 8px;
+}
+.card-cta {
+  grid-column: 1 / 3;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-radius: 9px;
+  padding: 7px;
+}
+.card:hover .card-cta {
+  background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+}
+.starter-foot {
+  margin-top: auto;
+  padding-top: 16px;
+  text-align: center;
+  color: var(--faint);
+  font-size: 10.5px;
+}
+
+/* ---------------- the familiars (SVG) ---------------- */
+
+.familiar-art {
+  display: block;
+  overflow: visible;
+  transform-origin: 50% 60%;
+}
+.familiar-art * {
+  transform-box: fill-box;
+}
+.breathe {
+  animation: breathe 3.6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.035);
+  }
+}
+
+/* Cinder — moth */
+[data-fam="cinder"] .wing path {
+  fill: color-mix(in srgb, var(--accent) 30%, transparent);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+[data-fam="cinder"] .torso,
+[data-fam="cinder"] .head {
+  fill: var(--ink);
+}
+[data-fam="cinder"] .antenna {
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  fill: none;
+  stroke-linecap: round;
+}
+[data-fam="cinder"] .ember {
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+[data-fam="cinder"] .emberdot {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 3px var(--accent));
+}
+.wing-l {
+  transform-origin: 95% 55%;
+  animation: flutter 2.6s ease-in-out infinite;
+}
+.wing-r {
+  transform-origin: 5% 55%;
+  animation: flutter 2.6s ease-in-out infinite;
+}
+@keyframes flutter {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(var(--flap, 6deg));
+  }
+}
+.wing-l {
+  --flap: -7deg;
+}
+.wing-r {
+  --flap: 7deg;
+}
+[data-emote="stir"] .wing-l,
+[data-emote="stir"] .wing-r,
+[data-emote="alert"] .wing-l,
+[data-emote="alert"] .wing-r {
+  animation-duration: 0.45s;
+}
+
+/* Murk — axolotl */
+[data-fam="murk"] .torso {
+  fill: color-mix(in srgb, var(--ink) 65%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 50%, transparent);
+  stroke-width: 1;
+}
+[data-fam="murk"] .frill path {
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  fill: none;
+}
+[data-fam="murk"] .frill circle {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 3px var(--accent));
+}
+[data-fam="murk"] .eye {
+  fill: #05060a;
+}
+[data-fam="murk"] .smile {
+  stroke: #05060a;
+  stroke-width: 1.2;
+  fill: none;
+  stroke-linecap: round;
+}
+.frill {
+  transform-origin: 100% 50%;
+  animation: wobble 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.18s);
+}
+.frill-r {
+  transform-origin: 0% 50%;
+}
+@keyframes wobble {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+[data-emote="stir"] .frill,
+[data-emote="alert"] .frill {
+  animation-duration: 0.9s;
+}
+
+/* Vane — raven */
+[data-fam="vane"] .torso,
+[data-fam="vane"] .skull {
+  fill: var(--ink);
+}
+[data-fam="vane"] .tail,
+[data-fam="vane"] .wing {
+  fill: color-mix(in srgb, var(--ink) 75%, black);
+}
+[data-fam="vane"] .beak {
+  fill: var(--accent);
+}
+[data-fam="vane"] .eye {
+  fill: #05060a;
+}
+[data-fam="vane"] .glint {
+  fill: var(--accent);
+  animation: glint 2.6s ease-in-out infinite;
+}
+@keyframes glint {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.head {
+  transform-origin: 60% 85%;
+}
+[data-emote="stir"] .head,
+[data-emote="alert"] .head {
+  animation: tilt 0.7s ease;
+}
+@keyframes tilt {
+  0% {
+    transform: rotate(0);
+  }
+  35% {
+    transform: rotate(-11deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .familiar-art,
+  .familiar-art *,
+  .moment {
+    animation: none !important;
+  }
+}

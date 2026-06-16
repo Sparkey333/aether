@@ -1,0 +1,16 @@
+[package]
+name = "cairn-core"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.77.2"
+description = "The bones of Cairn: the Ledger of Moments, the local Vault, undo/redo, and watcher classification. UI-free and portable — the part that never gets re-skinned."
+license = "MIT OR Apache-2.0"
+
+[lib]
+name = "cairn_core"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rusqlite = { version = "0.32", features = ["bundled"] }
+notify = "6"

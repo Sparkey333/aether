@@ -1,0 +1,35 @@
+[package]
+name = "cairn"
+version = "0.1.0"
+description = "Cairn — a watcher, record-keeper, and gentle reminder buddy. The skinny sidebar that keeps the ledger of what you just did."
+authors = ["DarkHearts"]
+license = "MIT OR Apache-2.0"
+repository = ""
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "cairn_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+cairn-core = { path = "../crates/cairn-core" }
+tauri = { version = "2", features = [] }
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-log = "2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+notify = "6"
+log = "0.4"
+
+# Smaller release bundle — matters for an always-on sidebar. Kept conservative
+# (no panic=abort) so the first build on macOS has the best odds of succeeding.
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
