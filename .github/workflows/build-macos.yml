@@ -1,0 +1,57 @@
+name: Build macOS app (.dmg)
+
+# The "keep rollin" loop: every push to a working branch builds a downloadable
+# .dmg on a real macOS runner (Tauri can't cross-compile a Mac bundle from
+# Linux). Grab the artifact from the run's summary page, click, test, repeat.
+
+on:
+  push:
+    branches:
+      - main
+      - "claude/**"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-14 # Apple-silicon runner
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build the Mac app (.dmg + .app)
+        run: npm run tauri:build
+
+      - name: Upload .dmg
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aether-macos-dmg
+          path: src-tauri/target/release/bundle/dmg/*.dmg
+          if-no-files-found: error
+
+      - name: Upload .app (zipped)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aether-macos-app
+          path: src-tauri/target/release/bundle/macos/*.app
+          if-no-files-found: warn

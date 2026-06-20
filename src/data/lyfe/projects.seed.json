@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "LIFE Tree — seeded snapshot",
+    "capturedFrom": "Google Drive · 'LIFE Tree Master Tracker — Project Index (138 projects, current)' + the prior version",
+    "capturedAt": "2026-06-16",
+    "completeness": "partial — ~60 of 138 projects captured from the tracker's preview text; full sync pending Drive reconnect (see docs/LYFE.md)",
+    "pillarMapping": "first-pass, by Lyfe's engine — the tracker's own 'Category (optimize later)' column was left blank, so this fills that gap. Re-sort freely.",
+    "doctrine": "provenance kept: every project carries its source + original Todoist id. Nothing here is invented; unknown counts are omitted, not guessed."
+  },
+  "projects": [
+    { "id": "t-6P4975FqMQ2P5pP6", "name": "Civil Engineer Career", "pillar": "work", "group": 0, "todoistId": "6P4975FqMQ2P5pP6", "sections": 10, "tasks": 20, "subtasks": 4, "totalItems": 24, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PHc763Wv6jfMpVX", "name": "Home Garden Eden", "pillar": "body", "group": 0, "todoistId": "6PHc763Wv6jfMpVX", "sections": 7, "tasks": 35, "totalItems": 35, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PVm3r5g76Ch8cXf", "name": "Store Website", "pillar": "work", "group": 0, "todoistId": "6PVm3r5g76Ch8cXf", "sections": 2, "tasks": 2, "totalItems": 3, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4hHCR3m6fxj3G5", "name": "Treasure Hunt - Truth", "pillar": "spirit", "group": 0, "todoistId": "6P4hHCR3m6fxj3G5", "sections": 10, "tasks": 45, "totalItems": 45, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6P4gvFX84fh3MWqQ", "name": "Ansom Outdoor LLC", "pillar": "work", "group": 1, "todoistId": "6P4gvFX84fh3MWqQ", "sections": 10, "tasks": 31, "totalItems": 32, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P89rWcR5VcwqFH6", "name": "Forcefield", "pillar": "mind", "group": 1, "todoistId": "6P89rWcR5VcwqFH6", "sections": 4, "tasks": 8, "totalItems": 8, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4gvMxJ8Fxq9JP8", "name": "Garden Fish System", "pillar": "body", "group": 1, "todoistId": "6P4gvMxJ8Fxq9JP8", "sections": 8, "tasks": 21, "subtasks": 17, "totalItems": 38, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4hM3CFpHPr5hVC", "name": "Inventions", "pillar": "mind", "group": 1, "todoistId": "6P4hM3CFpHPr5hVC", "sections": 7, "tasks": 6, "totalItems": 6, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7R77VJH8Rqv5qJ", "name": "Music", "pillar": "craft", "group": 1, "todoistId": "6P7R77VJH8Rqv5qJ", "sections": 6, "tasks": 31, "totalItems": 31, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6Crf327hxJqxhFfW", "name": "Personal Care", "pillar": "body", "group": 1, "todoistId": "6Crf327hxJqxhFfW", "sections": 6, "tasks": 11, "totalItems": 11, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4grM6Vghp7CjJm", "name": "Spiritual", "pillar": "spirit", "group": 1, "todoistId": "6P4grM6Vghp7CjJm", "sections": 6, "tasks": 14, "subtasks": 5, "totalItems": 19, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6P4Qxc8HJpwvgqcW", "name": "Fitness", "pillar": "body", "group": 2, "todoistId": "6P4Qxc8HJpwvgqcW", "sections": 4, "tasks": 5, "subtasks": 6, "totalItems": 11, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PGmQGJfRRghRXVp", "name": "MCOG Magneto Cog", "pillar": "mind", "group": 2, "todoistId": "6PGmQGJfRRghRXVp", "sections": 2, "tasks": 23, "totalItems": 23, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7QvJM6cCC3HhcH", "name": "Nikola Tesla Studies", "pillar": "mind", "group": 2, "todoistId": "6P7QvJM6cCC3HhcH", "sections": 7, "tasks": 47, "subtasks": 12, "totalItems": 59, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4h4Rg7x4MWCRFR", "name": "Small Mountain Farm", "pillar": "body", "group": 2, "todoistId": "6P4h4Rg7x4MWCRFR", "sections": 8, "tasks": 21, "subtasks": 32, "totalItems": 55, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6Crf327hxWP7JvP3", "name": "Work Business", "pillar": "work", "group": 2, "todoistId": "6Crf327hxWP7JvP3", "sections": 5, "tasks": 11, "totalItems": 12, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4wr9fjRmXrGjWW", "name": "Writing", "pillar": "craft", "group": 2, "todoistId": "6P4wr9fjRmXrGjWW", "sections": 7, "tasks": 10, "totalItems": 10, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6Crf327hxmm3J4j8", "name": "Electric Engineer", "pillar": "mind", "group": 3, "todoistId": "6Crf327hxmm3J4j8", "sections": 5, "tasks": 18, "subtasks": 8, "totalItems": 26, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4vvf5wccJhR8Jm", "name": "Finances", "pillar": "work", "group": 3, "todoistId": "6P4vvf5wccJhR8Jm", "sections": 5, "tasks": 5, "totalItems": 5, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PCm5CH8fXcw6FJW", "name": "Magneto-meter Sensor", "pillar": "mind", "group": 3, "todoistId": "6PCm5CH8fXcw6FJW", "sections": 6, "tasks": 50, "totalItems": 50, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7F8q4qHjQvpX8J", "name": "Side BusinessZ", "pillar": "work", "group": 3, "todoistId": "6P7F8q4qHjQvpX8J", "sections": 1, "tasks": 2, "totalItems": 2, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4hgR3pPmX3Vhfg", "name": "Wolfden Boarding Rescue", "pillar": "body", "group": 3, "todoistId": "6P4hgR3pPmX3Vhfg", "sections": 9, "tasks": 27, "totalItems": 27, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6P4grQG9Wc5pQmF2", "name": "AlchemyDiet", "pillar": "body", "group": 4, "todoistId": "6P4grQG9Wc5pQmF2", "sections": 3, "tasks": 8, "totalItems": 8, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7GhvC9wmM7pmrr", "name": "Build House and Workshops", "pillar": "body", "group": 4, "todoistId": "6P7GhvC9wmM7pmrr", "sections": 8, "tasks": 0, "totalItems": 0, "state": "shell", "source": "todoist-tracker", "note": "Empty shell — a named intention with no tasks yet." },
+    { "id": "t-6Crf327hxxM6g3hR", "name": "Earth Community", "pillar": "service", "group": 4, "todoistId": "6Crf327hxxM6g3hR", "sections": 5, "tasks": 4, "totalItems": 4, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7VFGPmMcQf4HR4", "name": "Meditation Powers", "pillar": "spirit", "group": 4, "todoistId": "6P7VFGPmMcQf4HR4", "sections": 6, "tasks": 28, "totalItems": 28, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PH5q3rgw5VGXrGv", "name": "Mega GPS Personal", "pillar": "mind", "group": 4, "todoistId": "6PH5q3rgw5VGXrGv", "sections": 2, "tasks": 22, "totalItems": 22, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P497mJ4994pCQvF", "name": "Real Estate", "pillar": "work", "group": 4, "todoistId": "6P497mJ4994pCQvF", "sections": 5, "tasks": 4, "totalItems": 4, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6Crf327j269w8GFm", "name": "Creative Arts", "pillar": "craft", "group": 5, "todoistId": "6Crf327j269w8GFm", "sections": 6, "tasks": 28, "subtasks": 23, "totalItems": 51, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PXWvpmv4rg5fqPG", "name": "Ponds and Dams", "pillar": "body", "group": 5, "todoistId": "6PXWvpmv4rg5fqPG", "sections": 4, "tasks": 14, "totalItems": 14, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7XVj88HvcR33Qj", "name": "Spirit Lightsaber", "pillar": "spirit", "group": 5, "todoistId": "6P7XVj88HvcR33Qj", "sections": 3, "tasks": 4, "totalItems": 4, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7RQwcCFXr52Wp8", "name": "Study Universal Laws", "pillar": "spirit", "group": 5, "todoistId": "6P7RQwcCFXr52Wp8", "sections": 3, "tasks": 9, "totalItems": 9, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7Ghh4hF5QfVQ2J", "name": "Wild Sanctuary", "pillar": "body", "group": 5, "todoistId": "6P7Ghh4hF5QfVQ2J", "sections": 8, "tasks": 20, "totalItems": 20, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6PXWxQXFmwx6rh8p", "name": "Artwork", "pillar": "craft", "group": 6, "todoistId": "6PXWxQXFmwx6rh8p", "sections": 0, "tasks": 0, "totalItems": 0, "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4hgRMGFvPg9RVw", "name": "Tech Integration", "pillar": "mind", "group": 6, "todoistId": "6P4hgRMGFvPg9RVw", "sections": 7, "tasks": 6, "totalItems": 6, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6PXWxV4gxG4mgr8J", "name": "Nonprofits", "pillar": "service", "group": 7, "todoistId": "6PXWxV4gxG4mgr8J", "sections": 0, "tasks": 0, "totalItems": 0, "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4hgRM5cwxjf7v8", "name": "Package and Market", "pillar": "work", "group": 7, "todoistId": "6P4hgRM5cwxjf7v8", "sections": 7, "tasks": 2, "totalItems": 2, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6PCpCR42XWQcxX5P", "name": "Tribes Game", "pillar": "craft", "group": 12, "todoistId": "6PCpCR42XWQcxX5P", "sections": 4, "tasks": 10, "totalItems": 10, "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6P7Vr9MGgGw7JQQ7", "name": "3 6 9", "pillar": "spirit", "group": null, "todoistId": "6P7Vr9MGgGw7JQQ7", "sections": 3, "tasks": 0, "totalItems": 0, "state": "shell", "source": "todoist-tracker", "note": "Tesla's 3·6·9 — currently an empty shell." },
+    { "id": "t-6P4vj8P7697XR7m2", "name": "3D Printing", "pillar": "mind", "group": null, "todoistId": "6P4vj8P7697XR7m2", "sections": 5, "tasks": 6, "totalItems": 6, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PGPQq7hr7J27vR3", "name": "3D Printing", "pillar": "mind", "group": null, "todoistId": "6PGPQq7hr7J27vR3", "sections": 2, "tasks": 1, "totalItems": 1, "state": "active", "source": "todoist-tracker", "note": "Second 3D Printing project — duplicate of the above." },
+    { "id": "t-6P4hHCXgvr5cCJMj", "name": "Always Learning", "pillar": "mind", "group": null, "todoistId": "6P4hHCXgvr5cCJMj", "sections": 3, "tasks": 5, "totalItems": 5, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6PH5rHwMFW3fmX66", "name": "Arduino Wireless Battery packs", "pillar": "mind", "group": null, "todoistId": "6PH5rHwMFW3fmX66", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P89rp8M56vFQg2h", "name": "Armor", "pillar": "craft", "group": null, "todoistId": "6P89rp8M56vFQg2h", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P6cR5VjRRw943j6", "name": "Auditorium Sky Garage", "pillar": "work", "group": null, "todoistId": "6P6cR5VjRRw943j6", "sections": 4, "tasks": 2, "totalItems": 2, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7392Qw3WHw7mWj", "name": "Automation Dynamo", "pillar": "mind", "group": null, "todoistId": "6P7392Qw3WHw7mWj", "sections": 6, "tasks": 31, "totalItems": 31, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4Qx9w8mm2V4h5w", "name": "Blogs AI", "pillar": "work", "group": null, "todoistId": "6P4Qx9w8mm2V4h5w", "sections": 6, "tasks": 1, "totalItems": 1, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7RMHrJ4G2c5vc6", "name": "Board Games Prints", "pillar": "craft", "group": null, "todoistId": "6P7RMHrJ4G2c5vc6", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4hHCxX7gWv39VG", "name": "Charity", "pillar": "service", "group": null, "todoistId": "6P4hHCxX7gWv39VG", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P7Qw7CQj878xJF7", "name": "Chill Master Engineer", "pillar": "mind", "group": null, "todoistId": "6P7Qw7CQj878xJF7", "sections": 5, "tasks": 14, "subtasks": 4, "totalItems": 18, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4hHF6wQXQ5HVv5", "name": "Church", "pillar": "spirit", "group": null, "todoistId": "6P4hHF6wQXQ5HVv5", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4hM3MvgPCV23QJ", "name": "Communities", "pillar": "service", "group": null, "todoistId": "6P4hM3MvgPCV23QJ", "state": "active", "source": "todoist-tracker" },
+
+    { "id": "t-6P7QxVphRQV5589V", "name": "Earth Healing Temple", "pillar": "spirit", "group": null, "todoistId": "6P7QxVphRQV5589V", "sections": 4, "tasks": 1, "totalItems": 2, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P89rwpWRr9X3j4g", "name": "Energy Cores", "pillar": "mind", "group": null, "todoistId": "6P89rwpWRr9X3j4g", "sections": 4, "tasks": 16, "totalItems": 16, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7Vr97FJWCHQcWX", "name": "Energy Frequency Vibration", "pillar": "spirit", "group": null, "todoistId": "6P7Vr97FJWCHQcWX", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P7Qm6JxM3fp5H7v", "name": "Engineer PE License", "pillar": "work", "group": null, "todoistId": "6P7Qm6JxM3fp5H7v", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4vv7q47fC45xC7", "name": "Guide Young Men - Dojo", "pillar": "service", "group": null, "todoistId": "6P4vv7q47fC45xC7", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6PC5HM8v935XwH39", "name": "Horror of Latter Cults", "pillar": "craft", "group": null, "todoistId": "6PC5HM8v935XwH39", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6PXWwvv4Q2PVh56C", "name": "Husky Breeding Ultimate Experience", "pillar": "body", "group": null, "todoistId": "6PXWwvv4Q2PVh56C", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4hgRFvjj339m9p", "name": "Land Development", "pillar": "work", "group": null, "todoistId": "6P4hgRFvjj339m9p", "sections": 9, "tasks": 12, "totalItems": 12, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7Vr5HRWx6428Qg", "name": "Magnetism Notes", "pillar": "mind", "group": null, "todoistId": "6P7Vr5HRWx6428Qg", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P5XwmpCvVMC4XH3", "name": "Magneto Spheres", "pillar": "mind", "group": null, "todoistId": "6P5XwmpCvVMC4XH3", "sections": 4, "tasks": 9, "totalItems": 9, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P4hHC73CVJFmgPj", "name": "Master of Science", "pillar": "mind", "group": null, "todoistId": "6P4hHC73CVJFmgPj", "sections": 3, "tasks": 10, "subtasks": 18, "totalItems": 29, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P7RMGh8P3jfvJRj", "name": "Materials Games", "pillar": "craft", "group": null, "todoistId": "6P7RMGh8P3jfvJRj", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6P4hHCghVqMcrGqc", "name": "Mentorship Teach", "pillar": "service", "group": null, "todoistId": "6P4hHCghVqMcrGqc", "sections": 4, "tasks": 5, "totalItems": 5, "state": "active", "source": "todoist-tracker" },
+    { "id": "t-6P89vFjfW8JMPRPR", "name": "Mind Reading - The Judge", "pillar": "spirit", "group": null, "todoistId": "6P89vFjfW8JMPRPR", "state": "shell", "source": "todoist-tracker" },
+    { "id": "t-6PCmVX32jPjCcGWG", "name": "Mining and Metallurgy", "pillar": "mind", "group": null, "todoistId": "6PCmVX32jPjCcGWG", "sections": 2, "tasks": 10, "totalItems": 10, "state": "active", "source": "todoist-tracker" }
+  ]
+}
