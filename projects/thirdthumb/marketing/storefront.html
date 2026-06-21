@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ThirdThumb — storefront mockups</title>
+<style>
+  :root{--bg:#0a0b10;--panel:#12141d;--line:#242838;--txt:#e8ebf5;--dim:#9aa3bd;
+        --accent:#7c5cff;--accent2:#26d0ce;--shiny:#ffd34e;--good:#3ddc97;
+        --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;--mono:ui-monospace,Menlo,monospace}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans)}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px}
+  .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+  h2{font-size:14px;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);margin:38px 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;
+        background:radial-gradient(700px 360px at 80% -20%,#1c1638,transparent 60%),var(--panel);
+        border:1px solid var(--line);border-radius:18px;padding:34px}
+  @media(max-width:780px){.hero{grid-template-columns:1fr}}
+  .hero h1{font-size:40px;margin:6px 0 12px;line-height:1.05}
+  .hero p{color:var(--dim);font-size:16px;line-height:1.6;margin:0 0 20px}
+  .cta{display:inline-block;background:linear-gradient(90deg,var(--accent),#9d7bff);color:#fff;
+       text-decoration:none;padding:13px 22px;border-radius:11px;font-weight:600}
+  .cta.alt{background:transparent;border:1px solid var(--line);color:var(--txt);margin-left:10px}
+  .heroart{aspect-ratio:1.2;border:1px solid var(--line);border-radius:14px;
+           background:radial-gradient(circle at 50% 38%,rgba(124,92,255,.25),transparent 60%),#0d0f17;
+           display:flex;align-items:center;justify-content:center}
+  /* product grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .shot{height:150px;display:flex;align-items:center;justify-content:center;
+        background:radial-gradient(circle at 50% 40%,rgba(38,208,206,.18),transparent 60%),#0d0f17;border-bottom:1px solid var(--line)}
+  .card .body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .plat{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2)}
+  .card h3{margin:0;font-size:16px}
+  .card p{margin:0;color:var(--dim);font-size:13px;line-height:1.5;flex:1}
+  .price{font-family:var(--mono);font-size:20px;color:var(--shiny)}
+  .row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .buy{background:#2a2f42;color:var(--txt);border:0;border-radius:9px;padding:9px 14px;font-size:13px;cursor:pointer}
+  .stars{color:var(--shiny);font-size:13px}
+  /* youtube funnel */
+  .yt{display:flex;align-items:center;gap:18px;background:linear-gradient(90deg,#1a0f12,var(--panel));
+      border:1px solid var(--line);border-radius:14px;padding:22px}
+  .play{width:54px;height:54px;border-radius:50%;background:#ff3b3b;display:flex;align-items:center;justify-content:center;flex:none;font-size:22px;color:#fff}
+  .sub{margin-left:auto;background:#ff3b3b;color:#fff;border:0;border-radius:9px;padding:11px 18px;font-weight:600;cursor:pointer}
+  .note{color:var(--dim);font-size:11px;margin-top:24px;line-height:1.6}
+</style></head>
+<body><div class="wrap">
+  <div class="tag">Storefront mockups · concept only</div>
+
+  <h2>Shopify / own-site hero</h2>
+  <div class="hero">
+    <div>
+      <div class="tag" style="color:var(--accent2)">ThirdThumb · GhostHands</div>
+      <h1>It mashes,<br>you chill.</h1>
+      <p>A friendly auto-presser for the long, boring grinds — Pokémon shiny hunts,
+         JRPG farming, idle tappers. Free app, $29 board, or a build-it-yourself kit.
+         Single-player &amp; accessibility first.</p>
+      <a class="cta" href="#">Get the free app</a>
+      <a class="cta alt" href="#">Shop the kit</a>
+    </div>
+    <div class="heroart">
+      <svg width="150" height="150" viewBox="0 0 64 64"><defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9d7bff"/><stop offset="1" stop-color="#26d0ce"/></linearGradient></defs>
+        <path d="M32 6c-11 0-20 9-20 20v28l6-5 6 5 6-5 6 5 6-5 6 5V26C52 15 43 6 32 6z" fill="url(#g)"/>
+        <circle cx="25" cy="26" r="3.4" fill="#0a0b10"/><circle cx="39" cy="26" r="3.4" fill="#0a0b10"/>
+        <rect x="27" y="34" width="10" height="13" rx="5" fill="#0a0b10"/></svg>
+    </div>
+  </div>
+
+  <h2>Marketplace listings (Etsy · Tindie · MakerWorld)</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="shot"><span style="color:var(--dim)">[ Link board photo ]</span></div>
+      <div class="body">
+        <div class="plat">Tindie</div>
+        <h3>ThirdThumb Link</h3>
+        <p>Pre-flashed RP2040 + cable. Plug into your console; the app mashes for you. No soldering, no CFW.</p>
+        <div class="row"><span class="price">$34</span><span class="stars">★★★★★ 41</span></div>
+        <div class="row"><button class="buy">Add to cart</button><span style="color:var(--good);font-size:12px">In stock</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="shot"><span style="color:var(--dim)">[ Assembled rig photo ]</span></div>
+      <div class="body">
+        <div class="plat">Etsy · Handmade</div>
+        <h3>ThirdThumb Rig — Assembled</h3>
+        <p>3D-printed clamp + 2 servos, built &amp; tuned. Physically presses any controller. The "magic" unit.</p>
+        <div class="row"><span class="price">$99</span><span class="stars">★★★★☆ 12</span></div>
+        <div class="row"><button class="buy">Add to cart</button><span style="color:var(--shiny);font-size:12px">Made to order</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="shot"><span style="color:var(--dim)">[ STL render ]</span></div>
+      <div class="body">
+        <div class="plat">MakerWorld · free</div>
+        <h3>Rig clamp — printable STL</h3>
+        <p>Parametric clamp + BOM, free to download &amp; print. Built it? Grab a Link board &amp; subscribe.</p>
+        <div class="row"><span class="price">FREE</span><span class="stars">⬇ 3.2k · ♥ 480</span></div>
+        <div class="row"><button class="buy">Download</button><span style="color:var(--dim);font-size:12px">PWYW tip</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>YouTube funnel</h2>
+  <div class="yt">
+    <div class="play">▶</div>
+    <div>
+      <h3 style="margin:0 0 4px">Build your own ThirdThumb Rig (full course)</h3>
+      <div style="color:var(--dim);font-size:13px">Print → wire → flash → tune. Every artifact links back here.</div>
+    </div>
+    <button class="sub">Subscribe</button>
+  </div>
+
+  <div class="note">Mockups for layout/direction only — not live listings. Photos are placeholders;
+    swap in real product shots (or Firefly/Canva renders). Keep all copy function-first
+    ("auto-press for grind-heavy single-player RPGs"), avoid game trademarks/sprites, never bundle games.
+    See <code>docs/STRATEGY.md</code> §5.</div>
+</div></body></html>

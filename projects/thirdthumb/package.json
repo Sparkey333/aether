@@ -1,0 +1,19 @@
+{
+  "name": "thirdthumb",
+  "private": true,
+  "version": "0.1.0",
+  "description": "ThirdThumb / GhostHands — a friendly KISS auto-masher for grind-heavy single-player games. Ships as a desktop app (.dmg) via Tauri.",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "icon": "tauri icon assets/icon.png"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.2"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.0"
+  }
+}

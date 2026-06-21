@@ -74,6 +74,20 @@
   .note{font-size:11px;color:var(--warn);margin-top:12px;line-height:1.5}
   a{color:var(--accent2)}
   .linkbtn{display:block;text-align:center;background:#2a2f42;color:var(--txt);border-radius:9px;padding:9px;margin-top:8px;text-decoration:none;font-size:13px}
+  .adv{margin-top:14px;border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+  .adv summary{cursor:pointer;font-size:12px;color:var(--dim)}
+  .kb{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:8px;align-items:center;margin:10px 0;font-size:12px;color:var(--dim)}
+  .kb input{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:7px;font-family:var(--mono);text-align:center;width:100%}
+  .life{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center}
+  .life>div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 6px}
+  .life span{display:block;font-family:var(--mono);font-size:20px;color:var(--shiny)}
+  .life small{font-size:10px;color:var(--dim);letter-spacing:.4px}
+  .badge+.badge{margin-left:10px}
+  .modal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.8);align-items:center;justify-content:center;z-index:50;padding:20px}
+  .modal .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:24px;max-width:440px}
+  .modal h3{margin:0 0 10px}.modal p{color:var(--dim);font-size:14px;margin:0 0 12px}
+  .modal ul{color:var(--dim);font-size:13px;line-height:1.7;margin:0 0 16px;padding-left:18px}
+  .modal .card button{width:100%}
 </style>
 </head>
 <body>
@@ -89,7 +103,8 @@
     </svg>
     <div><h1>ThirdThumb</h1><small>GhostHands · Mash Console</small></div>
   </div>
-  <div class="badge">● <b>local-first</b> · no account · your data stays on this machine</div>
+  <div class="badge" id="mode">◌ simulation (browser)</div>
+  <div class="badge">● <b>local-first</b> · your data stays on this machine</div>
 </header>
 
 <main>
@@ -102,6 +117,8 @@
       <option value="egg">Pokémon — egg hatch / breeding loop</option>
       <option value="jrpg">JRPG grind — confirm spam</option>
       <option value="idle">Mobile idle / gacha tapper</option>
+      <option value="fish">Pokémon — fishing / lottery reroll</option>
+      <option value="dialog">Story skip — dialog masher</option>
       <option value="custom">Custom</option>
     </select>
 
@@ -120,6 +137,17 @@
       <label class="switch"><input id="charm" type="checkbox"><span class="slider"></span></label></div>
     <div class="toggle"><span>Humanize timing (±jitter)</span>
       <label class="switch"><input id="jit" type="checkbox" checked><span class="slider"></span></label></div>
+
+    <details class="adv">
+      <summary>Emulator keybinds (Tier 1)</summary>
+      <div class="kb">
+        <span>A →</span><input id="akey" maxlength="6" value="x">
+        <span>B →</span><input id="bkey" maxlength="6" value="z">
+      </div>
+      <div class="mini">The keyboard keys your emulator uses for A / B. The desktop app presses
+        these for real; the browser only simulates.</div>
+    </details>
+    <button id="connect" class="ghostbtn" style="width:100%;margin-top:12px">🔌 Connect device · Tier 2 (WebSerial)</button>
 
     <div class="btns">
       <button id="go" class="start">▶ Start mashing</button>
@@ -168,6 +196,11 @@
   <!-- ============ HISTORY / DATA ============ -->
   <section class="panel">
     <h2>Session Log</h2>
+    <div class="life">
+      <div><span id="lifeH">0.0</span><small>HOURS SAVED</small></div>
+      <div><span id="lifeP">0</span><small>LIFETIME PRESSES</small></div>
+      <div><span id="lifeS">0</span><small>SESSIONS</small></div>
+    </div>
     <table><thead><tr><th>When</th><th>Dur</th><th>Presses</th><th>Enc</th></tr></thead>
       <tbody id="hist"><tr><td colspan="4" style="color:var(--dim)">No sessions yet.</td></tr></tbody></table>
     <button id="export" class="linkbtn" style="border:0;cursor:pointer;width:100%">⤓ Export sessions (JSON)</button>
@@ -177,13 +210,39 @@
   </section>
 </main>
 
+<div id="onb" class="modal"><div class="card">
+  <h3>👻 Welcome to ThirdThumb</h3>
+  <p>It mashes, you chill. Pick a profile, set the A-rate, hit <b>Start</b> — the ghost takes over.</p>
+  <ul>
+    <li><b>Browser:</b> simulation + live data — great for trying it.</li>
+    <li><b>Desktop app:</b> presses your emulator keys for real (set them under "Emulator keybinds").</li>
+    <li>Single-player / accessibility first — keep it off in online ranked.</li>
+  </ul>
+  <button id="onbClose" class="start">Got it</button>
+</div></div>
+
 <script>
 const $=id=>document.getElementById(id);
+
+// ---- Tier-1 bridge: drive the native engine when running inside the desktop app ----
+const TAURI=(window.__TAURI__&&window.__TAURI__.core)||null;
+function setMode(){ const m=$('mode');
+  if(TAURI){ m.innerHTML='● <b style="color:var(--good)">driving real input</b> · desktop'; }
+  else{ m.textContent='◌ simulation · browser'; } }
+function buildCfg(){return{
+  a_key:$('akey').value||'x', a_rate:+$('arate').value,
+  b_key:$('bkey').value||'z', b_enabled:+$('brate').value>0, b_every_sec:+$('brate').value,
+  move_enabled:$('move').checked, move_every_ms:450, jitter:$('jit').checked };}
+async function backendStart(){ if(TAURI){ try{ await TAURI.invoke('start_mash',{cfg:buildCfg()}); }catch(e){ console.warn('start_mash',e); } } }
+async function backendStop(){ if(TAURI){ try{ await TAURI.invoke('stop_mash'); }catch(e){ console.warn('stop_mash',e); } } }
+
 const PRESETS={
   shiny:{arate:4,brate:2,enc:8,move:true},
   egg:{arate:6,brate:0,enc:30,move:false},
   jrpg:{arate:8,brate:0,enc:6,move:false},
   idle:{arate:12,brate:0,enc:40,move:false},
+  fish:{arate:3,brate:1.5,enc:12,move:false},
+  dialog:{arate:7,brate:0,enc:40,move:false},
   custom:null
 };
 let running=false,t0=0,raf=0,tick=0,nextA=0,nextB=0,nextMove=0,
@@ -261,13 +320,13 @@ function drawSpark(){
 }
 function fmt(s){s=Math.floor(s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 
-$('go').addEventListener('click',()=>{
+$('go').addEventListener('click',async()=>{
   running=!running;
   $('go').textContent=running?'⏸ Stop':'▶ Start mashing';
   $('go').className=running?'stop':'start';
   $('state').textContent=running?'mashing':'idle';
-  if(running){ const now=performance.now(); t0=now; nextA=nextB=nextMove=now; tick=now; raf=requestAnimationFrame(loop); }
-  else{ cancelAnimationFrame(raf); save(); }
+  if(running){ const now=performance.now(); t0=now; nextA=nextB=nextMove=now; tick=now; raf=requestAnimationFrame(loop); await backendStart(); }
+  else{ cancelAnimationFrame(raf); await backendStop(); save(); }
 });
 $('reset').addEventListener('click',()=>{
   running=false;cancelAnimationFrame(raf);presses=0;encounters=0;apmBuf=[];pressWindow=[];
@@ -287,6 +346,10 @@ function save(){
 }
 function renderHist(){
   const s=load(),b=$('hist');
+  const tot=s.reduce((a,r)=>({p:a.p+r.presses,d:a.d+r.dur}),{p:0,d:0});
+  $('lifeH').textContent=(tot.d/3600).toFixed(1);
+  $('lifeP').textContent=tot.p.toLocaleString();
+  $('lifeS').textContent=s.length;
   if(!s.length){b.innerHTML='<tr><td colspan=4 style="color:var(--dim)">No sessions yet.</td></tr>';return;}
   b.innerHTML=s.slice(0,12).map(r=>`<tr><td>${new Date(r.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</td>
     <td>${fmt(r.dur)}</td><td>${r.presses.toLocaleString()}</td><td>${r.encounters}</td></tr>`).join('');
@@ -296,6 +359,22 @@ $('export').addEventListener('click',()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='thirdthumb-sessions.json';a.click();
 });
 
+// ---- Tier-2 device connect (WebSerial stub for the Link board) ----
+$('connect').addEventListener('click',async()=>{
+  if(!('serial' in navigator)){
+    alert('WebSerial isn’t available here. Pair a ThirdThumb Link board (Tier 2) in the desktop build to drive a real console.');
+    return;
+  }
+  try{ const port=await navigator.serial.requestPort(); await port.open({baudRate:115200});
+    $('connect').textContent='🔌 device connected'; $('connect').style.color='var(--good)';
+  }catch(e){ /* user dismissed the picker */ }
+});
+
+// ---- first-run onboarding ----
+if(!localStorage.getItem('thirdthumb.seen')) $('onb').style.display='flex';
+$('onbClose').addEventListener('click',()=>{ $('onb').style.display='none'; localStorage.setItem('thirdthumb.seen','1'); });
+
+setMode();
 renderHist(); paintLive(0); paintOdds();
 </script>
 </body>

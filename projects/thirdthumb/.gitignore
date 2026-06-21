@@ -1,0 +1,14 @@
+# --- Node ---
+node_modules/
+
+# --- Rust / Tauri ---
+src-tauri/target/
+src-tauri/gen/
+
+# --- OS ---
+.DS_Store
+
+# Generated icon set (run `npm run icon` to regenerate from assets/icon.png)
+src-tauri/icons/*.png
+src-tauri/icons/*.icns
+src-tauri/icons/*.ico
