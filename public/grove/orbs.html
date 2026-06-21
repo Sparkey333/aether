@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The Grove · Orbs</title>
+<link rel="stylesheet" href="grove.css"/>
+<style>
+  body{display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+  .wrap{flex:1;display:grid;grid-template-columns:1fr 380px;gap:0;min-height:0}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}}
+  .sky{position:relative;overflow:hidden;padding:30px 20px}
+  .sky-head{text-align:center;margin:6px 0 4px}
+  .orbfield{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:8px 28px;max-width:760px;margin:24px auto;min-height:520px}
+  .orb{position:relative;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;text-align:center;transition:transform .25s;animation:drift var(--dur) ease-in-out infinite}
+  .orb:hover{transform:scale(1.06)}
+  .orb .core{position:absolute;inset:0;border-radius:50%}
+  .orb .lab{position:relative;z-index:2;font-size:13px;font-weight:600;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6);letter-spacing:.02em}
+  .orb .chk{position:relative;z-index:2;font-size:10px;color:rgba(255,255,255,.72);margin-top:2px;letter-spacing:.06em}
+  .orb.sel{outline:2px solid rgba(255,255,255,.8);outline-offset:6px}
+  .roots{position:absolute;left:0;right:0;bottom:-2px;height:120px;pointer-events:none;opacity:.5}
+
+  /* right reading panel */
+  .read{border-left:1px solid var(--line);background:rgba(10,11,17,.6);backdrop-filter:blur(10px);
+    padding:26px 24px;overflow-y:auto}
+  .read h2{font-family:"Iowan Old Style",Georgia,serif;font-size:24px;margin:0 0 2px}
+  .read .chakra{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
+  .read .mantra{font-size:14px;font-style:italic;color:var(--ink);margin:14px 0 8px;line-height:1.5}
+  .read .gloss{font-size:13px;color:var(--ink-dim);line-height:1.65}
+  .meter{height:6px;border-radius:4px;background:rgba(255,255,255,.08);margin:16px 0 4px;overflow:hidden}
+  .meter>span{display:block;height:100%}
+  .meter-lab{font-size:11px;color:var(--ink-faint);display:flex;justify-content:between;gap:8px}
+  .sect{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin:24px 0 10px}
+  .toolrow{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);
+    border-radius:10px;margin-bottom:8px;background:rgba(255,255,255,.02)}
+  .toolrow .nm{font-size:13px;font-weight:600}
+  .toolrow .mt{font-size:11px;color:var(--ink-dim);margin-top:1px}
+  .toolrow .cost{margin-left:auto;font-size:12px;color:var(--gold);white-space:nowrap}
+  .total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);
+    margin-top:12px;padding-top:12px}
+  .total b{font-size:22px;color:var(--gold)}
+  .hint{font-size:11px;color:var(--ink-faint);margin-top:18px;line-height:1.6}
+</style>
+</head>
+<body>
+  <nav class="gv-nav">
+    <span class="gv-brand">✦ THE GROVE</span>
+    <div class="gv-tabs">
+      <a class="gv-tab on" href="orbs.html">Orbs</a>
+      <a class="gv-tab" href="tree.html">The Tree</a>
+      <a class="gv-tab" href="index.html">About</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <section class="sky scroll">
+      <div class="sky-head">
+        <h1 class="gv-h1">Seven Cores of a Life</h1>
+        <p class="gv-sub" style="margin-inline:auto">Each orb is one aspect of being. Its size and light are how strong the AI
+          toolscape is for that part of your life right now. Touch one to see its best root stack — and what it truly costs.</p>
+      </div>
+      <div class="orbfield" id="field"></div>
+    </section>
+
+    <aside class="read scroll" id="read"></aside>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const A = window.GROVE.aspects;
+    const T = Object.fromEntries(window.GROVE.tools.map(t=>[t.id,t]));
+    const field = document.getElementById('field');
+    let sel = A[2]; // open on Craft (the strongest aspect)
+
+    function sizeFor(glow){ return Math.round(96 + (glow/100)*84); } // 96..180px
+
+    A.forEach((a,i)=>{
+      const d = document.createElement('div');
+      d.className='orb'; d.dataset.id=a.id;
+      const s = sizeFor(a.glow);
+      d.style.width=s+'px'; d.style.height=s+'px';
+      d.style.setProperty('--dur', (5.5 + i*0.6)+'s');
+      // brightness of glow scales with strength
+      const op = 0.45 + (a.glow/100)*0.5;
+      d.innerHTML =
+        `<div class="core" style="
+            background:radial-gradient(circle at 35% 30%, ${a.color}ee, ${a.color}77 45%, ${a.color}11 75%);
+            box-shadow:0 0 ${Math.round(s*0.5)}px ${a.color}${Math.round(op*90).toString(16).padStart(2,'0')},
+                       inset 0 0 ${Math.round(s*0.25)}px rgba(255,255,255,.18);
+            animation:pulse ${4+i*0.5}s ease-in-out infinite;"></div>
+         <div class="lab">${a.name}</div><div class="chk">${a.chakra}</div>`;
+      d.onclick=()=>{ sel=a; paint(); };
+      field.appendChild(d);
+    });
+
+    function money(t){
+      const c=t.cost; if(!c) return '—';
+      if(c.model==='free') return 'free';
+      if(c.model==='local') return c.monthlyEst? '~$'+c.monthlyEst+'/mo':'local';
+      if(c.model==='open') return 'open';
+      if(c.model==='subscribe') return '$'+c.monthlyEst+'/mo';
+      if(c.model==='token') return c.perImage? '~$'+c.perImage+'/img' : '~$'+c.monthlyEst+'/mo';
+      return '—';
+    }
+
+    function paint(){
+      document.querySelectorAll('.orb').forEach(o=>o.classList.toggle('sel', o.dataset.id===sel.id));
+      const a=sel;
+      const stack=a.stack.map(id=>T[id]).filter(Boolean);
+      const total=stack.reduce((s,t)=>s+(t.cost.monthlyEst||0),0);
+      const read=document.getElementById('read');
+      read.innerHTML =
+        `<div class="chakra" style="color:${a.color}">${a.chakra} · ${a.title}</div>
+         <h2>${a.name}</h2>
+         <div class="mantra">“${a.mantra}”</div>
+         <div class="gloss">${a.gloss}</div>
+         <div class="sect">Toolscape strength</div>
+         <div class="meter"><span style="width:${a.glow}%;background:linear-gradient(90deg,${a.color},#fff8)"></span></div>
+         <div class="meter-lab">${a.glow}/100 — how much AI can do for this aspect today</div>
+         <div class="sect">Best root stack</div>
+         ${stack.map(t=>`
+           <div class="toolrow">
+             <span class="tier" style="background:${window.GROVE.tiers[t.tier].hex}"></span>
+             <div><div class="nm">${t.name}</div><div class="mt">${t.best}</div></div>
+             <div class="cost">${money(t)}</div>
+           </div>`).join('')}
+         <div class="total"><span class="gloss">Realistic monthly floor</span><b>$${total}/mo</b></div>
+         <div class="hint">Costs are a power-user estimate; free/local roots read $0. Trace exact routes on
+           <a href="tree.html" style="color:var(--accent)">The Tree →</a></div>`;
+    }
+    paint();
+  </script>
+</body>
+</html>

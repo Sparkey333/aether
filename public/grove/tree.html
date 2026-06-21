@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The Grove · The Tree</title>
+<link rel="stylesheet" href="grove.css"/>
+<style>
+  body{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  .app{flex:1;display:grid;grid-template-columns:230px 1fr 330px;min-height:0}
+  @media(max-width:1000px){.app{grid-template-columns:1fr}.side,.trace{display:none}}
+
+  .side{border-right:1px solid var(--line);background:rgba(10,11,17,.55);padding:18px 16px;overflow-y:auto}
+  .sect{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin:18px 0 9px}
+  .sect:first-child{margin-top:2px}
+  .chip{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:9px;cursor:pointer;font-size:13px;user-select:none}
+  .chip:hover{background:rgba(255,255,255,.05)}
+  .chip.on{background:rgba(255,255,255,.07)}
+  .dotc{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+  .routebtn{display:block;width:100%;text-align:left;margin-bottom:7px}
+  .legend{font-size:11px;color:var(--ink-faint);line-height:1.6;border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
+
+  /* canopy */
+  .canopy{position:relative;overflow:auto}
+  #edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+  .strata{position:relative;z-index:2;padding:16px 26px 40px}
+  .band{margin:0 0 6px}
+  .band-h{display:flex;align-items:baseline;gap:10px;margin:14px 0 8px;position:sticky}
+  .band-glyph{font-size:15px;color:var(--gold)}
+  .band-name{font-family:"Iowan Old Style",Georgia,serif;letter-spacing:.06em;font-size:15px}
+  .band-blurb{font-size:11px;color:var(--ink-faint)}
+  .nodes{display:flex;flex-wrap:wrap;gap:10px}
+  .node{position:relative;width:178px;border:1px solid var(--line);border-radius:12px;padding:10px 11px;
+    background:var(--panel);cursor:pointer;transition:.15s}
+  .node:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .node.sel{border-color:#fff;box-shadow:0 0 0 1px #fff,0 0 22px rgba(138,125,255,.35)}
+  .node.dim{opacity:.28}
+  .node .top{display:flex;align-items:center;gap:7px}
+  .node .nm{font-size:13px;font-weight:600;line-height:1.15}
+  .node .vd{font-size:10px;color:var(--ink-faint)}
+  .node .best{font-size:11px;color:var(--ink-dim);line-height:1.4;margin:6px 0 8px;min-height:30px}
+  .node .met{display:flex;gap:8px;align-items:center;font-size:10px;color:var(--ink-faint)}
+  .node .cost{margin-left:auto;font-size:11px;color:var(--gold);font-weight:600}
+  .bars{display:flex;gap:2px}
+  .bars i{width:4px;height:11px;border-radius:1px;background:rgba(255,255,255,.12)}
+  .aspect-strip{position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:3px}
+  .shadow .node{background:rgba(10,8,14,.8);border-style:dashed}
+
+  /* trace panel */
+  .trace{border-left:1px solid var(--line);background:rgba(10,11,17,.6);backdrop-filter:blur(10px);
+    padding:22px 20px;overflow-y:auto;display:flex;flex-direction:column}
+  .trace h2{font-family:"Iowan Old Style",Georgia,serif;font-size:21px;margin:0 0 2px}
+  .stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}
+  .st{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center}
+  .st b{display:block;font-size:19px;color:var(--gold);line-height:1}
+  .st span{font-size:9.5px;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase}
+  .pathlist{flex:1}
+  .prow{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;font-size:12.5px}
+  .prow:hover{background:rgba(255,255,255,.04)}
+  .prow .x{margin-left:auto;color:var(--ink-faint);cursor:pointer;font-size:14px}
+  .prow .x:hover{color:#fff}
+  .verdict{font-size:12px;color:var(--ink-dim);line-height:1.6;border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+  .empty{font-size:12.5px;color:var(--ink-faint);line-height:1.7;margin-top:14px}
+  .totbar{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+  .totbar b{font-size:26px;color:var(--gold)}
+</style>
+</head>
+<body>
+  <nav class="gv-nav">
+    <span class="gv-brand">✦ THE GROVE</span>
+    <div class="gv-tabs">
+      <a class="gv-tab" href="orbs.html">Orbs</a>
+      <a class="gv-tab on" href="tree.html">The Tree</a>
+      <a class="gv-tab" href="index.html">About</a>
+    </div>
+  </nav>
+
+  <div class="app">
+    <!-- left: filters + routes -->
+    <aside class="side scroll">
+      <div class="sect">Preset routes</div>
+      <button class="btn routebtn" data-route="recommended">✦ Aether-native</button>
+      <button class="btn routebtn" data-route="cheapest">↓ Cheapest</button>
+      <button class="btn routebtn" data-route="fastest">⚡ Fastest</button>
+      <button class="btn routebtn" data-route="capable">★ Most capable</button>
+      <button class="btn routebtn" data-route="local">⌂ Most private / local</button>
+      <button class="btn routebtn" data-route="clear">○ Clear path</button>
+
+      <div class="sect">Light an aspect</div>
+      <div id="aspects"></div>
+
+      <div class="legend">
+        <div class="sect" style="margin-top:0">Data tiers</div>
+        <div><span class="tier" style="background:var(--tierA)"></span> measured · <span class="tier" style="background:var(--tierB)"></span> scholarly · <span class="tier" style="background:var(--tierC)"></span> approx · <span class="tier" style="background:var(--tierD)"></span> folklore</div>
+        <div style="margin-top:8px">Bars = capability · speed · ease. Click nodes to lay a path; thin threads show what builds on what.</div>
+      </div>
+    </aside>
+
+    <!-- center: the tree -->
+    <main class="canopy scroll" id="canopy">
+      <svg id="edges"></svg>
+      <div class="strata" id="strata"></div>
+    </main>
+
+    <!-- right: the traced path -->
+    <aside class="trace scroll" id="trace"></aside>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+  const G=window.GROVE, T=Object.fromEntries(G.tools.map(t=>[t.id,t]));
+  const order=["fruit","leaf","branch","trunk","root","shadow"];
+  let path=new Set(), lit=null;
+
+  /* preset routes (curated; objective metrics keep them honest) */
+  const ROUTES={
+    recommended:["claude-api","mcp","ollama","claude-code","obsidian","n8n","nanobanana"],
+    cheapest:["deepseek","ollama","mcp","cline","vscode","obsidian","flux"],
+    fastest:["gemini-api","claude-code","cursor","zapier","nanobanana"],
+    capable:["claude-api","claude-code","cursor","langgraph","obsidian","nanobananapro","mcp"],
+    local:["ollama","llama5","deepseek","mcp","cline","vscode","obsidian","logseq"],
+  };
+
+  /* ---- build the strata ---- */
+  const strata=document.getElementById('strata');
+  order.forEach(layer=>{
+    const meta=G.layers[layer];
+    const band=document.createElement('div');
+    band.className='band '+layer;
+    band.innerHTML=`<div class="band-h"><span class="band-glyph">${meta.glyph}</span>
+      <span class="band-name">${meta.name}</span><span class="band-blurb">${meta.blurb}</span></div>
+      <div class="nodes" id="band-${layer}"></div>`;
+    strata.appendChild(band);
+  });
+  G.tools.forEach(t=>{
+    const aspColor=(G.aspects.find(a=>a.id===t.aspects[0])||{}).color||'#888';
+    const el=document.createElement('div');
+    el.className='node'; el.id='n-'+t.id; el.dataset.id=t.id;
+    el.innerHTML=`
+      <div class="aspect-strip" style="background:${aspColor}"></div>
+      <div class="top">
+        <span class="tier" style="background:${G.tiers[t.tier].hex}"></span>
+        <div><div class="nm">${t.name}</div><div class="vd">${t.vendor}</div></div>
+        <span class="cost">${money(t)}</span>
+      </div>
+      <div class="best">${t.best}</div>
+      <div class="met">${bars(t)} <span style="margin-left:4px">${metLabel(t)}</span></div>`;
+    el.onclick=()=>{ path.has(t.id)?path.delete(t.id):path.add(t.id); render(); };
+    document.getElementById('band-'+t.layer).appendChild(el);
+  });
+
+  function money(t){const c=t.cost;if(!c)return'';
+    if(c.model==='risk')return'risk';
+    if(c.model==='free')return'free';
+    if(c.model==='open')return'open';
+    if(c.model==='local')return c.monthlyEst?'~$'+c.monthlyEst:'local';
+    if(c.model==='subscribe')return'$'+c.monthlyEst+'/mo';
+    if(c.model==='token')return c.perImage?'~$'+c.perImage+'/img':'~$'+c.monthlyEst+'/mo';
+    return'';}
+  function bars(t){let h='';for(let i=0;i<5;i++){const cap=i<t.scores.capability,sp=i<t.scores.speed,ea=i<t.scores.ease;}
+    const mk=(v,c)=>{let s='<span class="bars">';for(let i=0;i<5;i++)s+=`<i style="background:${i<v?c:'rgba(255,255,255,.12)'}"></i>`;return s+'</span>';};
+    return mk(t.scores.capability,'#8a7dff')+mk(t.scores.speed,'#46c08d')+mk(t.scores.ease,'#ebbe5a');}
+  function metLabel(t){return t.scores.local? '◈ local-capable':'';}
+
+  /* ---- aspect filter chips ---- */
+  const asp=document.getElementById('aspects');
+  G.aspects.forEach(a=>{
+    const c=document.createElement('div'); c.className='chip'; c.dataset.a=a.id;
+    c.innerHTML=`<span class="dotc" style="background:${a.color}"></span>${a.name}`;
+    c.onclick=()=>{ lit=(lit===a.id?null:a.id); render(); };
+    asp.appendChild(c);
+  });
+
+  /* ---- routes ---- */
+  document.querySelectorAll('[data-route]').forEach(b=>b.onclick=()=>{
+    const r=b.dataset.route;
+    if(r==='clear'){path.clear();} else {path=new Set(ROUTES[r]);}
+    lit=null; render();
+  });
+
+  /* ---- render ---- */
+  function render(){
+    document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.a===lit));
+    document.querySelectorAll('.node').forEach(n=>{
+      const t=T[n.dataset.id];
+      n.classList.toggle('sel',path.has(t.id));
+      n.classList.toggle('dim', !!lit && !t.aspects.includes(lit) && !path.has(t.id));
+    });
+    drawEdges();
+    paintTrace();
+  }
+
+  /* ---- dependency threads ---- */
+  function drawEdges(){
+    const svg=document.getElementById('edges'), canopy=document.getElementById('canopy');
+    const W=canopy.scrollWidth,H=canopy.scrollHeight;
+    svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.style.width=W+'px'; svg.style.height=H+'px';
+    const cr=canopy.getBoundingClientRect();
+    const ctr=el=>{const r=el.getBoundingClientRect();return{x:r.left-cr.left+canopy.scrollLeft+r.width/2,y:r.top-cr.top+canopy.scrollTop+r.height/2};};
+    let p='';
+    G.tools.forEach(t=>{
+      const a=document.getElementById('n-'+t.id); if(!a)return;
+      t.buildsOn.forEach(dep=>{
+        const b=document.getElementById('n-'+dep); if(!b)return;
+        const pa=ctr(a),pb=ctr(b);
+        const onPath=path.has(t.id)&&path.has(dep);
+        const dim = lit && !(t.aspects.includes(lit));
+        const col=onPath?'rgba(138,125,255,.7)':(dim?'rgba(120,130,180,.04)':'rgba(120,130,180,.14)');
+        const w=onPath?2:1;
+        const my=(pa.y+pb.y)/2;
+        p+=`<path d="M${pa.x} ${pa.y} C ${pa.x} ${my}, ${pb.x} ${my}, ${pb.x} ${pb.y}" stroke="${col}" stroke-width="${w}" fill="none"/>`;
+      });
+    });
+    svg.innerHTML=p;
+  }
+
+  /* ---- the traced path readout ---- */
+  function paintTrace(){
+    const items=[...path].map(id=>T[id]).filter(t=>t&&t.layer!=='shadow');
+    const risks=[...path].map(id=>T[id]).filter(t=>t&&t.layer==='shadow');
+    const trace=document.getElementById('trace');
+    if(path.size===0){
+      trace.innerHTML=`<h2>No path traced</h2>
+        <div class="empty">Click any tools to lay a path through the grove — or pick a preset route on the left.
+        The panel will sum the real monthly cost and blend capability, speed & ease so you can read
+        <b>cheapest</b> vs <b>fastest</b> vs <b>most capable</b> objectively.</div>`;
+      return;
+    }
+    const mo=items.reduce((s,t)=>s+(t.cost.monthlyEst||0),0);
+    const avg=k=>items.length?(items.reduce((s,t)=>s+t.scores[k],0)/items.length):0;
+    const cap=avg('capability'),sp=avg('speed'),ea=avg('ease');
+    const localShare=items.length?Math.round(100*items.filter(t=>t.scores.local).length/items.length):0;
+    trace.innerHTML=`
+      <h2>Your path</h2>
+      <div class="totbar"><span class="gloss" style="color:var(--ink-dim);font-size:12px">${items.length} tools · realistic floor</span><b>$${mo}<span style="font-size:13px">/mo</span></b></div>
+      <div class="stat3">
+        <div class="st"><b>${cap.toFixed(1)}</b><span>capability</span></div>
+        <div class="st"><b>${sp.toFixed(1)}</b><span>speed</span></div>
+        <div class="st"><b>${ea.toFixed(1)}</b><span>ease</span></div>
+      </div>
+      <div class="pathlist">
+        ${items.map(t=>`<div class="prow"><span class="tier" style="background:${G.tiers[t.tier].hex}"></span>
+           ${t.name}<span class="cost" style="margin-left:auto;color:var(--gold)">${money(t)}</span>
+           <span class="x" data-id="${t.id}">✕</span></div>`).join('')}
+        ${risks.length?`<div class="sect" style="color:#e66e8c">Shadow on this path</div>
+          ${risks.map(t=>`<div class="prow"><span class="tier" style="background:#e66e8c"></span>${t.name}
+            <span class="x" data-id="${t.id}">✕</span></div>`).join('')}`:''}
+      </div>
+      <div class="verdict">${verdict(mo,cap,sp,localShare)}</div>`;
+    trace.querySelectorAll('.x').forEach(x=>x.onclick=e=>{e.stopPropagation();path.delete(x.dataset.id);render();});
+  }
+  function verdict(mo,cap,sp,local){
+    const bits=[];
+    bits.push(mo===0?'A <b>zero-dollar</b> stack — pure free/local roots.':mo<25?'A <b>lean</b> stack.':mo<90?'A <b>balanced</b> spend.':'A <b>heavyweight</b> stack — watch the shadow roots.');
+    bits.push(cap>=4.5?'Near-max capability.':cap>=3.8?'Strong capability.':'Modest capability — add a frontier root.');
+    if(sp>=4.5)bits.push('Very fast.'); if(local>=60)bits.push(`${local}% runs local — strong privacy.`);
+    return bits.join(' ');
+  }
+
+  // initial: the Aether-native route, so the page opens alive
+  path=new Set(ROUTES.recommended); render();
+  window.addEventListener('resize',drawEdges);
+  document.getElementById('canopy').addEventListener('scroll',drawEdges);
+  setTimeout(drawEdges,60);
+  </script>
+</body>
+</html>

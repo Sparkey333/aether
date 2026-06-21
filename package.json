@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "ingest": "node ./scripts/ingest.mjs",
     "heartbeat:run": "node ./scripts/heartbeat.mjs",
+    "imagine": "node ./scripts/imagine.mjs",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",

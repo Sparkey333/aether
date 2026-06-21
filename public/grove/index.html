@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The Grove · Aether</title>
+<link rel="stylesheet" href="grove.css"/>
+<style>
+  body{display:flex;flex-direction:column;min-height:100vh}
+  .hero{max-width:860px;margin:0 auto;padding:48px 28px 20px;text-align:center}
+  .seed{font-size:46px;margin:0 0 4px}
+  .hero h1{font-family:"Iowan Old Style",Georgia,serif;font-size:40px;letter-spacing:.04em;margin:6px 0}
+  .hero p{color:var(--ink-dim);font-size:15px;line-height:1.7;max-width:64ch;margin:14px auto}
+  .doors{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:860px;margin:18px auto;padding:0 28px}
+  @media(max-width:720px){.doors{grid-template-columns:1fr}}
+  .door{display:block;text-decoration:none;padding:24px;border-radius:16px;transition:.2s}
+  .door:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .door .g{font-size:30px}
+  .door h3{font-family:"Iowan Old Style",Georgia,serif;font-size:22px;margin:10px 0 4px}
+  .door p{color:var(--ink-dim);font-size:13px;line-height:1.6;margin:0}
+  .doc{max-width:860px;margin:8px auto 50px;padding:0 28px}
+  .doc h2{font-family:"Iowan Old Style",Georgia,serif;font-size:17px;letter-spacing:.05em;color:var(--gold);margin:26px 0 8px}
+  .doc p,.doc li{color:var(--ink-dim);font-size:13.5px;line-height:1.7}
+  .grid7{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .a7{display:flex;align-items:center;gap:7px;font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--line)}
+  .a7 i{width:10px;height:10px;border-radius:50%}
+</style>
+</head>
+<body>
+  <nav class="gv-nav">
+    <span class="gv-brand">✦ THE GROVE</span>
+    <div class="gv-tabs">
+      <a class="gv-tab" href="orbs.html">Orbs</a>
+      <a class="gv-tab" href="tree.html">The Tree</a>
+      <a class="gv-tab on" href="index.html">About</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="seed">🌱</div>
+    <h1>The Grove</h1>
+    <p>A living atlas of the AI toolscape — every model, app, connector and stack — grown as a tree.
+       Roots feed a trunk; branches reach to leaves and fruit; and the shadow roots, named not hidden,
+       carry the cost, lock-in and decay. Trace a path along any tools and read its cost, capability and
+       speed objectively. A new organ of <b>Aether</b>, built on the same doctrine: <i>keep every layer, label every layer.</i></p>
+  </div>
+
+  <div class="doors">
+    <a class="door card" href="orbs.html">
+      <div class="g">🔮</div>
+      <h3>Orbs</h3>
+      <p>Start simple. Seven floating orbs — the cores of a life (the chakras). Each lit by how strong AI is
+         for that aspect. Touch one for its best root stack and true cost.</p>
+    </a>
+    <a class="door card" href="tree.html">
+      <div class="g">🌳</div>
+      <h3>The Tree</h3>
+      <p>Go deep. The whole toolscape as strata from fruit to shadow-root. Click to lay a path; read cheapest
+         vs fastest vs most-capable, judged on honest numbers.</p>
+    </a>
+  </div>
+
+  <div class="doc">
+    <h2>The seven cores</h2>
+    <div class="grid7" id="seven"></div>
+
+    <h2>How to read a path</h2>
+    <p>On <b>The Tree</b>, click any tools to select them. The right panel sums a realistic monthly floor
+      (free &amp; local roots read $0) and blends capability, speed and ease across your selection — so
+      "cheapest route" and "most capable route" are objective, not vibes. Preset routes
+      (<span class="gv-kbd">Aether-native</span>, <span class="gv-kbd">Cheapest</span>, <span class="gv-kbd">Fastest</span>,
+      <span class="gv-kbd">Most private/local</span>) lay a curated path in one click. Thin threads show what builds on what —
+      Cursor on a VS Code fork, Claude Code on the Claude API and MCP, Nano Banana on the Gemini API.</p>
+
+    <h2>The doctrine of honest tiers</h2>
+    <p>Every datum carries a provenance tier, ported straight from Aether's Source Atlas —
+      <span class="tier" style="background:var(--tierA)"></span> measured (vendor docs),
+      <span class="tier" style="background:var(--tierB)"></span> scholarly (triangulated),
+      <span class="tier" style="background:var(--tierC)"></span> approximate (aggregators),
+      <span class="tier" style="background:var(--tierD)"></span> folklore (unverified / your own private tools).
+      The tier is metadata, never a delete key. Figures gathered June 2026 — and like the Loom, the Grove
+      should only re-pulse past a real threshold, not chase every daily price change.</p>
+
+    <h2>Generating the fruit</h2>
+    <p>The image generators in the canopy (Nano Banana, FLUX, Firefly…) are wired to a key-driven pipeline at
+      <span class="gv-kbd">scripts/imagine.mjs</span>. Drop a <span class="gv-kbd">GEMINI_API_KEY</span> into
+      <span class="gv-kbd">.env.local</span> and run <span class="gv-kbd">npm run imagine "a seed rooting into a glowing tree of tools"</span>.
+      Default model: <span class="gv-kbd">gemini-2.5-flash-image</span> (Nano Banana), with OpenAI &amp; Stability fallbacks.</p>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    document.getElementById('seven').innerHTML = window.GROVE.aspects.map(a=>
+      `<span class="a7"><i style="background:${a.color}"></i>${a.name} · <span style="color:var(--ink-faint)">${a.chakra}</span></span>`).join('');
+  </script>
+</body>
+</html>

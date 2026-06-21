@@ -1,0 +1,48 @@
+/* THE GROVE — shared styling. Inherits Aether's palette (globals.css). */
+:root{
+  --bg:#07080d; --bg2:#05060a;
+  --panel:rgba(14,16,26,.86); --panel-solid:#0e1018;
+  --line:rgba(120,130,180,.18);
+  --ink:#e7e9f3; --ink-dim:#9aa0bd; --ink-faint:#6b7196;
+  --gold:#ebbe5a; --accent:#8a7dff;
+  --tierA:#50c8ff; --tierB:#78e6a0; --tierC:#ebbe5a; --tierD:#e66e8c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:
+  radial-gradient(1200px 800px at 70% -10%, rgba(138,125,255,.10), transparent 60%),
+  radial-gradient(900px 700px at 10% 110%, rgba(235,190,90,.06), transparent 55%),
+  var(--bg);
+  color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;}
+a{color:inherit}
+
+/* top bar */
+.gv-nav{display:flex;align-items:center;gap:20px;padding:14px 26px;border-bottom:1px solid var(--line);
+  background:rgba(8,9,14,.7);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+.gv-brand{font-family:"Iowan Old Style",Georgia,serif;letter-spacing:.22em;font-size:13px;color:var(--gold)}
+.gv-tabs{display:flex;gap:6px;margin-left:auto}
+.gv-tab{font-size:13px;color:var(--ink-dim);text-decoration:none;padding:6px 13px;border-radius:8px}
+.gv-tab:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.gv-tab.on{background:rgba(138,125,255,.16);color:var(--ink)}
+
+.gv-h1{font-family:"Iowan Old Style",Georgia,serif;letter-spacing:.04em;font-size:30px;margin:0}
+.gv-sub{color:var(--ink-dim);font-size:13px;margin:6px 0 0;line-height:1.6;max-width:62ch}
+.gv-kbd{font-family:ui-monospace,monospace;background:rgba(255,255,255,.07);padding:1px 6px;border-radius:5px;font-size:.85em}
+
+/* tier dot */
+.tier{display:inline-block;width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.pill{display:inline-block;font-size:10px;letter-spacing:.05em;padding:2px 8px;border-radius:999px;border:1px solid currentColor;opacity:.9}
+
+/* generic card */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(10px)}
+.btn{font-size:13px;color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);
+  border-radius:9px;padding:8px 14px;cursor:pointer;transition:.15s}
+.btn:hover{background:rgba(255,255,255,.1);border-color:var(--accent)}
+.btn.on{background:linear-gradient(120deg,rgba(138,125,255,.30),rgba(235,190,90,.22));border-color:rgba(138,125,255,.5);color:#fff}
+
+/* float animation for orbs */
+@keyframes drift{0%{transform:translateY(0)}50%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+@keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+.scroll::-webkit-scrollbar{width:9px;height:9px}
+.scroll::-webkit-scrollbar-thumb{background:rgba(120,130,180,.25);border-radius:10px}

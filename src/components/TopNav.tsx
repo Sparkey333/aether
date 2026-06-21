@@ -23,6 +23,11 @@ export default function TopNav() {
             {t.label}
           </Link>
         ))}
+        {/* The Grove ships as self-contained static HTML under /public/grove,
+            so it's a plain anchor, not a Next route. */}
+        <a className="nav-tab" href="/grove/index.html">
+          Grove
+        </a>
       </div>
     </nav>
   );
