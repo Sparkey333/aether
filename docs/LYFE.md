@@ -37,8 +37,10 @@ a measure of how scattered things are. Nothing broke.
 
 ## What Lyfe v0 does now (built)
 
-- **The Life Tree** (`/lyfe`): your ~60 captured projects rendered across six
-  pillars — Mind · Body · Spirit · Craft · Work · Service.
+- **The Life Tree** (`/lyfe`): all **138 projects** rendered across six pillars —
+  Mind (35) · Craft (31) · Body (25) · Work (21) · Spirit (17) · Service (9).
+  Synced by [`scripts/lyfe-sync.mjs`](../scripts/lyfe-sync.mjs) from the raw
+  tracker export kept at [`src/data/lyfe/tracker.raw.md`](../src/data/lyfe/tracker.raw.md).
 - **Order Score** (0–100): balance across pillars + real-work-vs-shells +
   cleanliness. Always shown *with what would move it*.
 - **The Water-Line**: three live tides (urgency · priority · soul) with a
@@ -50,9 +52,9 @@ a measure of how scattered things are. Nothing broke.
 
 ## What I need from you to go further
 
-1. **Full tracker sync.** The seed is ~60 of 138 (captured from preview text).
-   When Drive reconnects I'll read the full *LIFE Tree Master Tracker* and the
-   per-area `TODO#1–6` sheets and complete the dataset automatically.
+1. ~~Full tracker sync.~~ **Done** — all 138 projects synced from the master
+   tracker via `npm run lyfe:sync`. (Still open: the per-area `TODO#1–6` sheets
+   add live due-dates and notes.)
 2. **Todoist backups.** The `.zip`s hold the real tasks/dates. Either (a) point
    me at the unzipped CSVs in Drive, or (b) I add an importer to the Mac build
    that unzips them locally. Your call — both are safe/local.

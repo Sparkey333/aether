@@ -1,8 +1,12 @@
 name: Build macOS app (.dmg)
 
-# The "keep rollin" loop: every push to a working branch builds a downloadable
-# .dmg on a real macOS runner (Tauri can't cross-compile a Mac bundle from
-# Linux). Grab the artifact from the run's summary page, click, test, repeat.
+# The "keep rollin" loop: every push to a working branch builds a .dmg on a real
+# macOS runner (Tauri can't cross-compile a Mac bundle from Linux) and publishes
+# it to a rolling prerelease Release. Download from the repo's Releases page,
+# click, test, repeat.
+#
+# Why a Release and not an artifact: GitHub Actions *artifact* storage has a
+# quota that filled up; Release assets don't draw on it and give a stable URL.
 
 on:
   push:
@@ -11,9 +15,12 @@ on:
       - "claude/**"
   workflow_dispatch: {}
 
+permissions:
+  contents: write # needed to create/update the Release
+
 jobs:
   build:
-    runs-on: macos-14 # Apple-silicon runner
+    runs-on: macos-14 # Apple-silicon runner → aarch64 .dmg
     timeout-minutes: 40
     steps:
       - name: Checkout
@@ -42,16 +49,15 @@ jobs:
       - name: Build the Mac app (.dmg + .app)
         run: npm run tauri:build
 
-      - name: Upload .dmg
-        uses: actions/upload-artifact@v4
+      - name: Publish .dmg to a rolling prerelease Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: Aether-macos-dmg
-          path: src-tauri/target/release/bundle/dmg/*.dmg
-          if-no-files-found: error
-
-      - name: Upload .app (zipped)
-        uses: actions/upload-artifact@v4
-        with:
-          name: Aether-macos-app
-          path: src-tauri/target/release/bundle/macos/*.app
-          if-no-files-found: warn
+          tag_name: mac-latest
+          name: Aether — latest Mac build
+          prerelease: true
+          fail_on_unmatched_files: true
+          body: |
+            Rolling Apple-silicon (aarch64) build of Aether — includes the **Lyfe** tab.
+            Built from `${{ github.sha }}` on ${{ github.ref_name }}.
+            Download the `.dmg`, drag to Applications, open, and click **Lyfe**.
+          files: src-tauri/target/release/bundle/dmg/*.dmg
