@@ -1,0 +1,47 @@
+name: GLADE macOS dmg
+
+# Builds the GLADE Tauri app into a downloadable macOS .dmg on a cloud Mac.
+# Run it manually from the Actions tab (workflow_dispatch), or push a tag like
+# `glade-v0.1.0`. The .dmg lands as a build artifact you can download.
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "glade-v*"
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            glade/src-tauri/target
+          key: ${{ runner.os }}-glade-cargo-${{ hashFiles('glade/src-tauri/Cargo.toml') }}
+
+      - name: Install app deps
+        working-directory: glade
+        run: npm install
+
+      - name: Build the .dmg
+        working-directory: glade
+        run: npm run build:dmg
+
+      - name: Upload the .dmg
+        uses: actions/upload-artifact@v4
+        with:
+          name: GLADE-macos-dmg
+          path: glade/src-tauri/target/release/bundle/dmg/*.dmg
+          if-no-files-found: error

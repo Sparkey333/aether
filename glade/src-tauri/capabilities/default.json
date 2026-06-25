@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "GLADE runs fully self-contained; only the core window permissions are needed.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

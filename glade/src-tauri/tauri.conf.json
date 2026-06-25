@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "GLADE",
+  "version": "0.1.0",
+  "identifier": "com.darkhearts.glade",
+  "build": {
+    "frontendDist": "../dist",
+    "beforeBuildCommand": "node scripts/stage-web.mjs",
+    "beforeDevCommand": "node scripts/stage-web.mjs"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "GLADE",
+        "label": "main",
+        "width": 980,
+        "height": 720,
+        "minWidth": 640,
+        "minHeight": 520,
+        "resizable": true,
+        "fullscreen": false,
+        "transparent": false,
+        "decorations": true,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "backgroundColor": "#0d1b2a"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; media-src 'self' data: blob:; connect-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "category": "Game",
+    "copyright": "© 2026 DarkHearts",
+    "shortDescription": "A garden you tend, a friend you raise.",
+    "longDescription": "GLADE is a calm, offline-first sanctuary game — a spiritual successor to the Chao Garden. Raise a Bloomling from a seed-egg through patient daily care, feed it light or moonlight to shape who it becomes, and tend the living garden that grows up around it. Nothing here can hurt you; the thing you love will remember you.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "11.0"
+    }
+  }
+}
