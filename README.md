@@ -52,6 +52,8 @@ engine work; it writes `public/data/hypotheses.json`, which the Atlas reads.
 | `scripts/heartbeat.mjs` | The Loom — the autonomous heartbeat |
 | `content/canon/` | Soul-files: the mandate, the guide, the doctrine, the organs |
 | `docs/SOURCE_ATLAS.md` | The 151-source, tiered resource atlas (the foundation) |
+| `docs/martial-codex/` | The **Martial Codex** — 134 fighting styles (real, military & reality-built fiction), tiered, stat-blocked, ranked & remixed |
+| `src/data/martial-arts.seed.json` | The Martial Codex dataset: 134 styles × 17 stats, the engine behind every ranking |
 | `docs/ARCHITECTURE.md` · `docs/ROADMAP.md` | Design and the road ahead |
 
 ## The eight organs
