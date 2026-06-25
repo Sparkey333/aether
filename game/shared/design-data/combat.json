@@ -1,0 +1,93 @@
+{
+  "$schema": "../schema/combat.schema.json",
+  "version": "1.0.0",
+  "comment": "Engine-agnostic combat constants. All durations are frames @ 60fps. All distances in meters. prngSeed spells 'AETH' (0x41455448). Every engine MUST read these — no engine hard-codes a combat value.",
+  "tickRate": 60,
+  "fixedTimestepSec": 0.0166666667,
+  "prngSeed": 1095062600,
+  "inputBufferFrames": 6,
+  "comboLinkWindowFrames": 18,
+  "tapHoldThresholdFrames": 10,
+  "player": {
+    "hp": 1000,
+    "stamina": { "max": 100, "regenPerSec": 40, "regenDelaySec": 0.5, "sprintDrainPerSec": 8 },
+    "aether": { "max": 100, "startValue": 0 },
+    "poise": { "max": 60, "regenPerSec": 30, "regenDelaySec": 1.0, "hyperArmorReductionPct": 0.5 },
+    "walkSpeedMps": 4.0,
+    "sprintSpeedMps": 7.0
+  },
+  "staminaCosts": {
+    "light": 10,
+    "heavy": 22,
+    "dodge": 25,
+    "backstep": 12,
+    "parry": 15,
+    "sprintPerSec": 8,
+    "blockPerPoise": 0.5
+  },
+  "dodge": { "totalFrames": 30, "iframes": [5, 17], "cancelWindow": [25, 30], "distanceM": 4.0 },
+  "backstep": { "totalFrames": 18, "iframes": [5, 11], "distanceM": 2.0 },
+  "lockOn": {
+    "acquireRangeM": 22,
+    "coneDeg": 60,
+    "breakRangeM": 30,
+    "breakLosSec": 2,
+    "switchDeadzone": 0.4,
+    "switchCooldownMs": 150
+  },
+  "flask": { "charges": 3, "healAmount": 400, "totalFrames": 52, "healFrame": 40 },
+  "block": { "reductionPct": 0.7 },
+  "parry": { "totalFrames": 20, "active": [3, 9], "riposteArmSec": 0.6 },
+  "backstab": { "rangeM": 1.4, "coneDeg": 45, "multiplier": 2.5, "iframes": 8 },
+  "riposte": { "multiplier": 3.0 },
+  "flow": {
+    "maxFp": 10000,
+    "ranks": [
+      { "name": "D", "threshold": 0 },
+      { "name": "C", "threshold": 2000 },
+      { "name": "B", "threshold": 4000 },
+      { "name": "A", "threshold": 6500 },
+      { "name": "S", "threshold": 9000 }
+    ],
+    "varietyWindow": 6,
+    "varietyNovelMult": 2.0,
+    "varietyRecentMult": 1.3,
+    "varietyRepeatMult": 0.5,
+    "decayPerSec": 600,
+    "damagePenaltyPct": 0.4,
+    "damageDecayMult": 2.0,
+    "damageDecaySec": 3,
+    "aeByRank": [0, 1, 3, 4, 6]
+  },
+  "juggle": {
+    "launchHeightM": 2.5,
+    "riseFrames": 20,
+    "hangFrames": 24,
+    "gravityMult": 0.4,
+    "extraHangPerHitFrames": 8,
+    "maxExtensions": 3
+  },
+  "specials": {
+    "groundCurrent": { "aetherCost": 35, "moveId": "special-ground-current" },
+    "leylineLance": { "aetherCost": 50, "moveId": "special-leyline-lance" },
+    "cauterize": { "aetherCost": 100, "durationFrames": 480, "damageBoostPct": 0.3 }
+  },
+  "hitstopDefaults": { "light": 4, "heavy": 8, "parry": 14 },
+  "render": {
+    "internalWidth": 320,
+    "internalHeight": 240,
+    "presentFps": 30,
+    "vertexSnapGrid": [160, 120],
+    "affineWarp": true,
+    "colorDepthBits": 5,
+    "ditherStrength": 1.0,
+    "fog": {
+      "startM": 8,
+      "endM": 36,
+      "farClipM": 38,
+      "colorGeneral": "#1a1f2e",
+      "colorArena": "#2a2418"
+    }
+  },
+  "tierColors": { "A": "#50c8ff", "B": "#78e6a0", "C": "#ebbe5a", "D": "#e66e8c" }
+}

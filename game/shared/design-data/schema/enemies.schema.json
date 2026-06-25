@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "enemies.schema.json",
+  "title": "Enemy stat blocks",
+  "type": "object",
+  "required": ["enemies"],
+  "properties": {
+    "version": { "type": "string" },
+    "enemies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "hp", "poise", "attacks"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string" },
+          "tier": { "enum": ["A", "B", "C", "D"] },
+          "hp": { "type": "integer", "minimum": 1 },
+          "poise": { "type": "integer", "minimum": 0 },
+          "poiseRegenPerSec": { "type": "number" },
+          "launchable": { "type": "boolean" },
+          "moveSpeedMps": { "type": "number" },
+          "behavior": { "type": "string" },
+          "attacks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["moveRef", "weight"],
+              "properties": {
+                "moveRef": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+                "weight": { "type": "number", "minimum": 0 },
+                "minRangeM": { "type": "number", "minimum": 0 },
+                "maxRangeM": { "type": "number", "minimum": 0 },
+                "cooldownFrames": { "type": "integer", "minimum": 0 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

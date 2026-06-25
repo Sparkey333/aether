@@ -1,0 +1,102 @@
+{
+  "$schema": "../schema/bosses.schema.json",
+  "version": "1.0.0",
+  "comment": "One data-driven FSM consumes both. Phases trigger at hpEnterPct (descending). Attack selection: filter phase.attacks by range + cooldown, then weighted-random via the seeded PRNG.",
+  "bosses": [
+    {
+      "id": "tuning-knight",
+      "name": "The Tuning Knight",
+      "title": "Sera, the First Warden of this Node",
+      "tier": "C",
+      "hp": 2600,
+      "poise": 120,
+      "poiseRegenPerSec": 20,
+      "poiseRegenSuspendAfterStaggerSec": 1.5,
+      "launchable": false,
+      "moveSpeedMps": 3.2,
+      "arena": "C",
+      "behavior": "aggressive-melee",
+      "phases": [
+        {
+          "name": "In Tune",
+          "hpEnterPct": 1.0,
+          "transitionInFrames": 90,
+          "moveSpeedMps": 3.2,
+          "attacks": [
+            { "moveRef": "knight-overhead", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 3.0, "cooldownFrames": 70, "punishRecoveryFrames": 18 },
+            { "moveRef": "knight-sweep-1", "weight": 1.2, "minRangeM": 0.0, "maxRangeM": 3.2, "cooldownFrames": 60, "punishRecoveryFrames": 22 },
+            { "moveRef": "knight-lunge", "weight": 0.9, "minRangeM": 3.0, "maxRangeM": 7.0, "cooldownFrames": 90, "punishRecoveryFrames": 18 }
+          ]
+        },
+        {
+          "name": "Dissonant",
+          "hpEnterPct": 0.55,
+          "transitionInFrames": 90,
+          "moveSpeedMps": 3.8,
+          "attacks": [
+            { "moveRef": "knight-feint-cleave", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 3.0, "cooldownFrames": 80, "punishRecoveryFrames": 14 },
+            { "moveRef": "knight-pillar-dash", "weight": 0.9, "minRangeM": 4.0, "maxRangeM": 12.0, "cooldownFrames": 110, "punishRecoveryFrames": 12 },
+            { "moveRef": "knight-resonant-burst", "weight": 0.7, "minRangeM": 0.0, "maxRangeM": 6.0, "cooldownFrames": 160, "punishRecoveryFrames": 30 },
+            { "moveRef": "knight-sweep-1", "weight": 0.8, "minRangeM": 0.0, "maxRangeM": 3.2, "cooldownFrames": 60, "punishRecoveryFrames": 22 }
+          ]
+        }
+      ],
+      "onDeath": { "drops": ["conductors-key"], "flaskRefill": true }
+    },
+    {
+      "id": "aetherius-mar",
+      "name": "Aetherius-Mar, the Folded Choir",
+      "title": "the corruption embodied",
+      "tier": "A",
+      "hp": 7200,
+      "poise": 200,
+      "poiseRegenPerSec": 25,
+      "poiseRegenSuspendAfterStaggerSec": 1.5,
+      "launchable": false,
+      "moveSpeedMps": 3.4,
+      "arena": "F",
+      "behavior": "phased-corruption",
+      "phases": [
+        {
+          "name": "The Lines Hold",
+          "hpEnterPct": 1.0,
+          "transitionInFrames": 100,
+          "moveSpeedMps": 3.4,
+          "attacks": [
+            { "moveRef": "mar-triple-slash", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 3.2, "cooldownFrames": 80, "punishRecoveryFrames": 24 },
+            { "moveRef": "mar-ground-fissure", "weight": 0.9, "minRangeM": 2.0, "maxRangeM": 10.0, "cooldownFrames": 100, "punishRecoveryFrames": 17 },
+            { "moveRef": "mar-grab", "weight": 0.6, "minRangeM": 0.0, "maxRangeM": 5.0, "cooldownFrames": 140, "punishRecoveryFrames": 40 }
+          ]
+        },
+        {
+          "name": "The Lines Bend",
+          "hpEnterPct": 0.65,
+          "transitionInFrames": 100,
+          "moveSpeedMps": 4.0,
+          "igniteCircles": true,
+          "attacks": [
+            { "moveRef": "mar-leyline-volley", "weight": 1.0, "minRangeM": 4.0, "maxRangeM": 16.0, "cooldownFrames": 110, "punishRecoveryFrames": 20 },
+            { "moveRef": "mar-circle-ignite", "weight": 0.8, "minRangeM": 0.0, "maxRangeM": 20.0, "cooldownFrames": 130, "punishRecoveryFrames": 0 },
+            { "moveRef": "mar-rushing-combo", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 8.0, "cooldownFrames": 100, "punishRecoveryFrames": 17 },
+            { "moveRef": "mar-grab", "weight": 0.5, "minRangeM": 0.0, "maxRangeM": 5.0, "cooldownFrames": 140, "punishRecoveryFrames": 40 }
+          ]
+        },
+        {
+          "name": "The Lines Break",
+          "hpEnterPct": 0.30,
+          "transitionInFrames": 120,
+          "moveSpeedMps": 4.2,
+          "rotatingCircles": true,
+          "voiceLine": "aetherius-turn",
+          "attacks": [
+            { "moveRef": "mar-choir-blades", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 20.0, "cooldownFrames": 120, "punishRecoveryFrames": 10 },
+            { "moveRef": "mar-rotating-circles", "weight": 0.7, "minRangeM": 0.0, "maxRangeM": 30.0, "cooldownFrames": 300, "punishRecoveryFrames": 0 },
+            { "moveRef": "mar-fold", "weight": 0.5, "minRangeM": 0.0, "maxRangeM": 30.0, "cooldownFrames": 360, "punishRecoveryFrames": 120, "hardCounter": "parry-or-cauterize" },
+            { "moveRef": "mar-desperate-grab", "weight": 0.6, "minRangeM": 0.0, "maxRangeM": 5.0, "cooldownFrames": 110, "punishRecoveryFrames": 30 }
+          ]
+        }
+      ],
+      "onDeath": { "reAnchorNode": true, "flowGradeLogged": true }
+    }
+  ]
+}

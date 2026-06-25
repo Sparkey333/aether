@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "combat.schema.json",
+  "title": "Combat constants",
+  "type": "object",
+  "required": ["tickRate", "prngSeed", "player", "dodge", "flow", "render"],
+  "properties": {
+    "version": { "type": "string" },
+    "tickRate": { "type": "integer", "const": 60 },
+    "fixedTimestepSec": { "type": "number" },
+    "prngSeed": { "type": "integer" },
+    "inputBufferFrames": { "type": "integer", "minimum": 0 },
+    "comboLinkWindowFrames": { "type": "integer", "minimum": 0 },
+    "tapHoldThresholdFrames": { "type": "integer", "minimum": 0 },
+    "player": {
+      "type": "object",
+      "required": ["hp", "stamina", "aether", "poise"],
+      "properties": {
+        "hp": { "type": "integer", "minimum": 1 },
+        "stamina": { "type": "object", "required": ["max"] },
+        "aether": { "type": "object", "required": ["max"] },
+        "poise": { "type": "object", "required": ["max"] }
+      }
+    },
+    "staminaCosts": { "type": "object" },
+    "dodge": {
+      "type": "object",
+      "required": ["totalFrames", "iframes"],
+      "properties": {
+        "totalFrames": { "type": "integer" },
+        "iframes": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["maxFp", "ranks", "aeByRank"],
+      "properties": {
+        "ranks": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["name", "threshold"] } },
+        "aeByRank": { "type": "array", "items": { "type": "integer" } }
+      }
+    },
+    "render": {
+      "type": "object",
+      "required": ["internalWidth", "internalHeight", "vertexSnapGrid", "fog"],
+      "properties": {
+        "internalWidth": { "type": "integer", "minimum": 1 },
+        "internalHeight": { "type": "integer", "minimum": 1 },
+        "vertexSnapGrid": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+      }
+    }
+  }
+}

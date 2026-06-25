@@ -1,0 +1,48 @@
+{
+  "$schema": "../schema/enemies.schema.json",
+  "version": "1.0.0",
+  "enemies": [
+    {
+      "id": "husk",
+      "name": "Husk",
+      "tier": "D",
+      "hp": 180,
+      "poise": 15,
+      "poiseRegenPerSec": 10,
+      "launchable": true,
+      "moveSpeedMps": 2.4,
+      "behavior": "chase",
+      "attacks": [
+        { "moveRef": "husk-overhead", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 2.2, "cooldownFrames": 70 }
+      ]
+    },
+    {
+      "id": "sundered-acolyte",
+      "name": "Sundered Acolyte",
+      "tier": "D",
+      "hp": 140,
+      "poise": 10,
+      "poiseRegenPerSec": 8,
+      "launchable": true,
+      "moveSpeedMps": 2.0,
+      "behavior": "kite",
+      "attacks": [
+        { "moveRef": "acolyte-bolt", "weight": 1.0, "minRangeM": 4.0, "maxRangeM": 16.0, "cooldownFrames": 110 }
+      ]
+    },
+    {
+      "id": "stone-sentinel",
+      "name": "Stone Sentinel",
+      "tier": "C",
+      "hp": 420,
+      "poise": 70,
+      "poiseRegenPerSec": 14,
+      "launchable": false,
+      "moveSpeedMps": 1.6,
+      "behavior": "hyper-armor-punish",
+      "attacks": [
+        { "moveRef": "sentinel-slam", "weight": 1.0, "minRangeM": 0.0, "maxRangeM": 3.0, "cooldownFrames": 130 }
+      ]
+    }
+  ]
+}

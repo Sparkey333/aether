@@ -1,0 +1,251 @@
+{
+  "$schema": "../schema/moves.schema.json",
+  "version": "1.0.0",
+  "comment": "Player AND boss/enemy attacks share this schema. frames @60. active is [startFrame,endFrame] inclusive. iframes [start,end] or [].",
+  "moves": [
+    {
+      "id": "player-light-1", "name": "Edge Slash 1", "kind": "light", "staminaCost": 10, "aetherCost": 0,
+      "frames": { "total": 22, "startup": 7, "active": [8, 11], "recovery": 11, "iframes": [] },
+      "hits": [ { "damage": 70, "poiseDamage": 12, "hitstop": 4, "knockback": 0.4, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.6, "length": 2.0, "offset": [0, 1.0, 1.2] } } ],
+      "comboNext": ["player-light-2"], "flowMoveId": "edge-slash-1"
+    },
+    {
+      "id": "player-light-2", "name": "Edge Slash 2", "kind": "light", "staminaCost": 10, "aetherCost": 0,
+      "frames": { "total": 24, "startup": 8, "active": [9, 12], "recovery": 12, "iframes": [] },
+      "hits": [ { "damage": 80, "poiseDamage": 14, "hitstop": 4, "knockback": 0.4, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.6, "length": 2.1, "offset": [0, 1.0, 1.2] } } ],
+      "comboNext": ["player-light-3", "player-heavy-2"], "flowMoveId": "edge-slash-2"
+    },
+    {
+      "id": "player-light-3", "name": "Edge Slash 3", "kind": "light", "staminaCost": 10, "aetherCost": 0,
+      "frames": { "total": 30, "startup": 11, "active": [12, 16], "recovery": 14, "iframes": [] },
+      "hits": [ { "damage": 100, "poiseDamage": 18, "hitstop": 6, "knockback": 0.9, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.7, "length": 2.2, "offset": [0, 1.0, 1.3] } } ],
+      "comboNext": [], "flowMoveId": "edge-slash-3"
+    },
+    {
+      "id": "player-heavy-1", "name": "Sundering Blow", "kind": "heavy", "staminaCost": 22, "aetherCost": 0,
+      "frames": { "total": 34, "startup": 12, "active": [18, 22], "recovery": 12, "iframes": [], "hyperArmorFrom": 8 },
+      "hits": [ { "damage": 160, "poiseDamage": 40, "hitstop": 8, "knockback": 1.4, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.8, "length": 2.4, "offset": [0, 1.0, 1.4] } } ],
+      "comboNext": ["player-heavy-2"], "flowMoveId": "sundering-blow"
+    },
+    {
+      "id": "player-heavy-2", "name": "Riven Smash", "kind": "heavy", "staminaCost": 22, "aetherCost": 0,
+      "frames": { "total": 40, "startup": 14, "active": [20, 26], "recovery": 14, "iframes": [], "hyperArmorFrom": 8 },
+      "hits": [ { "damage": 200, "poiseDamage": 48, "hitstop": 10, "knockback": 2.2, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.9, "length": 2.6, "offset": [0, 0.8, 1.5] } } ],
+      "comboNext": [], "flowMoveId": "riven-smash"
+    },
+    {
+      "id": "player-launcher", "name": "Rising Ley", "kind": "launcher", "staminaCost": 22, "aetherCost": 0,
+      "frames": { "total": 34, "startup": 12, "active": [16, 20], "recovery": 14, "iframes": [] },
+      "hits": [ { "damage": 90, "poiseDamage": 20, "hitstop": 8, "knockback": 0.5, "launch": true,
+        "hitbox": { "shape": "capsule", "radius": 0.7, "length": 2.3, "offset": [0, 1.2, 1.1] } } ],
+      "comboNext": ["player-aerial-1"], "flowMoveId": "rising-ley"
+    },
+    {
+      "id": "player-aerial-1", "name": "Aerial Rave", "kind": "aerial", "staminaCost": 10, "aetherCost": 0,
+      "frames": { "total": 24, "startup": 6, "active": [8, 12], "recovery": 10, "iframes": [] },
+      "hits": [ { "damage": 80, "poiseDamage": 12, "hitstop": 4, "knockback": 0.2, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.6, "length": 2.0, "offset": [0, 1.4, 1.1] } } ],
+      "comboNext": ["player-aerial-slam"], "flowMoveId": "aerial-rave"
+    },
+    {
+      "id": "player-aerial-slam", "name": "Ley Slam", "kind": "aerial", "staminaCost": 22, "aetherCost": 0,
+      "frames": { "total": 30, "startup": 10, "active": [14, 18], "recovery": 16, "iframes": [] },
+      "hits": [ { "damage": 140, "poiseDamage": 40, "hitstop": 10, "knockback": 3.0, "launch": false,
+        "hitbox": { "shape": "sphere", "radius": 1.4, "offset": [0, 0.4, 1.0] } } ],
+      "comboNext": [], "flowMoveId": "ley-slam"
+    },
+    {
+      "id": "player-dash-thrust", "name": "Dash Thrust", "kind": "light", "staminaCost": 12, "aetherCost": 0,
+      "frames": { "total": 28, "startup": 10, "active": [14, 18], "recovery": 10, "iframes": [] },
+      "hits": [ { "damage": 120, "poiseDamage": 26, "hitstop": 6, "knockback": 1.0, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.5, "length": 2.8, "offset": [0, 1.0, 1.6] } } ],
+      "comboNext": [], "flowMoveId": "dash-thrust"
+    },
+    {
+      "id": "special-ground-current", "name": "Ground Current", "kind": "special", "staminaCost": 0, "aetherCost": 35,
+      "frames": { "total": 44, "startup": 16, "active": [18, 30], "recovery": 14, "iframes": [] },
+      "hits": [ { "damage": 140, "poiseDamage": 40, "hitstop": 8, "knockback": 1.5, "launch": false,
+        "hitbox": { "shape": "sphere", "radius": 3.2, "offset": [0, 0.2, 1.6] } } ],
+      "comboNext": [], "flowMoveId": "ground-current"
+    },
+    {
+      "id": "special-leyline-lance", "name": "Leyline Lance", "kind": "special", "staminaCost": 0, "aetherCost": 50,
+      "frames": { "total": 40, "startup": 14, "active": [16, 24], "recovery": 16, "iframes": [] },
+      "hits": [ { "damage": 220, "poiseDamage": 60, "hitstop": 10, "knockback": 2.0, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.6, "length": 7.0, "offset": [0, 1.0, 4.0] } } ],
+      "comboNext": [], "flowMoveId": "leyline-lance"
+    },
+
+    {
+      "id": "knight-overhead", "name": "Overhead Cleave", "kind": "heavy", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 48, "startup": 24, "active": [25, 30], "recovery": 18, "iframes": [] },
+      "hits": [ { "damage": 180, "poiseDamage": 35, "hitstop": 8, "knockback": 2.0, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 1.0, "length": 3.0, "offset": [0, 0.8, 1.8] } } ],
+      "comboNext": [], "flowMoveId": "knight-overhead"
+    },
+    {
+      "id": "knight-sweep-1", "name": "Horizontal Sweep 1", "kind": "light", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 30, "startup": 16, "active": [18, 22], "recovery": 8, "iframes": [] },
+      "hits": [ { "damage": 120, "poiseDamage": 22, "hitstop": 6, "knockback": 1.2, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 1.2, "length": 3.2, "offset": [0, 1.0, 1.4] } } ],
+      "comboNext": ["knight-sweep-2"], "flowMoveId": "knight-sweep-1"
+    },
+    {
+      "id": "knight-sweep-2", "name": "Horizontal Sweep 2", "kind": "light", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 42, "startup": 30, "active": [34, 38], "recovery": 4, "iframes": [] },
+      "hits": [ { "damage": 120, "poiseDamage": 22, "hitstop": 6, "knockback": 1.2, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 1.2, "length": 3.2, "offset": [0, 1.0, 1.4] } } ],
+      "comboNext": [], "flowMoveId": "knight-sweep-2"
+    },
+    {
+      "id": "knight-lunge", "name": "Lunge Thrust", "kind": "heavy", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 40, "startup": 18, "active": [20, 26], "recovery": 14, "iframes": [] },
+      "hits": [ { "damage": 150, "poiseDamage": 40, "hitstop": 8, "knockback": 1.8, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.6, "length": 6.0, "offset": [0, 1.0, 3.2] } } ],
+      "comboNext": [], "flowMoveId": "knight-lunge"
+    },
+    {
+      "id": "knight-feint-cleave", "name": "Feint Cleave", "kind": "heavy", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 58, "startup": 38, "active": [39, 44], "recovery": 14, "iframes": [] },
+      "hits": [ { "damage": 200, "poiseDamage": 38, "hitstop": 10, "knockback": 2.2, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 1.0, "length": 3.0, "offset": [0, 0.8, 1.8] } } ],
+      "comboNext": [], "flowMoveId": "knight-feint-cleave"
+    },
+    {
+      "id": "knight-pillar-dash", "name": "Pillar Dash", "kind": "heavy", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 48, "startup": 30, "active": [31, 36], "recovery": 12, "iframes": [] },
+      "hits": [ { "damage": 160, "poiseDamage": 42, "hitstop": 8, "knockback": 2.0, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.6, "length": 5.0, "offset": [0, 1.0, 2.8] } } ],
+      "comboNext": [], "flowMoveId": "knight-pillar-dash"
+    },
+    {
+      "id": "knight-resonant-burst", "name": "Resonant Burst", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 78, "startup": 40, "active": [41, 48], "recovery": 30, "iframes": [] },
+      "hits": [ { "damage": 140, "poiseDamage": 60, "hitstop": 10, "knockback": 3.0, "launch": false, "guardBreak": true,
+        "hitbox": { "shape": "sphere", "radius": 6.0, "offset": [0, 0.4, 0] } } ],
+      "comboNext": [], "flowMoveId": "knight-resonant-burst"
+    },
+
+    {
+      "id": "mar-triple-slash", "name": "Triple Slash", "kind": "light", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 64, "startup": 16, "active": [17, 46], "recovery": 24, "iframes": [] },
+      "hits": [
+        { "damage": 110, "poiseDamage": 20, "hitstop": 6, "knockback": 1.0, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.1, "length": 3.0, "offset": [0, 1.0, 1.6] } },
+        { "damage": 110, "poiseDamage": 20, "hitstop": 6, "knockback": 1.0, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.1, "length": 3.0, "offset": [0, 1.0, 1.6] } },
+        { "damage": 110, "poiseDamage": 20, "hitstop": 6, "knockback": 1.4, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.1, "length": 3.0, "offset": [0, 1.0, 1.6] } }
+      ],
+      "comboNext": [], "flowMoveId": "mar-triple-slash"
+    },
+    {
+      "id": "mar-ground-fissure", "name": "Ground Fissure", "kind": "heavy", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 50, "startup": 30, "active": [31, 33], "recovery": 17, "iframes": [] },
+      "hits": [ { "damage": 150, "poiseDamage": 35, "hitstop": 8, "knockback": 1.6, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.8, "length": 9.0, "offset": [0, 0.2, 5.0] } } ],
+      "comboNext": [], "flowMoveId": "mar-ground-fissure"
+    },
+    {
+      "id": "mar-grab", "name": "Folding Grasp", "kind": "grab", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 50, "startup": 22, "active": [22, 28], "recovery": 22, "iframes": [] },
+      "hits": [ { "damage": 280, "poiseDamage": 0, "hitstop": 0, "knockback": 4.0, "launch": false, "unparryable": true,
+        "hitbox": { "shape": "sphere", "radius": 1.3, "offset": [0, 1.0, 2.2] } } ],
+      "comboNext": [], "flowMoveId": "mar-grab"
+    },
+    {
+      "id": "mar-leyline-volley", "name": "Leyline Volley", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 70, "startup": 18, "active": [20, 50], "recovery": 20, "iframes": [] },
+      "hits": [
+        { "damage": 90, "poiseDamage": 15, "hitstop": 4, "knockback": 0.8, "launch": false,
+          "hitbox": { "shape": "sphere", "radius": 0.7, "offset": [0, 1.0, 0] } },
+        { "damage": 90, "poiseDamage": 15, "hitstop": 4, "knockback": 0.8, "launch": false,
+          "hitbox": { "shape": "sphere", "radius": 0.7, "offset": [0, 1.0, 0] } },
+        { "damage": 90, "poiseDamage": 15, "hitstop": 4, "knockback": 0.8, "launch": false,
+          "hitbox": { "shape": "sphere", "radius": 0.7, "offset": [0, 1.0, 0] } }
+      ],
+      "comboNext": [], "flowMoveId": "mar-leyline-volley"
+    },
+    {
+      "id": "mar-circle-ignite", "name": "Circle Ignite", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 108, "startup": 36, "active": [37, 108], "recovery": 0, "iframes": [] },
+      "hits": [ { "damage": 160, "poiseDamage": 45, "hitstop": 6, "knockback": 1.4, "launch": false,
+        "hitbox": { "shape": "sphere", "radius": 4.0, "offset": [0, 0.1, 0] } } ],
+      "comboNext": [], "flowMoveId": "mar-circle-ignite"
+    },
+    {
+      "id": "mar-rushing-combo", "name": "Rushing Combo", "kind": "light", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 80, "startup": 24, "active": [25, 63], "recovery": 17, "iframes": [] },
+      "hits": [
+        { "damage": 100, "poiseDamage": 20, "hitstop": 5, "knockback": 0.8, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.0, "length": 3.0, "offset": [0, 1.0, 1.6] } },
+        { "damage": 100, "poiseDamage": 20, "hitstop": 5, "knockback": 0.8, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.0, "length": 3.0, "offset": [0, 1.0, 1.6] } },
+        { "damage": 100, "poiseDamage": 20, "hitstop": 5, "knockback": 0.8, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.0, "length": 3.0, "offset": [0, 1.0, 1.6] } },
+        { "damage": 100, "poiseDamage": 20, "hitstop": 8, "knockback": 1.8, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 1.0, "length": 3.0, "offset": [0, 1.0, 1.6] } }
+      ],
+      "comboNext": [], "flowMoveId": "mar-rushing-combo"
+    },
+    {
+      "id": "mar-choir-blades", "name": "Choir of Blades", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 90, "startup": 1, "active": [1, 80], "recovery": 10, "iframes": [] },
+      "hits": [
+        { "damage": 100, "poiseDamage": 18, "hitstop": 4, "knockback": 0.9, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 0.4, "length": 4.0, "offset": [0, 1.0, 2.0] } },
+        { "damage": 100, "poiseDamage": 18, "hitstop": 4, "knockback": 0.9, "launch": false,
+          "hitbox": { "shape": "capsule", "radius": 0.4, "length": 4.0, "offset": [0, 1.0, 2.0] } }
+      ],
+      "comboNext": [], "flowMoveId": "mar-choir-blades"
+    },
+    {
+      "id": "mar-rotating-circles", "name": "Rotating Circles", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 240, "startup": 1, "active": [1, 240], "recovery": 0, "iframes": [] },
+      "hits": [ { "damage": 200, "poiseDamage": 60, "hitstop": 6, "knockback": 2.0, "launch": false,
+        "hitbox": { "shape": "sphere", "radius": 13.0, "offset": [0, 0.1, 0] } } ],
+      "comboNext": [], "flowMoveId": "mar-rotating-circles"
+    },
+    {
+      "id": "mar-fold", "name": "Fold", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 120, "startup": 90, "active": [91, 91], "recovery": 29, "iframes": [] },
+      "hits": [ { "damage": 600, "poiseDamage": 100, "hitstop": 16, "knockback": 5.0, "launch": false, "unparryable": false, "hardCounter": "parry-or-cauterize",
+        "hitbox": { "shape": "sphere", "radius": 26.0, "offset": [0, 0.1, 0] } } ],
+      "comboNext": [], "flowMoveId": "mar-fold"
+    },
+    {
+      "id": "mar-desperate-grab", "name": "Desperate Grasp", "kind": "grab", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 42, "startup": 18, "active": [18, 24], "recovery": 18, "iframes": [] },
+      "hits": [ { "damage": 300, "poiseDamage": 0, "hitstop": 0, "knockback": 4.0, "launch": false, "unparryable": true,
+        "hitbox": { "shape": "sphere", "radius": 1.3, "offset": [0, 1.0, 2.2] } } ],
+      "comboNext": [], "flowMoveId": "mar-desperate-grab"
+    },
+
+    {
+      "id": "husk-overhead", "name": "Husk Overhead", "kind": "light", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 40, "startup": 22, "active": [23, 27], "recovery": 13, "iframes": [] },
+      "hits": [ { "damage": 40, "poiseDamage": 15, "hitstop": 5, "knockback": 1.0, "launch": false,
+        "hitbox": { "shape": "capsule", "radius": 0.7, "length": 2.0, "offset": [0, 1.0, 1.2] } } ],
+      "comboNext": [], "flowMoveId": "husk-overhead"
+    },
+    {
+      "id": "acolyte-bolt", "name": "Gold Bolt", "kind": "special", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 46, "startup": 24, "active": [25, 25], "recovery": 21, "iframes": [] },
+      "hits": [ { "damage": 30, "poiseDamage": 8, "hitstop": 3, "knockback": 0.6, "launch": false, "projectile": true,
+        "hitbox": { "shape": "sphere", "radius": 0.4, "offset": [0, 1.0, 0.6] } } ],
+      "comboNext": [], "flowMoveId": "acolyte-bolt"
+    },
+    {
+      "id": "sentinel-slam", "name": "Sentinel Slam", "kind": "heavy", "staminaCost": 0, "aetherCost": 0,
+      "frames": { "total": 60, "startup": 34, "active": [35, 40], "recovery": 20, "iframes": [], "hyperArmorFrom": 0 },
+      "hits": [ { "damage": 90, "poiseDamage": 70, "hitstop": 10, "knockback": 2.6, "launch": false,
+        "hitbox": { "shape": "sphere", "radius": 2.2, "offset": [0, 0.4, 1.4] } } ],
+      "comboNext": [], "flowMoveId": "sentinel-slam"
+    }
+  ]
+}

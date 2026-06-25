@@ -28,3 +28,21 @@ yarn-debug.log*
 yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
+
+# ── game: three.js sub-app (game/threejs) ──
+game/threejs/node_modules/
+game/threejs/dist/
+game/threejs/.vite/
+game/threejs/test-results/
+game/threejs/playwright-report/
+
+# ── game: build-time shared-asset copies (derived; source is game/shared) ──
+game/threejs/public/design-data/
+game/threejs/public/assets/
+game/unity/Assets/StreamingAssets/design-data/
+game/godot/data/design-data/
+
+# ── game: godot (engine cache; machine-local) ──
+game/godot/.godot/
+game/godot/.import/
+game/godot/export_presets.cfg

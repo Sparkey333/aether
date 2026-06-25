@@ -1,0 +1,32 @@
+{
+  "$schema": "../schema/weapons.schema.json",
+  "version": "1.0.0",
+  "weapons": [
+    {
+      "id": "geomancers-edge",
+      "name": "Geomancer's Edge",
+      "description": "The Warden's blade. Reads the Aether in a thing and turns it against them. Balanced poise damage and reach.",
+      "lightCombo": ["player-light-1", "player-light-2", "player-light-3"],
+      "heavyCombo": ["player-heavy-1", "player-heavy-2"],
+      "launcher": "player-launcher",
+      "aerialCombo": ["player-aerial-1", "player-aerial-slam"],
+      "dashAttack": "player-dash-thrust",
+      "damageScalar": 1.0,
+      "staminaPerSwing": 10,
+      "dodgeStaminaCost": 25
+    },
+    {
+      "id": "resonant-edge",
+      "name": "Resonant Edge",
+      "description": "Unsanctioned variant recovered from the Vault (S2). Faster, lower poise damage. Power with no provenance.",
+      "lightCombo": ["player-light-1", "player-light-2", "player-light-3"],
+      "heavyCombo": ["player-heavy-1", "player-heavy-2"],
+      "launcher": "player-launcher",
+      "aerialCombo": ["player-aerial-1", "player-aerial-slam"],
+      "dashAttack": "player-dash-thrust",
+      "damageScalar": 0.85,
+      "staminaPerSwing": 8,
+      "dodgeStaminaCost": 22
+    }
+  ]
+}

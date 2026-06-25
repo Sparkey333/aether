@@ -9,6 +9,16 @@ against chance*. It is the cartographer organ of a larger constellation
 ([Pyramid Temples](../Pyramid%20Temples), [Jarvis](../Jarvis)) and ships as a
 Mac/iOS app via Tauri.
 
+## This repo holds two things
+
+1. **Aether Atlas** — the geomancy engine described here (`src/`, `src-tauri/`, `content/`, `docs/`).
+2. **Aether: The Sundered Nexus** — a 3D boss-fighting game built three ways (Three.js / Godot /
+   Unity) for engine comparison, living entirely under [`game/`](game/). It reuses the Atlas's lore
+   and four-tier provenance vocabulary but is otherwise independent; **the Atlas app is unaffected by
+   anything under `game/`.** The Three.js build is playable now: `cd game/threejs && npm install &&
+   npm run dev`. See [`game/README.md`](game/README.md) and the design docs in
+   [`docs/game-bible.md`](docs/game-bible.md) / [`docs/game-build-plan.md`](docs/game-build-plan.md).
+
 ## The doctrine, in one line
 
 **Keep every layer. Label every layer.** From satellite-measured terrain to
