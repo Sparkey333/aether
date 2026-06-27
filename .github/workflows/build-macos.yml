@@ -15,6 +15,13 @@ on:
       - "claude/**"
   workflow_dispatch: {}
 
+# Serialize builds per ref so two close pushes can't both publish to the shared
+# mac-latest release — a slower older run could otherwise overwrite the newer
+# .dmg. A newer push cancels the in-flight older one (newest wins; saves minutes).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write # needed to create/update the Release
 
