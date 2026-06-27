@@ -1,0 +1,17 @@
+{
+  "name": "Pocket Glade",
+  "short_name": "Pocket Glade",
+  "description": "A tiny garden you carry — the same Bloomling, always in your pocket.",
+  "start_url": "pocket.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1b2a",
+  "theme_color": "#0d1b2a",
+  "categories": ["games", "lifestyle"],
+  "icons": [
+    { "src": "icons-pwa/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons-pwa/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons-pwa/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

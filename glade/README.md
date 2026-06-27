@@ -58,11 +58,36 @@ Every step is meant to feel good, even the waiting:
 Everything is **saved to your device**, and it keeps growing while you're away — come back to
 a creature that aged and missed you, with a few dewdrops waiting.
 
+## Pocket Glade — carry it with you 🌱
+
+The same Bloomling, in your pocket. **[`pocket.html`](./pocket.html)** is a tiny, cozy check-in
+garden that shares the *exact same save* as the full game — pet it, gather dewdrops, slip it a
+treat, and it all carries home. It's the modern Tiny Chao Garden: a creature that comes
+everywhere with you.
+
+```bash
+npx serve glade      # then open the printed URL, and /pocket.html on your phone
+```
+
+- **Same creature, both ways.** Served from one origin (or inside the Mac app), what you do in
+  Pocket shows up in the full Glade and vice-versa — open both in two tabs and watch them sync live.
+- **Add to your home screen.** Over https/localhost it's an installable **PWA** (offline,
+  full-screen, its own icon) — your Bloomling literally lives on your phone.
+- **A gentle 30-second loop.** A *"while you were away"* card greets you with what changed and a
+  few dewdrops it gathered for you; **pet / gather / treat** are capped per check-in (Pocket is for
+  maintenance — the home garden does the deep shaping). No streaks, no guilt.
+
+> Sharing needs a common origin, so **serve the folder** (or use the Mac app) rather than
+> double-clicking — opening `pocket.html` on its own still works, it just raises its own creature
+> until you serve them together.
+
 ## What's here
 
 | File | What it is |
 |---|---|
-| [`index.html`](./index.html) | The playable prototype (one self-contained file — open it directly) |
+| [`index.html`](./index.html) | The full game — one self-contained file you can open directly |
+| [`pocket.html`](./pocket.html) | **Pocket Glade** — the portable, installable companion (shares the save) |
+| `manifest.webmanifest` · `sw.js` · `icons-pwa/` | PWA bits so Pocket Glade installs + runs offline |
 | [`DESIGN.md`](./DESIGN.md) | The full Game Design Document + the build spec |
 | [`src-tauri/`](./src-tauri) | The Tauri desktop-app shell (Rust + config + icons) |
 | [`scripts/`](./scripts) | `make-icons.mjs` (icon generator), `stage-web.mjs`, `build-dmg.sh` |
@@ -95,14 +120,15 @@ time with `npm run icons`.
 
 ## Status
 
-**v0.1 — playable prototype, now with full game-feel + desktop packaging.** Implemented: the
-Mote, the care loop (pet/feed/name/call), procedural essence-driven evolution, Solar/Lunar/
-Verdant alignment, a day/night garden that blooms as you tend it, a gentle blight-tending
-beat, offline persistence with wall-clock catch-up, the Returning, the Everbloom, synthesized
+**v0.2 — full game-feel, desktop packaging, and Pocket Glade.** Implemented: the Mote, the
+care loop (pet/feed/name/call), procedural essence-driven evolution, Solar/Lunar/Verdant
+alignment, a day/night garden that blooms as you tend it, a gentle blight-tending beat,
+offline persistence with wall-clock catch-up, the Returning, the Everbloom, synthesized
 ambient audio + fanfares, collectible dewdrops, floating pops/confetti/level-ups, a cozy-CRT
-mode, and a one-command **Tauri macOS `.dmg`** build (+ cloud-Mac CI).
+mode, a one-command **Tauri macOS `.dmg`** build (+ cloud-Mac CI), and **Pocket Glade** — the
+installable, save-sharing portable companion.
 
-**Next:** *Pocket Glade* (the portable companion layer — the thing the GBA link made magic),
-multi-zone navigation, the secrets/Almanac layer, and seasons. See [`DESIGN.md`](./DESIGN.md).
+**Next:** multi-zone navigation (Pond / Meadow / Grove / Burrow), the secrets/Almanac layer,
+seasons, and code-signing the `.dmg`. See [`DESIGN.md`](./DESIGN.md).
 
 *Original IP — no Sega assets or trademarks are used.*

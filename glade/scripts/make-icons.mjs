@@ -25,43 +25,40 @@ function inRoundBox(px,py,hw,hh,r){ // signed-distance rounded box, inside if <0
 function inEll(u,v,cx,cy,rx,ry,ang){ const dx=u-cx,dy=v-cy,c=Math.cos(-ang),s=Math.sin(-ang);
   const x=dx*c-dy*s, y=dx*s+dy*c; return (x*x)/(rx*rx)+(y*y)/(ry*ry); }
 
-// sample the scene at normalized (u,v) in [0,1]; returns [r,g,b,a]
-function sample(u,v){
+// sample the scene at normalized (u,v) in [0,1]; returns [r,g,b,a].
+// mask=true → full-bleed background (for PWA maskable icons) with the sprite
+// shrunk into the safe zone so OS masking never clips it.
+function sample(u,v,mask){
   let c=[0,0,0,0];
-  // squircle background with a soft vertical garden gradient + center glow
   const d = inRoundBox(u-0.5, v-0.5, 0.5-0.045, 0.5-0.045, 0.20);
-  if(d < 0){
-    let bg = lerp([22,38,59],[31,61,52], clamp(v*1.05,0,1));     // night indigo -> teal-green
-    const gl = clamp(1 - Math.hypot(u-0.5,v-0.42)/0.5, 0, 1);
-    bg = lerp(bg, [60,96,104], gl*0.35);                          // gentle warm-cool glow
-    c = [bg[0],bg[1],bg[2],1];
-  } else return c; // outside the squircle stays transparent
-  // mound
-  if(inEll(u,v,0.5,0.74,0.17,0.05,0) <= 1) c = over(c,[18,42,28,1]);
-  // stem
-  if(Math.abs(u-0.5)<0.030 && v>0.50 && v<0.735) c = over(c,[95,161,104,1]);
-  // leaves
-  if(inEll(u,v,0.40,0.57,0.12,0.05,-0.6) <= 1) c = over(c,[134,217,142,1]);
-  if(inEll(u,v,0.60,0.55,0.12,0.05, 0.6) <= 1) c = over(c,[155,227,162,1]);
-  // the Mote: glow halo + warm core (homage to the emotion-orb)
-  const md = Math.hypot(u-0.5, v-0.37);
+  const bgAt=(vv)=>{ let bg=lerp([22,38,59],[31,61,52],clamp(vv*1.05,0,1));
+    const gl=clamp(1-Math.hypot(u-0.5,v-0.42)/0.5,0,1); return lerp(bg,[60,96,104],gl*0.35); };
+  if(mask){ const bg=bgAt(v); c=[bg[0],bg[1],bg[2],1]; }
+  else if(d < 0){ const bg=bgAt(v); c=[bg[0],bg[1],bg[2],1]; }
+  else return c; // outside the squircle stays transparent (non-maskable)
+  // foreground in (su,sv): shrunk toward centre when maskable
+  const su = mask? 0.5+(u-0.5)/0.80 : u, sv = mask? 0.5+(v-0.5)/0.80 : v;
+  if(inEll(su,sv,0.5,0.74,0.17,0.05,0) <= 1) c = over(c,[18,42,28,1]);            // mound
+  if(Math.abs(su-0.5)<0.030 && sv>0.50 && sv<0.735) c = over(c,[95,161,104,1]);   // stem
+  if(inEll(su,sv,0.40,0.57,0.12,0.05,-0.6) <= 1) c = over(c,[134,217,142,1]);     // leaf
+  if(inEll(su,sv,0.60,0.55,0.12,0.05, 0.6) <= 1) c = over(c,[155,227,162,1]);     // leaf
+  const md = Math.hypot(su-0.5, sv-0.37);                                         // the Mote
   const halo = clamp(1 - md/0.17, 0, 1); if(halo>0) c = over(c,[255,231,168, halo*halo*0.55]);
   if(md < 0.050) c = over(c,[255,247,205,1]);
   if(md < 0.022) c = over(c,[255,255,255,1]);
-  // two tiny sparkles
-  if(Math.hypot(u-0.63,v-0.30)<0.013) c = over(c,[255,243,205,1]);
-  if(Math.hypot(u-0.39,v-0.33)<0.011) c = over(c,[255,243,205,1]);
+  if(Math.hypot(su-0.63,sv-0.30)<0.013) c = over(c,[255,243,205,1]);              // sparkles
+  if(Math.hypot(su-0.39,sv-0.33)<0.011) c = over(c,[255,243,205,1]);
   return c;
 }
 
 /* --------------------- render master + downsample ----------------------- */
-function renderMaster(M, SS){
+function renderMaster(M, SS, mask){
   const buf = Buffer.alloc(M*M*4);
   for(let py=0; py<M; py++){
     for(let px=0; px<M; px++){
       let R=0,G=0,B=0,A=0;
       for(let sy=0; sy<SS; sy++) for(let sx=0; sx<SS; sx++){
-        const u=(px+(sx+0.5)/SS)/M, v=(py+(sy+0.5)/SS)/M, c=sample(u,v);
+        const u=(px+(sx+0.5)/SS)/M, v=(py+(sy+0.5)/SS)/M, c=sample(u,v,mask);
         R+=c[0]*c[3]; G+=c[1]*c[3]; B+=c[2]*c[3]; A+=c[3];
       }
       const n=SS*SS, o=(py*M+px)*4;
@@ -117,12 +114,20 @@ function buildICO(images){ // [{size, png}]
 
 /* -------------------------------- build --------------------------------- */
 const M=1024, master=renderMaster(M, 4);
-const png={}; for(const s of [16,32,48,64,128,256,512,1024]) png[s]=encodePNG(downsample(master,M,s),s,s);
+const png={}; for(const s of [16,32,48,64,128,192,256,512,1024]) png[s]=encodePNG(downsample(master,M,s),s,s);
 
 writeFileSync(join(OUT,"32x32.png"),      png[32]);
 writeFileSync(join(OUT,"128x128.png"),    png[128]);
 writeFileSync(join(OUT,"128x128@2x.png"), png[256]);
 writeFileSync(join(OUT,"icon.png"),       png[512]);
+
+// PWA icons (for "add Pocket Glade to your home screen") → glade/icons-pwa/
+const PWA = join(OUT, "..", "..", "icons-pwa");
+mkdirSync(PWA, { recursive: true });
+const maskMaster = renderMaster(512, 4, true);
+writeFileSync(join(PWA,"icon-192.png"),          png[192]);
+writeFileSync(join(PWA,"icon-512.png"),          png[512]);
+writeFileSync(join(PWA,"icon-512-maskable.png"), encodePNG(downsample(maskMaster,512,512),512,512));
 
 writeFileSync(join(OUT,"icon.icns"), buildICNS([
   { type:"ic11", png:png[32] },   // 16@2x

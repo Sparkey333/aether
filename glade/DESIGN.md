@@ -268,6 +268,10 @@ and a save/reload round-trip — all passing. (See the harness approach in the c
 
 ## Roadmap from here
 
-The named **deferred** systems above, in priority order: Pocket Glade (the portability that
-made the original sing), zone navigation + Verdancy biomes, the secrets/Almanac layer, and
-seasons/weather. All fit the existing data model.
+**Built since v0.1:** a full game-feel pass (dewdrops, pops, confetti, level-up + evolution
+fanfares, a startup jingle, screen-bounce, cozy-CRT mode), a Tauri macOS `.dmg` build, and
+**Pocket Glade** — the portable, installable (PWA) companion in [`pocket.html`](./pocket.html)
+that shares the same `glade.save.v1` and syncs both ways.
+
+**Still deferred,** in priority order: multi-zone navigation + Verdancy biomes, the
+secrets/Almanac layer, and seasons/weather. All fit the existing data model.
