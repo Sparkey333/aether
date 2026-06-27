@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 112" role="img" aria-label="Provenance tier D — folklore">
+  <defs><linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3a8b6"/><stop offset="1" stop-color="#6b7080"/></linearGradient></defs>
+  <path d="M50 4 92 22V58c0 26-18 40-42 50C26 98 8 84 8 58V22z" fill="url(#d)" stroke="#0a0a0f" stroke-width="3"/>
+  <text x="50" y="68" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="46" fill="#2b2f3a">D</text>
+</svg>

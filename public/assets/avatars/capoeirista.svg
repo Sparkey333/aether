@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Capoeirista avatar">
+  <defs><radialGradient id="bg" cx="50%" cy="40%" r="78%"><stop offset="0" stop-color="#2a2350"/><stop offset="1" stop-color="#0a0814"/></radialGradient></defs>
+  <circle cx="80" cy="80" r="76" fill="url(#bg)"/>
+  <g fill="#b58cf0">
+    <circle cx="64" cy="98" r="12"/>
+    <path d="M58 60 q18 -8 34 6 l-10 34 -26 -4 2 -36z"/>
+    <rect x="86" y="40" width="12" height="44" rx="6" transform="rotate(28 92 62)"/>
+    <rect x="100" y="34" width="12" height="40" rx="6" transform="rotate(54 106 54)"/>
+    <rect x="46" y="92" width="30" height="11" rx="5.5" transform="rotate(-24 61 97)"/>
+  </g>
+  <circle cx="80" cy="80" r="74" fill="none" stroke="#d9b46a" stroke-width="3"/>
+  <circle cx="80" cy="80" r="68" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="2"/>
+</svg>

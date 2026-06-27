@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Katana">
+  <g transform="rotate(-38 100 100)">
+    <rect x="60" y="30" width="80" height="8" rx="4" fill="#dfe4ee"/>
+    <rect x="60" y="30" width="80" height="3" fill="#fff" opacity=".7"/>
+    <path d="M140 30h18a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4h-18z" fill="#cfd5e0"/>
+    <rect x="56" y="24" width="6" height="20" rx="3" fill="#d9b46a"/>
+    <rect x="20" y="28" width="36" height="12" rx="6" fill="#23262f"/>
+    <g stroke="#d9b46a" stroke-width="2"><line x1="26" y1="28" x2="30" y2="40"/><line x1="34" y1="28" x2="38" y2="40"/><line x1="42" y1="28" x2="46" y2="40"/></g>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Striker avatar">
+  <defs><radialGradient id="bg" cx="50%" cy="38%" r="75%"><stop offset="0" stop-color="#1d2740"/><stop offset="1" stop-color="#090b12"/></radialGradient></defs>
+  <circle cx="80" cy="80" r="76" fill="url(#bg)"/>
+  <g fill="#cf5050">
+    <circle cx="86" cy="58" r="12"/>
+    <path d="M72 70 q14 -6 28 0 l4 34 -12 6 -16 -2 -6 -32z"/>
+    <rect x="64" y="60" width="22" height="9" rx="4.5" transform="rotate(-18 75 64)"/>
+    <rect x="92" y="58" width="20" height="9" rx="4.5" transform="rotate(10 102 62)"/>
+    <rect x="74" y="100" width="11" height="34" rx="5" transform="rotate(8 79 117)"/>
+    <rect x="90" y="100" width="11" height="36" rx="5" transform="rotate(-14 95 118)"/>
+  </g>
+  <circle cx="80" cy="80" r="74" fill="none" stroke="#d9b46a" stroke-width="3"/>
+  <circle cx="80" cy="80" r="68" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="2"/>
+</svg>

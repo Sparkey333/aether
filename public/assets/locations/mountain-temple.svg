@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Mountain temple">
+  <defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2f55"/><stop offset="1" stop-color="#c98a6a"/></linearGradient></defs>
+  <rect width="320" height="180" fill="url(#s)"/>
+  <circle cx="250" cy="48" r="22" fill="#f3d9a8" opacity=".85"/>
+  <path d="M0 150 L70 86 L120 130 L180 70 L250 140 L320 96 V180 H0Z" fill="#3a3550" opacity=".75"/>
+  <path d="M0 180 L80 120 L150 168 L230 110 L320 160 V180Z" fill="#241f36"/>
+  <g transform="translate(132 96)">
+    <rect x="6" y="22" width="44" height="30" fill="#5a2f2f"/>
+    <path d="M-2 22 L28 6 L58 22Z" fill="#7c3b3b"/>
+    <path d="M2 38 L28 28 L54 38Z" fill="#7c3b3b"/>
+    <rect x="24" y="36" width="8" height="16" fill="#1c1010"/>
+  </g>
+</svg>
