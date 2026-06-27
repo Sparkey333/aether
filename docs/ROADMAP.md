@@ -54,6 +54,11 @@ interpretive layers rest on top. Provenance first, always.
 - [ ] Frequency↔place mappings (disclosed as designed correspondences, Tier C).
 - [ ] The Tesla layer: Wardenclyffe, Colorado Springs notes, the patents — and a
       model of global resonance toward wireless free energy (the endgame).
+- [x] **Resonance organ soul-file + build ladder** — `content/canon/resonance.md`:
+      the physical-lab limb of this phase (slayer exciter → SGTC → SSTC → DRSSTC →
+      magnifier), tier-governed, with a first-class safety doctrine. *Still to do:*
+      fold in Tilbury (Tier-B) once the source is readable; add a Schumann-detector
+      rung; wire measured coil data back to the Loom as Tier-A.
 
 ## Phase 5 — The Aegis (counter-sigils)
 
