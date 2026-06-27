@@ -56,9 +56,13 @@ interpretive layers rest on top. Provenance first, always.
       model of global resonance toward wireless free energy (the endgame).
 - [x] **Resonance organ soul-file + build ladder** — `content/canon/resonance.md`:
       the physical-lab limb of this phase (slayer exciter → SGTC → SSTC → DRSSTC →
-      magnifier), tier-governed, with a first-class safety doctrine. *Still to do:*
-      fold in Tilbury (Tier-B) once the source is readable; add a Schumann-detector
-      rung; wire measured coil data back to the Loom as Tier-A.
+      magnifier), tier-governed, with a first-class safety doctrine.
+- [x] **The Resonance Lab — full DIY build guides** — `docs/resonance/`: a master
+      safety doctrine plus complete guides for L0–L4 **and** the S1 Schumann
+      detector, each with parallel 🔰 base / ⚡ decked-out tracks, BOMs, step-by-step
+      builds, and dangers marked inline (authored + adversarially safety-reviewed).
+      *Still to do:* fold in Tilbury (Tier-B) once the source is readable; wire
+      measured coil data back to the Loom as Tier-A.
 
 ## Phase 5 — The Aegis (counter-sigils)
 

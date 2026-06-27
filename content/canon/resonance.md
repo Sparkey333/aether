@@ -49,6 +49,11 @@ Five rungs, simplest to hardest. Each rung is a *real* build with a *real*
 next-step, and each is honest about what it actually demonstrates and how much it
 can hurt you.
 
+> **The full DIY build guides live in [`docs/resonance/`](../../docs/resonance/README.md)** —
+> each rung with two parallel tracks (🔰 *base / book-equivalent* vs ⚡ *decked-out /
+> our design*), full BOMs, step-by-step builds, tuning/first-light tests, and dangers
+> marked *everywhere*. ☠ **Read [`docs/resonance/00-safety-doctrine.md`](../../docs/resonance/00-safety-doctrine.md) first — every time.**
+
 ### L0 — The Slayer Exciter · *the seed*
 - **What it is:** the smallest Tesla coil that works — a self-resonant feedback
   oscillator, one transistor doing the job the spark gap does in a big coil.
