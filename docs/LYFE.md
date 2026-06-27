@@ -65,10 +65,15 @@ a measure of how scattered things are. Nothing broke.
 
 ## Roadmap
 
-- **Now** — Life Tree + Order Score + Water-Line + Snags (read-only).
-- **Next** — full 138 sync; re-sort pillars by hand; per-project drill-in.
-- **Vacuum** — local folder scan (Tauri fs): duplicate/clutter map, backup-first
-  safe moves with approval, Drive backup target. Mirrors the VACUUM-app spirit.
+- **Now (built)** — Life Tree (138) + Order Score + Water-Line + Snags +
+  **Time-Waves** (real dated commitments seeding the urgency tide) + **the
+  Vacuum** (read-only clutter findings from the Drive scan, each with a
+  backup-first safe action). Emerald-leaf brand.
+- **Next** — re-sort pillars by hand; per-project drill-in; the per-area
+  `TODO#3–6` sheets into Time-Waves.
+- **Vacuum execution** — local folder scan (Tauri fs): turn the findings into
+  actual backup-first safe moves with approval + a Drive backup target. Mirrors
+  the VACUUM-app spirit. Ships in the Mac build only.
 - **Connectors** — Google Drive / Todoist read + safe organize.
 - **Trajectory** — résumé/LinkedIn → life-points timeline → projected paths,
   gentle popup nudges.

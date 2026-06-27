@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "Vacuum — real clutter found in Drive",
+    "capturedFrom": "Google Drive scan, 2026-06-16 (the same scan that found Lyfe scattered under three names)",
+    "doctrine": "Read-only findings. Every action is backup-first, reversible, and runs only after you approve it in the Mac build. Nothing here has been touched.",
+    "note": "Byte sizes are exact where Drive reported them (identical sizes = byte-for-byte duplicates). Google-native docs report no meaningful byte size, so those are framed as clarity, not space."
+  },
+  "items": [
+    {
+      "id": "dup-automate-zip",
+      "kind": "duplicate",
+      "title": "\"Automate the Boring Stuff\" zip — 2 identical copies",
+      "detail": "Both copies are byte-for-byte identical (6,826,503 B each). One is in a different folder than the other — a classic re-download instead of a move.",
+      "where": "Drive · two separate folders",
+      "members": ["Automate_the_Boring_Stuff_3e_onlinematerials-…-3-001.zip", "Automate_the_Boring_Stuff_3e_onlinematerials-…-1-001.zip"],
+      "reclaimBytes": 6826503,
+      "safeAction": "Keep the newest copy, move the older into _Backup/_dedup/ (not deleted). Reversible."
+    },
+    {
+      "id": "dup-waterloo-xlsx",
+      "kind": "duplicate",
+      "title": "\"TODO#1_WaterlooIOWA.xlsx\" — 2 identical copies",
+      "detail": "Both 1,631,979 B, identical. Same spreadsheet saved into two project folders.",
+      "where": "Drive · two project folders",
+      "members": ["TODO#1_WaterlooIOWA.xlsx (copy A)", "TODO#1_WaterlooIOWA.xlsx (copy B)"],
+      "reclaimBytes": 1631979,
+      "safeAction": "Keep one canonical copy, link the other; archive the duplicate to _Backup/_dedup/."
+    },
+    {
+      "id": "frag-workflow-doc",
+      "kind": "fragmented",
+      "title": "\"_Workflow\" doc — 4 identical copies (incl. \"Copy of _Workflow\")",
+      "detail": "The same content-creation workflow doc exists 4× across different folders. Splitting it means edits never stay in sync.",
+      "where": "Drive · 4 folders",
+      "members": ["_Workflow (×3)", "Copy of _Workflow"],
+      "safeAction": "Promote one to a single canonical _Workflow, replace the others with a shortcut/link, archive the rest. Clarity, not space."
+    },
+    {
+      "id": "stale-todoist-backups",
+      "kind": "stale-backup",
+      "title": "Todoist backup zips — 4 generations kept",
+      "detail": "Backups from 2026-04-30, 2026-04-29, 2023-08-18, 2023-06-03. Keeping the latest + one milestone is plenty.",
+      "where": "Drive · Todoist - LIFE LYFE Projects / _LYFE Projects",
+      "members": ["Todoist backup 2026-04-30.zip", "Todoist backup 2026-04-29.zip", "Todoist backup 2023-08-18.zip", "Todoist backup 2023-06-03.zip"],
+      "reclaimBytes": 790938,
+      "safeAction": "Keep newest (2026-04-30) + oldest milestone (2023-06-03); move the middle two to _Backup/_archive/."
+    },
+    {
+      "id": "dup-master-tracker",
+      "kind": "duplicate",
+      "title": "LIFE Tree Master Tracker — 2 drifting copies",
+      "detail": "Two versions of the 138-project index exist; they've already drifted (different project counts). One should be the source of truth.",
+      "where": "Drive · Todoist - LIFE LYFE Projects",
+      "members": ["LIFE Tree Master Tracker — Project Index (138 projects, current)", "LIFE Tree Master Tracker — Project Index (older)"],
+      "safeAction": "Mark the 138-project one canonical; archive the older. Lyfe already reads the canonical one."
+    },
+    {
+      "id": "scatter-three-names",
+      "kind": "scatter",
+      "title": "Lyfe lives under three folder names",
+      "detail": "_ProjectZ, 'Todoist - LIFE LYFE Projects', and _LYFE Projects all hold pieces of the same effort. The fragmentation is the very thing Lyfe exists to heal.",
+      "where": "Drive · root + _ProjectZ",
+      "members": ["_ProjectZ/", "Todoist - LIFE LYFE Projects/", "_LYFE Projects/"],
+      "safeAction": "Choose one canonical home (suggest _ProjectZ/_LYFE), move the others under it as dated subfolders. Backup the whole tree first."
+    }
+  ]
+}

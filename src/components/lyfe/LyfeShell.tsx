@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import seed from "@/data/lyfe/projects.seed.json";
+import timewaves from "@/data/lyfe/timewaves.seed.json";
 import {
   PILLARS,
   PILLAR_META,
@@ -10,38 +11,64 @@ import {
   orderScore,
   waterLine,
 } from "@/lib/lyfe/engine";
+import { byDue, seededUrgency, type Commitment } from "@/lib/lyfe/timewaves";
 import type { LyfeProject, Pillar } from "@/lib/lyfe/types";
+import VacuumPanel from "@/components/lyfe/VacuumPanel";
 
 const PROJECTS = (seed as unknown as { projects: LyfeProject[] }).projects;
 const META = (seed as unknown as { meta: { completeness: string } }).meta;
+const COMMITS = (timewaves as unknown as { commitments: Commitment[] }).commitments;
+
+function LeafMark() {
+  return (
+    <svg className="leaf" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+      <defs>
+        <linearGradient id="lyfeLeaf" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#3ee08f" />
+          <stop offset="1" stopColor="#0c8a4f" />
+        </linearGradient>
+      </defs>
+      <path d="M21 3C9 3 3 9 3 21c12 0 18-6 18-18Z" fill="url(#lyfeLeaf)" />
+      <path
+        d="M6.5 17.5C9 12 13 8 18.5 5.5"
+        fill="none"
+        stroke="#06311e"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        opacity="0.55"
+      />
+    </svg>
+  );
+}
 
 export default function LyfeShell() {
-  // The Water-Line — the three tides. Start a touch urgency-heavy, the common lean.
-  const [urgency, setUrgency] = useState(0.7);
+  // The Water-Line. Urgency starts seeded from real dated commitments (Time-Waves);
+  // priority and soul start centered, for the person to set.
+  const [urgency, setUrgency] = useState(() => seededUrgency(COMMITS));
   const [priority, setPriority] = useState(0.55);
-  const [soul, setSoul] = useState(0.35);
+  const [soul, setSoul] = useState(0.4);
 
   const order = useMemo(() => orderScore(PROJECTS), []);
   const balance = useMemo(() => balanceByPillar(PROJECTS), []);
   const snags = useMemo(() => detectSnags(PROJECTS), []);
-  const water = useMemo(
-    () => waterLine({ urgency, priority, soul }),
-    [urgency, priority, soul],
-  );
+  const commitments = useMemo(() => byDue(COMMITS), []);
+  const water = useMemo(() => waterLine({ urgency, priority, soul }), [urgency, priority, soul]);
 
   const active = PROJECTS.filter((p) => p.state === "active").length;
   const shells = PROJECTS.length - active;
+  const seededU = useMemo(() => Math.round(seededUrgency(COMMITS) * 100), []);
 
   return (
     <div className="dashboard">
       <header className="dash-head">
-        <div>
-          <h1 className="brand" style={{ fontSize: 26 }}>
-            Lyfe · Projekt Z
-          </h1>
-          <p className="brand-sub">
-            The harmony organ — your life, gathered into one honest tree
-          </p>
+        <div className="lyfe-brand-row">
+          <LeafMark />
+          <div>
+            <h1 className="brand lyfe-brand" style={{ fontSize: 26 }}>
+              Lyfe · Projekt Z
+            </h1>
+            <p className="brand-sub">The harmony organ — your life, gathered into one honest tree</p>
+          </div>
         </div>
         <div className="score-badge" title="Order Score — how gathered your life is right now">
           <div className="score-num">{order.score}</div>
@@ -53,7 +80,7 @@ export default function LyfeShell() {
         <Stat label="Projects in the tree" value={String(PROJECTS.length)} hint={META.completeness} />
         <Stat label="Active branches" value={String(active)} />
         <Stat label="Empty shells (seeds)" value={String(shells)} hint="named, not yet planted" />
-        <Stat label="Snags found" value={String(snags.length)} hint="duplicates + shells to triage" />
+        <Stat label="Dated commitments" value={String(COMMITS.length)} hint="from your TODO sheets" />
       </div>
 
       {/* ── The Water-Line ─────────────────────────────────── */}
@@ -61,10 +88,9 @@ export default function LyfeShell() {
         <div className="section-title">The Water-Line — balance the three tides</div>
         <div className="waterline">
           <p className="wl-mantra">
-            “Maintain a fluid balance, like a shifting wave at the water line —
-            between one extreme, the other, and the places in between. With
-            time-waves, balancing <em>urgency</em>, <em>priority</em>, and{" "}
-            <em>soul</em> is the key.”
+            “Maintain a fluid balance, like a shifting wave at the water line — between
+            one extreme, the other, and the places in between. With time-waves,
+            balancing <em>urgency</em>, <em>priority</em>, and <em>soul</em> is the key.”
           </p>
           <Tide name="Urgency" value={urgency} set={setUrgency} hex="#e6a45a" />
           <Tide name="Priority" value={priority} set={setPriority} hex="#50c8ff" />
@@ -78,8 +104,36 @@ export default function LyfeShell() {
               {water.lean !== "centered" && <> · leaning to {water.lean}</>}
             </div>
             <p className="wl-reading">{water.reading}</p>
+            <p className="wl-seed">
+              Urgency seeded at <strong>{seededU}</strong> from {COMMITS.length} dated
+              commitments below — nudge it to your truth.
+            </p>
           </div>
         </div>
+      </section>
+
+      {/* ── Time-Waves ─────────────────────────────────────── */}
+      <section>
+        <div className="section-title">Time-Waves — your dated commitments</div>
+        <div className="waves">
+          {commitments.map((c) => (
+            <div key={c.id} className={`wave${c.urgent ? " urgent" : ""}`}>
+              <span className="wave-due">{c.due}</span>
+              <span className="wave-body">
+                <span className="wave-task">{c.task}</span>
+                <span className="wave-meta">
+                  {c.project} · {c.source}
+                  {c.note ? ` · ${c.note}` : ""}
+                </span>
+              </span>
+              {c.urgent && <span className="wave-flag">urgent</span>}
+            </div>
+          ))}
+        </div>
+        <p className="legend-note">
+          Imported from <span className="kbd">TODO#1–2</span>. Dates are M/D as written
+          (year inferred); live, year-accurate urgency arrives with the Todoist connector.
+        </p>
       </section>
 
       {/* ── The Life Tree (pillars) ────────────────────────── */}
@@ -97,7 +151,7 @@ export default function LyfeShell() {
         </div>
       </section>
 
-      {/* ── Order Score breakdown — honest, shows what moves it ─ */}
+      {/* ── Order Score breakdown ──────────────────────────── */}
       <section>
         <div className="section-title">What moves your Order Score</div>
         <div className="cards">
@@ -105,10 +159,7 @@ export default function LyfeShell() {
             <div key={part.label} className="card">
               <div className="card-body">
                 <div className="card-title">
-                  {part.label}{" "}
-                  <span style={{ color: "var(--gold)" }}>
-                    {part.value}/{part.of}
-                  </span>
+                  {part.label} <span style={{ color: "var(--gold)" }}>{part.value}/{part.of}</span>
                 </div>
                 <div className="bar" style={{ margin: "8px 0" }}>
                   <span style={{ width: `${(part.value / part.of) * 100}%` }} />
@@ -120,7 +171,7 @@ export default function LyfeShell() {
         </div>
       </section>
 
-      {/* ── Snags — clutter, with SAFE suggestions ─────────── */}
+      {/* ── Snags ──────────────────────────────────────────── */}
       <section>
         <div className="section-title">Snags — gentle, safe to fix</div>
         {snags.map((s) => (
@@ -133,13 +184,10 @@ export default function LyfeShell() {
             <div className="snag-fix">→ {s.suggestion}</div>
           </div>
         ))}
-        <p className="legend-note">
-          <strong>The Vacuum doctrine (TransparentZ):</strong> Lyfe never moves or
-          deletes anything on its own. Every fix is <em>back-up-first, propose,
-          wait for your yes</em> — and always reversible. This view is read-only;
-          the safe-move engine arrives with the Mac build&apos;s file access.
-        </p>
       </section>
+
+      {/* ── The Vacuum ─────────────────────────────────────── */}
+      <VacuumPanel />
     </div>
   );
 }
@@ -168,9 +216,16 @@ function PillarColumn({
       <div className="pillar-list">
         {projects.map((p) => (
           <div key={p.id} className={`proj${p.state === "shell" ? " shell" : ""}`}>
-            <span className="proj-dot" style={{ background: p.state === "shell" ? "transparent" : meta.hex, borderColor: meta.hex }} />
+            <span
+              className="proj-dot"
+              style={{ background: p.state === "shell" ? "transparent" : meta.hex, borderColor: meta.hex }}
+            />
             <span className="proj-name">{p.name}</span>
-            {p.totalItems ? <span className="proj-n">{p.totalItems}</span> : <span className="proj-n shell-tag">seed</span>}
+            {p.totalItems ? (
+              <span className="proj-n">{p.totalItems}</span>
+            ) : (
+              <span className="proj-n shell-tag">seed</span>
+            )}
           </div>
         ))}
       </div>
