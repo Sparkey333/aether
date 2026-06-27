@@ -19,6 +19,10 @@
 # env
 .env*.local
 .env
+.env.assets
+
+# generated AI art (rendered locally from public/assets/manifest.json; keep the vector starters, not the binaries)
+/public/assets/generated/
 
 # misc
 .DS_Store

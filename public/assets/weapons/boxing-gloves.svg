@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Boxing gloves">
+  <g>
+    <path d="M44 78c0-20 18-30 38-30 22 0 34 12 34 30v22c0 16-14 26-34 26-8 0-14-2-14-2v10c0 6-6 10-14 10s-14-4-14-12z" fill="#b23b3b"/>
+    <path d="M44 102c4 4 14 6 24 6 6 0 12-2 12-2" fill="none" stroke="#7c2727" stroke-width="3"/>
+    <rect x="48" y="120" width="28" height="12" rx="4" fill="#e7d2a6"/>
+  </g>
+  <g transform="translate(64 28)">
+    <path d="M44 78c0-20 18-30 38-30 22 0 34 12 34 30v22c0 16-14 26-34 26-8 0-14-2-14-2v10c0 6-6 10-14 10s-14-4-14-12z" fill="#cf5050"/>
+    <path d="M44 102c4 4 14 6 24 6 6 0 12-2 12-2" fill="none" stroke="#7c2727" stroke-width="3"/>
+    <rect x="48" y="120" width="28" height="12" rx="4" fill="#e7d2a6"/>
+  </g>
+</svg>

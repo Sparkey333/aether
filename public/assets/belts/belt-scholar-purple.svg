@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 96" role="img" aria-label="Scholar (B) purple belt">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d5bb0"/><stop offset="1" stop-color="#553a83"/></linearGradient></defs>
+  <rect x="8" y="34" width="224" height="22" rx="5" fill="url(#g)" stroke="#0a0a0f" stroke-width="2"/>
+  <rect x="98" y="28" width="44" height="36" rx="5" fill="url(#g)" stroke="#0a0a0f" stroke-width="2"/>
+  <rect x="105" y="32" width="10" height="28" fill="rgba(7,8,13,.2)"/>
+  <rect x="102" y="60" width="16" height="30" rx="3" fill="url(#g)" stroke="#0a0a0f" stroke-width="2"/>
+  <rect x="122" y="60" width="16" height="34" rx="3" fill="url(#g)" stroke="#0a0a0f" stroke-width="2"/>
+  <rect x="124" y="74" width="12" height="4" rx="1" fill="#d9b46a"/>
+  <rect x="124" y="82" width="12" height="4" rx="1" fill="#d9b46a"/>
+  <text x="120" y="20" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#8a8f9e">SCHOLAR · B</text>
+</svg>

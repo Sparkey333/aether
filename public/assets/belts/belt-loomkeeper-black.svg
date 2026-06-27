@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 96" role="img" aria-label="Loom-Keeper black belt">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#23262f"/><stop offset="1" stop-color="#101218"/></linearGradient></defs>
+  <rect x="8" y="34" width="224" height="22" rx="5" fill="url(#g)" stroke="#000" stroke-width="2"/>
+  <rect x="98" y="28" width="44" height="36" rx="5" fill="url(#g)" stroke="#000" stroke-width="2"/>
+  <rect x="105" y="32" width="10" height="28" fill="rgba(255,255,255,.05)"/>
+  <rect x="102" y="60" width="16" height="30" rx="3" fill="url(#g)" stroke="#000" stroke-width="2"/>
+  <rect x="122" y="60" width="16" height="34" rx="3" fill="url(#g)" stroke="#000" stroke-width="2"/>
+  <rect x="102" y="38" width="136" height="3" fill="#d9b46a" opacity=".9"/>
+  <path d="M120 64l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill="#d9b46a"/>
+  <text x="120" y="20" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#d9b46a">LOOM-KEEPER</text>
+</svg>

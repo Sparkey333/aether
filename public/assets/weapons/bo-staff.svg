@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Bo staff">
+  <g transform="rotate(-40 100 100)">
+    <rect x="20" y="94" width="160" height="12" rx="6" fill="#8a5a32"/>
+    <rect x="20" y="94" width="160" height="4" fill="#a9713f" opacity=".8"/>
+    <rect x="44" y="92" width="6" height="16" rx="2" fill="#5c3a1e"/>
+    <rect x="150" y="92" width="6" height="16" rx="2" fill="#5c3a1e"/>
+    <rect x="96" y="92" width="8" height="16" rx="2" fill="#d9b46a"/>
+  </g>
+</svg>
