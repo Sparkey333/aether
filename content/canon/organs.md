@@ -30,7 +30,9 @@ language written in the land — pattern, proportion, and form.
 
 ## 🔊 Resonance — *the frequencies*
 Schumann, cymatics, the note of the earth — toward Tesla's endgame of global
-resonance and free wireless energy.
+resonance and free wireless energy. Its soul-file carries the **build ladder**:
+slayer exciter → spark-gap → solid-state → dual-resonant → magnifier. See
+[[resonance]]. **Mapped, with a build path.**
 
 ## 🛡 Aegis — *the wards*
 The counter-sigil workshop. Study the geometry of summoning and binding only to
