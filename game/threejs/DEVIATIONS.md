@@ -21,7 +21,26 @@ retuned), so the three engine builds stay honestly comparable.
   frame-exact and deterministic. Rapier swept-capsule collision is the planned upgrade before slopes
   / the boss-pit kill volume (arena F) are needed.
 
-## Combat values
+## Combat (M3)
 
-- None yet — combat (M3) is not implemented. All combat numbers are loaded unmodified from
-  `game/shared/design-data/`.
+- **All combat numbers are loaded unmodified from `game/shared/design-data/`.** The one addition to
+  the shared data is `flow.baseFpPerHit` (140): the bible's Flow section defines the rank thresholds,
+  variety multipliers, decay, and `aeByRank`, but no explicit base FP granted per landed hit. 140 was
+  added to `combat.json` (+ its type + schema) as the missing tuning constant rather than hard-coded in
+  code — so the value stays in the shared contract and the other two engines read the same number.
+- **Multi-hit move timing:** the schema gives a move one `active:[start,end]` window and a `hits[]`
+  array. For multi-hit moves the active window is split into equal sub-windows (one hit each). This is
+  a documented interpretation of the shared data, applied identically in all engines.
+- **Deferred to a later pass (data + types already present, not yet wired):** launcher -> aerial-rave
+  juggle chains, the dash-attack, and riposte's x3 multiplier. Parry currently negates + hard-staggers
+  the attacker (its full punish), but does not yet arm the separate x3 riposte follow-up. `player-launcher`,
+  `player-aerial-*`, `player-dash-thrust` exist in `moves.json` but are not bound to inputs yet.
+- **Present cadence:** logic runs at a fixed 60 Hz (the determinism contract); the game currently also
+  presents at 60 fps. The bible's 30-fps frame-doubled present (§4.8) is a one-constant toggle not yet
+  applied — combat is frame-count based so it is purely cosmetic.
+
+## Verification harness
+
+- `playwright` (library only) is a devDependency for the headless screenshot/state check
+  (`e2e/screenshot.mjs`). Browsers are the container's preinstalled Chromium
+  (`executablePath: /opt/pw-browsers/chromium-1194/chrome-linux/chrome`); no browser download.

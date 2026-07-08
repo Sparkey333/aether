@@ -161,7 +161,7 @@ export interface CombatConstants {
   backstab: { rangeM: number; coneDeg: number; multiplier: number; iframes: number };
   riposte: { multiplier: number };
   flow: {
-    maxFp: number; ranks: FlowRank[]; varietyWindow: number;
+    maxFp: number; baseFpPerHit: number; ranks: FlowRank[]; varietyWindow: number;
     varietyNovelMult: number; varietyRecentMult: number; varietyRepeatMult: number;
     decayPerSec: number; damagePenaltyPct: number; damageDecayMult: number; damageDecaySec: number;
     aeByRank: number[];

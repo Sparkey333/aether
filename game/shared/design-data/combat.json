@@ -42,6 +42,7 @@
   "riposte": { "multiplier": 3.0 },
   "flow": {
     "maxFp": 10000,
+    "baseFpPerHit": 140,
     "ranks": [
       { "name": "D", "threshold": 0 },
       { "name": "C", "threshold": 2000 },
