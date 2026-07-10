@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOLLOWMARK — Greybox Slice</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #06060c; }
+    body { font-family: "Courier New", ui-monospace, monospace; color: #e8e8f0; }
+    #game { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+
+    .hud { position: absolute; pointer-events: none; }
+    .bar { position: relative; background: rgba(0,0,0,.62); border: 1px solid rgba(255,255,255,.18); }
+    .bar > i { display: block; height: 100%; width: 100%; transition: width .08s linear; }
+
+    #vitals { left: 18px; bottom: 18px; }
+    #hp    { width: 300px; height: 20px; margin-bottom: 5px; } #hp > i    { background: #d93535; }
+    #hollow{ width: 300px; height: 12px; margin-bottom: 4px; } #hollow > i{ background: #8c33d9; width: 0; }
+    #cor   { width: 300px; height: 5px; }                      #cor > i   { background: #86cc33; width: 0; }
+
+    #weapon { right: 18px; bottom: 18px; text-align: right; }
+    #core-name { color: #7fe3ff; font-size: 18px; letter-spacing: 2px; }
+    #ammo { font-size: 26px; margin-top: 2px; }
+
+    #sparks { right: 18px; top: 16px; font-size: 20px; color: #ffd94d; }
+
+    #boss-wrap { left: 50%; top: 20px; transform: translateX(-50%); width: 480px; display: none; text-align: center; }
+    #boss-name { color: #ff9585; font-size: 15px; letter-spacing: 3px; margin-bottom: 4px; }
+    #boss { width: 100%; height: 14px; } #boss > i { background: #e04030; }
+
+    #announce { left: 50%; top: 32%; transform: translateX(-50%); font-size: 34px;
+      letter-spacing: 4px; text-shadow: 0 0 12px rgba(140,51,217,.8); opacity: 0; transition: opacity .4s; }
+
+    #death { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex;
+      align-items: center; justify-content: center; pointer-events: none; transition: background .5s; }
+    #death span { font-size: 52px; color: #d92020; letter-spacing: 8px; opacity: 0; transition: opacity .5s; }
+    #death.on { background: rgba(0,0,0,.72); } #death.on span { opacity: 1; }
+
+    #overlay { position: absolute; inset: 0; background: rgba(4,4,10,.9); display: flex;
+      flex-direction: column; align-items: center; justify-content: center; gap: 14px; cursor: pointer; z-index: 10; }
+    #overlay h1 { font-size: 42px; letter-spacing: 10px; color: #b78aff; text-shadow: 0 0 18px rgba(140,51,217,.9); }
+    #overlay p { color: #9aa; font-size: 14px; }
+    #overlay .keys { font-size: 13px; color: #cfd6e4; line-height: 1.9; text-align: center; }
+    #overlay .go { margin-top: 10px; font-size: 18px; color: #7fe3ff; animation: blink 1.2s infinite; }
+    @keyframes blink { 50% { opacity: .25; } }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div class="hud" id="vitals">
+    <div class="bar" id="hp"><i></i></div>
+    <div class="bar" id="hollow"><i></i></div>
+    <div class="bar" id="cor"><i></i></div>
+  </div>
+  <div class="hud" id="weapon">
+    <div id="core-name">MAW</div>
+    <div id="ammo">24 / 24</div>
+  </div>
+  <div class="hud" id="sparks">SPARKS 0</div>
+  <div class="hud" id="boss-wrap">
+    <div id="boss-name"></div>
+    <div class="bar" id="boss"><i></i></div>
+  </div>
+  <div class="hud" id="announce"></div>
+  <div id="death"><span>DOWNED</span></div>
+
+  <div id="overlay">
+    <h1>HOLLOWMARK</h1>
+    <p>greybox slice — a feel test, not the game</p>
+    <div class="keys">
+      WASD move &nbsp;·&nbsp; MOUSE look &nbsp;·&nbsp; SPACE jump / double-jump &nbsp;·&nbsp; SHIFT dash<br/>
+      LMB fire &nbsp;·&nbsp; Q / E swap core &nbsp;·&nbsp; F melee &nbsp;·&nbsp; T hollow form &nbsp;·&nbsp; R refill ammo
+    </div>
+    <div class="go">CLICK TO PLAY</div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
