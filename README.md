@@ -50,6 +50,7 @@ engine work; it writes `public/data/hypotheses.json`, which the Atlas reads.
 | `src/data/*.seed.json` | Seed POIs and named leylines |
 | `src/components/` | The Atlas map, layer panel, inspector, Loom feed |
 | `scripts/heartbeat.mjs` | The Loom — the autonomous heartbeat |
+| `src/components/VaultShell.tsx` · `scripts/asset-sync.mjs` | **The Vault** — the ecosystem asset manager: pulls copies of every 2D/3D/background asset from your apps & folders, Higgsfield forge wired in. See [`docs/ASSET_MANAGER.md`](docs/ASSET_MANAGER.md) |
 | `content/canon/` | Soul-files: the mandate, the guide, the doctrine, the organs |
 | `docs/SOURCE_ATLAS.md` | The 151-source, tiered resource atlas (the foundation) |
 | `docs/martial-codex/` | The **Martial Codex** — 134 fighting styles (real, military & reality-built fiction), tiered, stat-blocked, ranked & remixed |

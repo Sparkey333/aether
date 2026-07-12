@@ -1,0 +1,98 @@
+{
+  "$comment": "Aether Asset Manager — the Vault's source map. `npm run assets:sync` walks every source, pulls COPIES of the assets it finds into public/vault/store/<source>/, and writes public/vault/catalog.json. Missing roots are skipped gracefully (their previously-catalogued assets are kept, flagged offline), so this file can safely list every machine's folders. Paths support ~ expansion and $ENV vars.",
+  "version": "0.1.0",
+  "output": "public/vault",
+  "extensions": {
+    "2d": ["png", "jpg", "jpeg", "webp", "gif", "avif", "bmp", "tif", "tiff"],
+    "vector": ["svg"],
+    "3d": ["glb", "gltf", "obj", "fbx", "stl", "usdz", "usd", "usda", "ply", "dae", "blend", "3ds"],
+    "video": ["mp4", "webm", "mov", "m4v"],
+    "audio": ["wav", "mp3", "ogg", "m4a", "flac", "aif", "aiff"]
+  },
+  "ignoreDirs": ["node_modules", ".git", ".next", "out", "dist", "build", "target", ".turbo", ".cache", "coverage", "DerivedData", "Pods", ".venv", "venv", "__pycache__", "vault"],
+  "maxFileMB": 200,
+  "sources": [
+    {
+      "id": "aether",
+      "label": "Aether (this app)",
+      "root": ".",
+      "include": ["public/assets"],
+      "realm": "spiritual",
+      "copy": false,
+      "note": "Vector starters + AI renders for Aether Fight; served in place from public/, never duplicated."
+    },
+    {
+      "id": "aetheroscope",
+      "label": "Aetheroscope",
+      "root": "~/Aetheroscope",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "spiritual"
+    },
+    {
+      "id": "aetherpulse",
+      "label": "AetherPulse",
+      "root": "~/AetherPulse",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "spiritual"
+    },
+    {
+      "id": "aetherworks",
+      "label": "AetherWorks",
+      "root": "~/AetherWorks",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "virtual"
+    },
+    {
+      "id": "tredee",
+      "label": "Tre Dee",
+      "root": "~/Tre Dee",
+      "include": ["public", "assets", "models", "src/assets"],
+      "realm": "virtual",
+      "note": "The 3D shop — meshes, rigs, and renders."
+    },
+    {
+      "id": "subconscious",
+      "label": "Subconscious",
+      "root": "~/Subconscious",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "spiritual"
+    },
+    {
+      "id": "soverign",
+      "label": "Soverign",
+      "root": "~/Soverign",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "physical"
+    },
+    {
+      "id": "pharos",
+      "label": "Pharos",
+      "root": "~/Pharos",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "physical"
+    },
+    {
+      "id": "timelinez",
+      "label": "TimelineZ",
+      "root": "~/TimelineZ",
+      "include": ["public", "assets", "src/assets"],
+      "realm": "physical"
+    },
+    {
+      "id": "gameassets",
+      "label": "GameAssets (shared pool)",
+      "root": "~/GameAssets",
+      "include": ["."],
+      "realm": "virtual"
+    },
+    {
+      "id": "higgsfield-downloads",
+      "label": "Higgsfield downloads",
+      "root": "~/Downloads/higgsfield",
+      "include": ["."],
+      "realm": "virtual",
+      "tags": ["higgsfield", "generated"],
+      "note": "Anything you download from higgsfield.ai lands in the Vault on the next sync."
+    }
+  ]
+}
