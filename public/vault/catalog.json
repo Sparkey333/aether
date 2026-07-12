@@ -1,0 +1,512 @@
+{
+  "version": 1,
+  "syncedAt": "2026-07-12T06:13:49.382Z",
+  "sources": [
+    {
+      "id": "aether",
+      "label": "Aether (this app)",
+      "root": ".",
+      "online": true,
+      "count": 22
+    },
+    {
+      "id": "aetheroscope",
+      "label": "Aetheroscope",
+      "root": "~/Aetheroscope",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "aetherpulse",
+      "label": "AetherPulse",
+      "root": "~/AetherPulse",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "aetherworks",
+      "label": "AetherWorks",
+      "root": "~/AetherWorks",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "tredee",
+      "label": "Tre Dee",
+      "root": "~/Tre Dee",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "subconscious",
+      "label": "Subconscious",
+      "root": "~/Subconscious",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "soverign",
+      "label": "Soverign",
+      "root": "~/Soverign",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "pharos",
+      "label": "Pharos",
+      "root": "~/Pharos",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "timelinez",
+      "label": "TimelineZ",
+      "root": "~/TimelineZ",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "gameassets",
+      "label": "GameAssets (shared pool)",
+      "root": "~/GameAssets",
+      "online": false,
+      "count": 0
+    },
+    {
+      "id": "higgsfield-downloads",
+      "label": "Higgsfield downloads",
+      "root": "~/Downloads/higgsfield",
+      "online": false,
+      "count": 0
+    }
+  ],
+  "counts": {
+    "total": 22,
+    "byKind": {
+      "vector": 22
+    },
+    "byRealm": {
+      "spiritual": 22
+    }
+  },
+  "assets": [
+    {
+      "id": "aether:db481be1b18554d3",
+      "name": "capoeirista",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/avatars/capoeirista.svg",
+      "url": "/assets/avatars/capoeirista.svg",
+      "ext": "svg",
+      "bytes": 887,
+      "mtime": 1783835238765.1433,
+      "hash": "db481be1b18554d3",
+      "tags": [
+        "avatars"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:9134e470ff3598d4",
+      "name": "grappler",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/avatars/grappler.svg",
+      "url": "/assets/avatars/grappler.svg",
+      "ext": "svg",
+      "bytes": 968,
+      "mtime": 1783835238765.1433,
+      "hash": "9134e470ff3598d4",
+      "tags": [
+        "avatars"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:84c242f1e1aac0c0",
+      "name": "striker",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/avatars/striker.svg",
+      "url": "/assets/avatars/striker.svg",
+      "ext": "svg",
+      "bytes": 976,
+      "mtime": 1783835238765.1433,
+      "hash": "84c242f1e1aac0c0",
+      "tags": [
+        "avatars"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:e48ba62fd2902b4d",
+      "name": "tier-A",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/badges/tier-A.svg",
+      "url": "/assets/badges/tier-A.svg",
+      "ext": "svg",
+      "bytes": 711,
+      "mtime": 1783835238765.1433,
+      "hash": "e48ba62fd2902b4d",
+      "tags": [
+        "badges"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:bd0f13afb95aa130",
+      "name": "tier-B",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/badges/tier-B.svg",
+      "url": "/assets/badges/tier-B.svg",
+      "ext": "svg",
+      "bytes": 532,
+      "mtime": 1783835238765.1433,
+      "hash": "bd0f13afb95aa130",
+      "tags": [
+        "badges"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:0a2d0457bb35784a",
+      "name": "tier-C",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/badges/tier-C.svg",
+      "url": "/assets/badges/tier-C.svg",
+      "ext": "svg",
+      "bytes": 534,
+      "mtime": 1783835238765.1433,
+      "hash": "0a2d0457bb35784a",
+      "tags": [
+        "badges"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:0e2b8233b3f247d5",
+      "name": "tier-D",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/badges/tier-D.svg",
+      "url": "/assets/badges/tier-D.svg",
+      "ext": "svg",
+      "bytes": 531,
+      "mtime": 1783835238765.1433,
+      "hash": "0e2b8233b3f247d5",
+      "tags": [
+        "badges"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:91608bb9ed154e8f",
+      "name": "belt-folklore-white",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/belts/belt-folklore-white.svg",
+      "url": "/assets/belts/belt-folklore-white.svg",
+      "ext": "svg",
+      "bytes": 888,
+      "mtime": 1783835238765.1433,
+      "hash": "91608bb9ed154e8f",
+      "tags": [
+        "belts"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:80163c077ba5c816",
+      "name": "belt-loomkeeper-black",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/belts/belt-loomkeeper-black.svg",
+      "url": "/assets/belts/belt-loomkeeper-black.svg",
+      "ext": "svg",
+      "bytes": 1057,
+      "mtime": 1783835238765.1433,
+      "hash": "80163c077ba5c816",
+      "tags": [
+        "belts"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:ca76db28f3962dc1",
+      "name": "belt-measured-brown",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/belts/belt-measured-brown.svg",
+      "url": "/assets/belts/belt-measured-brown.svg",
+      "ext": "svg",
+      "bytes": 1095,
+      "mtime": 1783835238765.1433,
+      "hash": "ca76db28f3962dc1",
+      "tags": [
+        "belts"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:23e55266c0ba1479",
+      "name": "belt-scholar-purple",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/belts/belt-scholar-purple.svg",
+      "url": "/assets/belts/belt-scholar-purple.svg",
+      "ext": "svg",
+      "bytes": 1024,
+      "mtime": 1783835238765.1433,
+      "hash": "23e55266c0ba1479",
+      "tags": [
+        "belts"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:59e9a4dc90954e6f",
+      "name": "belt-tradition-blue",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/belts/belt-tradition-blue.svg",
+      "url": "/assets/belts/belt-tradition-blue.svg",
+      "ext": "svg",
+      "bytes": 958,
+      "mtime": 1783835238765.1433,
+      "hash": "59e9a4dc90954e6f",
+      "tags": [
+        "belts"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:70685b92f26cb892",
+      "name": "gi-with-belt",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/gi/gi-with-belt.svg",
+      "url": "/assets/gi/gi-with-belt.svg",
+      "ext": "svg",
+      "bytes": 830,
+      "mtime": 1783835238765.1433,
+      "hash": "70685b92f26cb892",
+      "tags": [
+        "gi"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:f4139e873a5d2305",
+      "name": "dojo",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "background",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/locations/dojo.svg",
+      "url": "/assets/locations/dojo.svg",
+      "ext": "svg",
+      "bytes": 1232,
+      "mtime": 1783835238765.1433,
+      "hash": "f4139e873a5d2305",
+      "tags": [
+        "locations"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:a0a2a611799b4de8",
+      "name": "mountain-temple",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "background",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/locations/mountain-temple.svg",
+      "url": "/assets/locations/mountain-temple.svg",
+      "ext": "svg",
+      "bytes": 837,
+      "mtime": 1783835238765.1433,
+      "hash": "a0a2a611799b4de8",
+      "tags": [
+        "locations"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:74c2de736c2c9b53",
+      "name": "neon-arena",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "background",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/locations/neon-arena.svg",
+      "url": "/assets/locations/neon-arena.svg",
+      "ext": "svg",
+      "bytes": 1166,
+      "mtime": 1783835238765.1433,
+      "hash": "74c2de736c2c9b53",
+      "tags": [
+        "locations"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:133d29f02998c8ad",
+      "name": "bo-staff",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/weapons/bo-staff.svg",
+      "url": "/assets/weapons/bo-staff.svg",
+      "ext": "svg",
+      "bytes": 508,
+      "mtime": 1783835238765.1433,
+      "hash": "133d29f02998c8ad",
+      "tags": [
+        "weapons"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:0d5e30d983ff5b02",
+      "name": "boxing-gloves",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/weapons/boxing-gloves.svg",
+      "url": "/assets/weapons/boxing-gloves.svg",
+      "ext": "svg",
+      "bytes": 777,
+      "mtime": 1783835238761.1433,
+      "hash": "0d5e30d983ff5b02",
+      "tags": [
+        "weapons"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:6879def97cd5dff3",
+      "name": "escrima-sticks",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/weapons/escrima-sticks.svg",
+      "url": "/assets/weapons/escrima-sticks.svg",
+      "ext": "svg",
+      "bytes": 613,
+      "mtime": 1783835238761.1433,
+      "hash": "6879def97cd5dff3",
+      "tags": [
+        "weapons"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:6325cf62efcaaeb8",
+      "name": "katana",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/weapons/katana.svg",
+      "url": "/assets/weapons/katana.svg",
+      "ext": "svg",
+      "bytes": 670,
+      "mtime": 1783835238761.1433,
+      "hash": "6325cf62efcaaeb8",
+      "tags": [
+        "weapons"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:4a15caeabc33c4bb",
+      "name": "longsword",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/weapons/longsword.svg",
+      "url": "/assets/weapons/longsword.svg",
+      "ext": "svg",
+      "bytes": 636,
+      "mtime": 1783835238761.1433,
+      "hash": "4a15caeabc33c4bb",
+      "tags": [
+        "weapons"
+      ],
+      "available": true
+    },
+    {
+      "id": "aether:62a5eff6e6308cd9",
+      "name": "nunchaku",
+      "kind": "vector",
+      "realm": "spiritual",
+      "role": "element",
+      "source": "aether",
+      "sourceLabel": "Aether (this app)",
+      "origin": "public/assets/weapons/nunchaku.svg",
+      "url": "/assets/weapons/nunchaku.svg",
+      "ext": "svg",
+      "bytes": 636,
+      "mtime": 1783835238761.1433,
+      "hash": "62a5eff6e6308cd9",
+      "tags": [
+        "weapons"
+      ],
+      "available": true
+    }
+  ]
+}
