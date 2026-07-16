@@ -1,0 +1,7 @@
+.env
+node_modules/
+out/*.png
+out/*.jpg
+out/*.mp4
+out/*.prompt.txt
+!out/.gitkeep
