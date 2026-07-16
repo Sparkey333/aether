@@ -4,20 +4,20 @@
 import * as THREE from 'three';
 
 // ---------------------------------------------------------------- HUD
-const $ = (id) => document.getElementById(id);
+const byId = (id) => document.getElementById(id);
 const hud = {
-  hp: $('hp').firstElementChild,
-  hollow: $('hollow').firstElementChild,
-  cor: $('cor').firstElementChild,
-  coreName: $('core-name'),
-  ammo: $('ammo'),
-  sparks: $('sparks'),
-  bossWrap: $('boss-wrap'),
-  bossName: $('boss-name'),
-  boss: $('boss').firstElementChild,
-  announce: $('announce'),
-  death: $('death'),
-  overlay: $('overlay'),
+  hp: byId('hp').firstElementChild,
+  hollow: byId('hollow').firstElementChild,
+  cor: byId('cor').firstElementChild,
+  coreName: byId('core-name'),
+  ammo: byId('ammo'),
+  sparks: byId('sparks-count'),
+  bossWrap: byId('boss-wrap'),
+  bossName: byId('boss-name'),
+  boss: byId('boss').firstElementChild,
+  announce: byId('announce'),
+  death: byId('death'),
+  overlay: byId('overlay'),
 };
 let announceTimer = null;
 function announce(text) {
@@ -28,7 +28,7 @@ function announce(text) {
 }
 
 // ---------------------------------------------------------------- renderer
-const canvas = $('game');
+const canvas = byId('game');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
 const RETRO_SCALE = 0.35; // the PS2 lever: render tiny, upscale pixelated
 const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 300);
@@ -355,7 +355,7 @@ function updateSparks(dt) {
       scene.remove(spark.mesh);
       sparks.splice(i, 1);
       sparkCount++;
-      hud.sparks.textContent = `SPARKS ${sparkCount}`;
+      hud.sparks.textContent = sparkCount;
       continue;
     }
     if (dist < 4) {

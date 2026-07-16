@@ -5,75 +5,198 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HOLLOWMARK — Greybox Slice</title>
   <style>
+    /*
+      One committed world: a Warden-tech instrument HUD reading corrupted
+      Vyre energy. No light theme — a corrupted-energy readout doesn't
+      flip with the OS, same as a letterpress invitation doesn't.
+    */
+    :root {
+      --void: #0b0a10;
+      --bone: #e9e4d9;
+      --bone-dim: #9b9a9e;
+      --iron: #4a3b33;
+      --plate: rgba(11, 10, 16, .74);
+      --hair: rgba(233, 228, 217, .16);
+      --teal: #35c9c2;
+      --violet: #8c33d9;
+      --violet-text: #c39bf2;
+      --red: #e0453a;
+      --amber: #ffcf5c;
+      --caution: #e08a3c;
+
+      --font-display: ui-sans-serif, "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+      --font-body: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-data: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #06060c; }
-    body { font-family: "Courier New", ui-monospace, monospace; color: #e8e8f0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--void); }
+    body { font-family: var(--font-body); color: var(--bone); }
     #game { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
 
-    .hud { position: absolute; pointer-events: none; }
-    .bar { position: relative; background: rgba(0,0,0,.62); border: 1px solid rgba(255,255,255,.18); }
-    .bar > i { display: block; height: 100%; width: 100%; transition: width .08s linear; }
+    .eyebrow {
+      font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
+      letter-spacing: .32em; font-size: 11px; color: var(--bone-dim);
+    }
 
-    #vitals { left: 18px; bottom: 18px; }
-    #hp    { width: 300px; height: 20px; margin-bottom: 5px; } #hp > i    { background: #d93535; }
-    #hollow{ width: 300px; height: 12px; margin-bottom: 4px; } #hollow > i{ background: #8c33d9; width: 0; }
-    #cor   { width: 300px; height: 5px; }                      #cor > i   { background: #86cc33; width: 0; }
+    /* Welded instrument plate: clipped corners + inset hairline, not a rounded card. */
+    .plate {
+      position: relative; background: var(--plate); backdrop-filter: blur(2px);
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+      padding: 10px 14px;
+    }
+    .plate::before {
+      content: ""; position: absolute; inset: 0; clip-path: inherit;
+      box-shadow: inset 0 0 0 1px var(--hair); pointer-events: none;
+    }
+
+    .hud { position: absolute; pointer-events: none; }
+    .meter { position: relative; background: rgba(0, 0, 0, .55); border: 1px solid var(--hair); }
+    .meter > i { display: block; height: 100%; width: 100%; transition: width .08s linear; }
+
+    #vitals { left: 18px; bottom: 18px; display: flex; flex-direction: column; gap: 5px; }
+    #hp     { width: 300px; height: 18px; } #hp > i     { background: var(--red); }
+    #hollow { width: 300px; height: 11px; } #hollow > i { background: var(--violet); width: 0; }
+    #cor    { width: 300px; height: 5px; }  #cor > i    { background: var(--caution); width: 0; }
+    #vitals .eyebrow { margin-bottom: 1px; }
 
     #weapon { right: 18px; bottom: 18px; text-align: right; }
-    #core-name { color: #7fe3ff; font-size: 18px; letter-spacing: 2px; }
-    #ammo { font-size: 26px; margin-top: 2px; }
+    #core-name {
+      font-family: var(--font-display); font-weight: 800; letter-spacing: .28em;
+      font-size: 15px; color: var(--teal);
+    }
+    #ammo {
+      font-family: var(--font-data); font-variant-numeric: tabular-nums;
+      font-size: 26px; margin-top: 2px; color: var(--bone);
+    }
 
-    #sparks { right: 18px; top: 16px; font-size: 20px; color: #ffd94d; }
+    #sparks {
+      right: 18px; top: 16px; display: flex; align-items: baseline; gap: 8px;
+    }
+    #sparks .eyebrow { color: var(--amber); }
+    #sparks-count {
+      font-family: var(--font-data); font-variant-numeric: tabular-nums;
+      font-size: 20px; color: var(--amber);
+    }
 
-    #boss-wrap { left: 50%; top: 20px; transform: translateX(-50%); width: 480px; display: none; text-align: center; }
-    #boss-name { color: #ff9585; font-size: 15px; letter-spacing: 3px; margin-bottom: 4px; }
-    #boss { width: 100%; height: 14px; } #boss > i { background: #e04030; }
+    #boss-wrap { left: 50%; top: 22px; transform: translateX(-50%); width: 480px; display: none; text-align: center; }
+    #boss-name {
+      font-family: var(--font-display); font-weight: 800; letter-spacing: .3em;
+      font-size: 13px; color: var(--red); margin-bottom: 5px;
+    }
+    #boss { width: 100%; height: 12px; } #boss > i { background: var(--red); }
 
-    #announce { left: 50%; top: 32%; transform: translateX(-50%); font-size: 34px;
-      letter-spacing: 4px; text-shadow: 0 0 12px rgba(140,51,217,.8); opacity: 0; transition: opacity .4s; }
+    #announce {
+      left: 50%; top: 30%; transform: translateX(-50%); text-align: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 30px;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+      text-shadow: 0 0 16px rgba(140, 51, 217, .75); opacity: 0; transition: opacity .4s;
+    }
 
-    #death { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex;
-      align-items: center; justify-content: center; pointer-events: none; transition: background .5s; }
-    #death span { font-size: 52px; color: #d92020; letter-spacing: 8px; opacity: 0; transition: opacity .5s; }
-    #death.on { background: rgba(0,0,0,.72); } #death.on span { opacity: 1; }
+    #death {
+      position: absolute; inset: 0; background: rgba(0, 0, 0, 0); display: flex;
+      align-items: center; justify-content: center; pointer-events: none; transition: background .5s;
+    }
+    #death span {
+      font-family: var(--font-display); font-weight: 800; font-size: 48px;
+      letter-spacing: .3em; color: var(--red); opacity: 0; transition: opacity .5s;
+    }
+    #death.on { background: rgba(0, 0, 0, .74); } #death.on span { opacity: 1; }
 
-    #overlay { position: absolute; inset: 0; background: rgba(4,4,10,.9); display: flex;
-      flex-direction: column; align-items: center; justify-content: center; gap: 14px; cursor: pointer; z-index: 10; }
-    #overlay h1 { font-size: 42px; letter-spacing: 10px; color: #b78aff; text-shadow: 0 0 18px rgba(140,51,217,.9); }
-    #overlay p { color: #9aa; font-size: 14px; }
-    #overlay .keys { font-size: 13px; color: #cfd6e4; line-height: 1.9; text-align: center; }
-    #overlay .go { margin-top: 10px; font-size: 18px; color: #7fe3ff; animation: blink 1.2s infinite; }
-    @keyframes blink { 50% { opacity: .25; } }
+    /* ---------------------------------------------------------- overlay */
+    #overlay {
+      position: absolute; inset: 0; z-index: 10; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        linear-gradient(rgba(6, 5, 10, .82), rgba(6, 5, 10, .9)),
+        radial-gradient(ellipse at 50% 30%, rgba(140, 51, 217, .18), transparent 60%);
+    }
+    #overlay .console {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      padding: 40px 56px; text-align: center;
+    }
+    #overlay .eyebrow { color: var(--violet-text); }
+    #overlay h1 {
+      font-family: var(--font-display); font-weight: 800; font-size: 46px;
+      letter-spacing: .22em; color: var(--bone); text-wrap: balance;
+      text-shadow: 0 0 1px var(--teal), 0 0 22px rgba(53, 201, 194, .35), 0 0 40px rgba(140, 51, 217, .3);
+    }
+    #overlay .sub { font-size: 13px; color: var(--bone-dim); max-width: 46ch; line-height: 1.6; }
+
+    .keys {
+      display: grid; grid-template-columns: auto auto; gap: 6px 22px;
+      font-family: var(--font-data); font-size: 12.5px; color: var(--bone);
+      text-align: left; padding: 16px 22px;
+    }
+    .keys kbd {
+      font-family: var(--font-data); font-size: 11px; color: var(--teal);
+      border: 1px solid var(--hair); padding: 1px 6px; margin-right: 6px;
+    }
+    .keys span { color: var(--bone-dim); }
+
+    #overlay .go {
+      font-family: var(--font-display); font-weight: 800; font-size: 15px;
+      letter-spacing: .3em; color: var(--teal);
+      animation: sync-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes sync-pulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      #overlay .go { animation: none; opacity: 1; }
+    }
+
+    #overlay .caption {
+      font-family: var(--font-data); font-size: 10.5px; letter-spacing: .05em;
+      color: var(--bone-dim); opacity: .7;
+    }
   </style>
 </head>
 <body>
   <canvas id="game"></canvas>
 
-  <div class="hud" id="vitals">
-    <div class="bar" id="hp"><i></i></div>
-    <div class="bar" id="hollow"><i></i></div>
-    <div class="bar" id="cor"><i></i></div>
+  <div class="hud plate" id="vitals">
+    <div class="eyebrow">Vitals</div>
+    <div class="meter" id="hp"><i></i></div>
+    <div class="meter" id="hollow"><i></i></div>
+    <div class="meter" id="cor"><i></i></div>
   </div>
-  <div class="hud" id="weapon">
+
+  <div class="hud plate" id="weapon">
     <div id="core-name">MAW</div>
     <div id="ammo">24 / 24</div>
   </div>
-  <div class="hud" id="sparks">SPARKS 0</div>
-  <div class="hud" id="boss-wrap">
-    <div id="boss-name"></div>
-    <div class="bar" id="boss"><i></i></div>
+
+  <div class="hud plate" id="sparks">
+    <span class="eyebrow">Sparks</span>
+    <span id="sparks-count">0</span>
   </div>
+
+  <div class="hud plate" id="boss-wrap">
+    <div id="boss-name"></div>
+    <div class="meter" id="boss"><i></i></div>
+  </div>
+
   <div class="hud" id="announce"></div>
   <div id="death"><span>DOWNED</span></div>
 
   <div id="overlay">
-    <h1>HOLLOWMARK</h1>
-    <p>greybox slice — a feel test, not the game</p>
-    <div class="keys">
-      WASD move &nbsp;·&nbsp; MOUSE look &nbsp;·&nbsp; SPACE jump / double-jump &nbsp;·&nbsp; SHIFT dash<br/>
-      LMB fire &nbsp;·&nbsp; Q / E swap core &nbsp;·&nbsp; F melee &nbsp;·&nbsp; T hollow form &nbsp;·&nbsp; R refill ammo
+    <div class="console">
+      <div class="eyebrow">Vertical-slice sync</div>
+      <h1>HOLLOWMARK</h1>
+      <p class="sub">Ashes of the Warden Crown — Rook, before the list. A feel test of movement, the Splitfang, and the Hollow.</p>
+      <div class="keys plate">
+        <div><kbd>WASD</kbd><span>move</span></div>
+        <div><kbd>MOUSE</kbd><span>look</span></div>
+        <div><kbd>SPACE</kbd><span>jump · double-jump</span></div>
+        <div><kbd>SHIFT</kbd><span>dash</span></div>
+        <div><kbd>LMB</kbd><span>fire</span></div>
+        <div><kbd>Q / E</kbd><span>swap core</span></div>
+        <div><kbd>F</kbd><span>melee</span></div>
+        <div><kbd>T</kbd><span>hollow form</span></div>
+        <div><kbd>R</kbd><span>refill ammo</span></div>
+      </div>
+      <div class="go">CLICK TO SYNC</div>
+      <div class="caption">greybox slice · vertical-slice feel test, not the shipping game</div>
     </div>
-    <div class="go">CLICK TO PLAY</div>
   </div>
 
   <script type="module" src="/src/main.js"></script>
