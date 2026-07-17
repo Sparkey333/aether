@@ -17,14 +17,24 @@ if (!existsSync(inlineThreePath))
 
 const threeSrc = readFileSync(inlineThreePath, 'utf8');
 
-const mainSrc = readFileSync(path.join(root, 'src/main.js'), 'utf8')
-  .split('\n')
-  .filter((line) => line.trim() !== "import * as THREE from 'three';")
-  .join('\n');
+// Strip every ES import/export line so a source file runs as a plain script
+// sharing one scope. Local modules (textures, audio) are concatenated ahead
+// of main in dependency order — main imports from them, none import each
+// other — so their exported functions are simply in scope by the time main
+// runs. `import * as THREE` is dropped too; THREE is a global here.
+function deModule(relPath) {
+  return readFileSync(path.join(root, relPath), 'utf8')
+    .split('\n')
+    .filter((line) => !/^\s*import\b/.test(line))
+    .map((line) => line.replace(/^\s*export\s+(?=(function|const|let|var|class)\b)/, ''))
+    .join('\n');
+}
+
+const modules = ['src/textures.js', 'src/audio.js', 'src/main.js'].map(deModule).join('\n');
 // Three.js's de-moduled internals declare top-level single-letter const/let
 // bindings (e.g. `$`, `P`) that now share the page's global lexical scope —
 // an IIFE keeps the game's own top-level declarations from colliding with them.
-const gameSrc = `(function(){\n'use strict';\n${mainSrc}\n})();\n`;
+const gameSrc = `(function(){\n'use strict';\n${modules}\n})();\n`;
 
 const html = readFileSync(path.join(root, 'index.html'), 'utf8');
 const styleBlock = html.slice(html.indexOf('<style>') + 7, html.indexOf('</style>'));
