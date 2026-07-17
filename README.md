@@ -20,9 +20,10 @@ The tier is metadata, never a delete key. That is what lets a pattern that
 ## Quickstart
 
 ```bash
-npm install          # Next 15 + React 19 + MapLibre + deck.gl
-npm run dev          # the Atlas at http://localhost:3000
+npm install            # Next 15 + React 19 + MapLibre + deck.gl
+npm run dev            # the Atlas at http://localhost:3000
 npm run heartbeat:run  # a Loom pulse — dependency-free, writes the pattern feed
+npm run trophy:heartbeat  # a Trophy Hype "Hunt" pulse — expands the event library
 ```
 
 The heartbeat needs **no install** — it's pure Node. Run it first to see the
@@ -54,9 +55,28 @@ engine work; it writes `public/data/hypotheses.json`, which the Atlas reads.
 | `docs/SOURCE_ATLAS.md` | The 151-source, tiered resource atlas (the foundation) |
 | `docs/martial-codex/` | The **Martial Codex** — 134 fighting styles (real, military & reality-built fiction), tiered, stat-blocked, ranked & remixed |
 | `src/data/martial-arts.seed.json` | The Martial Codex dataset: 134 styles × 17 stats, the engine behind every ranking |
+| `src/lib/trophy/` · `src/components/trophy/` | **Trophy Hype** — the competition tracker: integrity/proof engine, gamification, discovery, and UI |
+| `scripts/trophy-heartbeat.mjs` | Trophy Hype's **Hunt** — the daily heartbeat that expands & ranks the opportunity library |
+| `docs/TROPHY_HYPE.md` | Trophy Hype's full business plan & product scope |
 | `docs/ARCHITECTURE.md` · `docs/ROADMAP.md` | Design and the road ahead |
 
 ## The eight organs
 
 Atlas · Heavens · Codex · Lexicon · Resonance · Aegis · Nexus · the Loom.
 Only the Atlas + Loom are built in v1. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## 🏆 Trophy Hype — track every arena, prove every win
+
+A first-class module at [`/trophy`](src/app/trophy/page.tsx): find, plan for, and
+earn **provable** gamified rewards across the whole spectrum of competition —
+races, 14ers, angling award-collections, festivals, and creative competitions
+(music first, then books, anime, games, apps). It reuses Aether's spine: a
+dependency-free **Hunt** heartbeat that expands the event library each morning, a
+four-tier **proof** system so no trophy can be faked (*no corruption — not even
+the appearance of it*), and a rank/XP gamification engine. Full plan &
+architecture in [`docs/TROPHY_HYPE.md`](docs/TROPHY_HYPE.md).
+
+```bash
+npm run trophy:heartbeat   # a Hunt pulse — writes public/data/trophy-discoveries.json
+npm run dev                # then open http://localhost:3000/trophy
+```

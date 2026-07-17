@@ -1,0 +1,24 @@
+{
+  "_doc": "Trophy Hype starter data — a demo profile, Trophy Case, and pursuits loaded on first run so the integrity engine and gamification are visible immediately. XP fields are recomputed from kind × difficulty × proof-weight on load, so they can never drift from what actually backs a trophy. Users can clear this and start their own case.",
+  "profile": {
+    "name": "You",
+    "home": { "label": "Boulder, CO", "lat": 40.0150, "lon": -105.2705 },
+    "disciplines": ["road-running", "trail-ultra", "peak-bagging", "angling", "music", "game-dev", "app-dev"],
+    "interests": ["colorado", "mountain", "unsigned", "indie", "free", "pr"],
+    "maxTravelKm": 800,
+    "creations": ["music", "books", "anime", "games", "apps"]
+  },
+  "trophies": [
+    { "id": "t-bb-2026", "title": "BolderBOULDER 10K — Finisher", "arena": "field", "discipline": "road-running", "kind": "medal", "opportunityId": "bolder-boulder", "earnedAt": "2026-05-25", "place": "Boulder, CO", "difficulty": 2, "result": "48:22 · chip", "xp": 0, "proof": { "tier": "verified", "evidence": [{ "method": "chip-time", "label": "Official chip time 48:22", "url": "https://www.bolderboulder.com/results" }] } },
+    { "id": "t-elbert", "title": "Mount Elbert — Summit (14,440 ft)", "arena": "field", "discipline": "peak-bagging", "kind": "summit", "opportunityId": "colorado-14ers", "earnedAt": "2026-07-12", "place": "Sawatch Range, CO", "difficulty": 3, "result": "1 of 58 CO 14ers", "xp": 0, "proof": { "tier": "verified", "evidence": [{ "method": "gps-track", "label": "Recorded GPS track to summit" }, { "method": "photo", "label": "Summit register photo" }] } },
+    { "id": "t-brown-trout", "title": "Master Angler — Brown Trout", "arena": "field", "discipline": "angling", "kind": "catch", "opportunityId": "co-master-angler", "earnedAt": "2026-07-15", "place": "Colorado", "difficulty": 2, "result": "23 in · qualifying length", "xp": 0, "proof": { "tier": "documented", "evidence": [{ "method": "photo", "label": "Measured catch photo on ruler mat" }, { "method": "certificate", "label": "CPW Master Angler application filed" }] } },
+    { "id": "t-openmic", "title": "First Open-Mic Set", "arena": "stage", "discipline": "music", "kind": "finish", "opportunityId": "beat-battle-local", "earnedAt": "2026-07-16", "place": "Local venue", "difficulty": 1, "result": "3-song original set", "xp": 0, "proof": { "tier": "documented", "evidence": [{ "method": "video", "label": "Phone video of the set" }] } },
+    { "id": "t-ludum", "title": "Ludum Dare — Top 20% Fun", "arena": "stage", "discipline": "game-dev", "kind": "placement", "opportunityId": "ludum-dare", "earnedAt": "2026-04-21", "place": "Online", "difficulty": 3, "result": "Fun: 187/1024", "xp": 0, "proof": { "tier": "verified", "evidence": [{ "method": "official-results", "label": "Community ranking page", "url": "https://ldjam.com" }] } },
+    { "id": "t-quandary", "title": "Quandary Peak — Summit", "arena": "field", "discipline": "peak-bagging", "kind": "summit", "opportunityId": "colorado-14ers", "earnedAt": "2026-07-05", "place": "Tenmile Range, CO", "difficulty": 2, "result": "unlogged", "xp": 0, "proof": { "tier": "claimed", "evidence": [{ "method": "self-report", "label": "Remembered it — no track yet. Add a photo or GPX to promote." }] } }
+  ],
+  "pursuits": [
+    { "id": "p-pikes", "opportunityId": "pikes-peak-ascent", "status": "training", "targetDate": "2026-09-19", "notes": "Barr Trail long runs on weekends.", "createdAt": "2026-06-01" },
+    { "id": "p-unsigned", "opportunityId": "unsigned-only", "status": "eyeing", "targetDate": "2026-11-13", "notes": "Finish mixing the single first.", "createdAt": "2026-07-10" },
+    { "id": "p-14ers", "opportunityId": "colorado-14ers", "status": "training", "notes": "2 of 58 down. Grays & Torreys next.", "createdAt": "2026-05-30" }
+  ]
+}
