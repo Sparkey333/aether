@@ -1,0 +1,29 @@
+{
+  "_doc": "Trophy Hype discipline taxonomy — the two arenas (FIELD = physical athletics, STAGE = creative submissions) and the disciplines within them. glyph is an emoji used across the UI. The heartbeat and profile match opportunities against these ids.",
+  "disciplines": [
+    { "id": "road-running", "arena": "field", "group": "Endurance", "name": "Road Running", "glyph": "🏃", "blurb": "5K to marathon on the road — chip-timed, ranked, PR-hunted." },
+    { "id": "trail-ultra", "arena": "field", "group": "Endurance", "name": "Trail & Ultra", "glyph": "⛰️", "blurb": "Trail races and ultras from 50K to 100 miles." },
+    { "id": "triathlon", "arena": "field", "group": "Endurance", "name": "Triathlon", "glyph": "🏊", "blurb": "Swim-bike-run, sprint through full-distance." },
+    { "id": "cycling", "arena": "field", "group": "Endurance", "name": "Cycling & Gravel", "glyph": "🚴", "blurb": "Road, gravel, and mountain-bike races and gran fondos." },
+    { "id": "obstacle-race", "arena": "field", "group": "Grit", "name": "Obstacle Racing", "glyph": "🧗", "blurb": "Spartan, Tough Mudder, ninja and OCR series." },
+    { "id": "peak-bagging", "arena": "field", "group": "Mountain", "name": "Peak Bagging", "glyph": "🏔️", "blurb": "Named summit collections — Colorado 14ers, the Seven Summits, county highpoints." },
+    { "id": "mountaineering", "arena": "field", "group": "Mountain", "name": "Mountaineering", "glyph": "🪢", "blurb": "Alpine and expedition climbing, ski-mountaineering." },
+    { "id": "climbing", "arena": "field", "group": "Mountain", "name": "Climbing & Bouldering", "glyph": "🧗‍♀️", "blurb": "Sport, boulder, and comp climbing." },
+    { "id": "angling", "arena": "field", "group": "Water", "name": "Angling", "glyph": "🎣", "blurb": "Master Angler programs, species slams, and tournament fishing." },
+    { "id": "open-water", "arena": "field", "group": "Water", "name": "Open-Water & Paddle", "glyph": "🌊", "blurb": "Open-water swims, SUP, and paddling races." },
+    { "id": "strength", "arena": "field", "group": "Grit", "name": "Strength Sport", "glyph": "🏋️", "blurb": "Powerlifting, weightlifting, strongman, functional-fitness comps." },
+    { "id": "martial-arts", "arena": "field", "group": "Grit", "name": "Martial Arts", "glyph": "🥋", "blurb": "Grappling, striking, and open tournaments — ties to the Aether Martial Codex." },
+    { "id": "multisport", "arena": "field", "group": "Endurance", "name": "Adventure & Multisport", "glyph": "🧭", "blurb": "Adventure races, orienteering, rogaines, and hybrid events." },
+
+    { "id": "music", "arena": "stage", "group": "Sound", "name": "Music", "glyph": "🎵", "blurb": "Songwriting, production, and beat competitions — the first stage." },
+    { "id": "film", "arena": "stage", "group": "Screen", "name": "Film", "glyph": "🎬", "blurb": "Short and feature film festivals and screenplay competitions." },
+    { "id": "animation", "arena": "stage", "group": "Screen", "name": "Animation & Anime", "glyph": "✨", "blurb": "Animation festivals, anime showcases, and AMV / motion competitions." },
+    { "id": "writing", "arena": "stage", "group": "Page", "name": "Writing", "glyph": "✍️", "blurb": "Fiction, poetry, and nonfiction prizes, anthologies, and open calls." },
+    { "id": "comics", "arena": "stage", "group": "Page", "name": "Comics & Manga", "glyph": "📖", "blurb": "Comic and manga contests, tapas, and anthology calls." },
+    { "id": "game-dev", "arena": "stage", "group": "Play", "name": "Game Dev", "glyph": "🎮", "blurb": "Game jams and indie game awards — ship a build, get judged." },
+    { "id": "app-dev", "arena": "stage", "group": "Build", "name": "Apps & Software", "glyph": "💻", "blurb": "Hackathons and product competitions for fun and work apps alike." },
+    { "id": "engineering", "arena": "stage", "group": "Build", "name": "Engineering & Design", "glyph": "📐", "blurb": "Civil, hardware, and design competitions — engineer all of it." },
+    { "id": "visual-art", "arena": "stage", "group": "Art", "name": "Visual Art", "glyph": "🎨", "blurb": "Juried art shows, illustration, and design open calls." },
+    { "id": "photography", "arena": "stage", "group": "Art", "name": "Photography", "glyph": "📷", "blurb": "Photo contests and portfolio reviews." }
+  ]
+}
