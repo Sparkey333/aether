@@ -17,7 +17,8 @@
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
     "tauri:ios:init": "tauri ios init",
-    "tauri:ios:dev": "tauri ios dev"
+    "tauri:ios:dev": "tauri ios dev",
+    "darkhearts:cabinet": "node darkhearts/scripts/build-cabinet.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",

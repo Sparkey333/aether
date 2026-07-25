@@ -1,0 +1,24 @@
+{
+  "studio": "DarkHearts",
+  "note": "Hand-maintained catalog. Add a game, then run: node darkhearts/scripts/build-cabinet.mjs",
+  "games": [
+    {
+      "id": "hollowmark",
+      "title": "HOLLOWMARK",
+      "tagline": "Ashes of the Warden Crown — Rook, before the list.",
+      "blurb": "Third-person action platformer: double-jump and dash traversal, the Splitfang's four swappable cores, a Hollow transformation fed by kills, and a Vat-Thing boss.",
+      "status": "playable-greybox",
+      "poster": "../hollowmark-web/app-icon.png",
+      "accent": "#8c33d9",
+      "build": {
+        "script": "hollowmark-web/scripts/build-artifact.mjs",
+        "output": "hollowmark-web/dist-artifact/hollowmark.html"
+      },
+      "demoUrl": "https://claude.ai/code/artifact/2ba9789a-e169-4e4e-b63a-7c74280599e1",
+      "aspect": "16:9",
+      "controls": "kbm-pointer-lock",
+      "controlsNote": "WASD move, mouse look (click to lock pointer), Space jump, Shift dash, LMB fire, Q/E swap core, F melee, T Hollow form, R reload.",
+      "vrNote": "Camera look is driven by real pointer-lock mouse movement. A VR room's laser pointer or gaze cursor can hit the cabinet UI and the in-game HUD buttons, but it cannot drive the look camera — a player needs a physical mouse (or the room's controller-to-mouse bridge) to move the camera once inside the game."
+    }
+  ]
+}
