@@ -131,4 +131,8 @@ installable, save-sharing portable companion.
 **Next:** multi-zone navigation (Pond / Meadow / Grove / Burrow), the secrets/Almanac layer,
 seasons, and code-signing the `.dmg`. See [`DESIGN.md`](./DESIGN.md).
 
+📊 **Where we stand vs. the Chao Garden — and what's next — is tracked in
+[`PARITY.md`](./PARITY.md)** (a living feature-parity map). Character design lives in
+[`design/BESTIARY.md`](./design/BESTIARY.md) + [`design/GALLERY.md`](./design/GALLERY.md).
+
 *Original IP — no Sega assets or trademarks are used.*
