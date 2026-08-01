@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Hardened Runtime is required for notarization. These exceptions are the
+       minimum needed for a Tauri/WKWebView app that uses the camera. -->
+
+  <!-- Clone Studio capture (built-in camera or iPhone via Continuity Camera) -->
+  <key>com.apple.security.device.camera</key>
+  <true/>
+  <key>com.apple.security.device.audio-input</key>
+  <true/>
+
+  <!-- JavaScriptCore JIT inside the webview -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+
+  <!-- Outbound HTTPS: map tiles, asset generation providers -->
+  <key>com.apple.security.network.client</key>
+  <true/>
+</dict>
+</plist>
