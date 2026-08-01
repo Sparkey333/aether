@@ -1,0 +1,67 @@
+{
+  "$comment": "Aether Fight — asset generation manifest. `npm run assets:plan` to preview, `npm run assets:generate` to render with your API keys. Edit prompts freely; add items to expand. Vector starter assets already live alongside this file.",
+  "version": "0.1.0",
+  "artDirection": "cohesive stylized game art for 'Aether Fight'; painterly flat-shaded with dramatic rim lighting; dark indigo base palette (#07080d / #1d2740) with warm gold (#d9b46a) accents; clean silhouettes, readable at small sizes; no text, no watermark, no logos",
+  "negative": "blurry, low-res, extra limbs, deformed hands, text, watermark, signature, photo, oversaturated",
+  "defaults": { "provider": "gemini", "model": "gemini-2.5-flash-image", "imagenModel": "imagen-3.0-generate-002" },
+  "categories": {
+    "avatars": {
+      "aspect": "1:1", "size": "1024x1024", "transparent": true,
+      "note": "character portraits keyed to Codex styles; best with Gemini 2.5 Flash Image for consistency",
+      "items": [
+        { "id": "bjj-grappler", "linkedStyle": "Brazilian Jiu-Jitsu", "prompt": "half-body portrait of a calm, focused jiu-jitsu fighter in a worn blue gi with a purple belt, relaxed grappling guard, transparent background" },
+        { "id": "muaythai-striker", "linkedStyle": "Muay Thai", "prompt": "half-body portrait of a lean Muay Thai nak muay with hand-wraps and mongkon headband, elbows-up clinch guard, transparent background" },
+        { "id": "kali-blade", "linkedStyle": "Filipino Eskrima / Arnis / Kali", "prompt": "half-body portrait of an agile Filipino Kali fighter holding twin rattan sticks, low ready stance, transparent background" },
+        { "id": "capoeirista", "linkedStyle": "Capoeira", "prompt": "dynamic portrait of a capoeirista mid-ginga sway in white abadá pants, expressive and acrobatic, transparent background" },
+        { "id": "karateka", "linkedStyle": "Shotokan Karate", "prompt": "half-body portrait of a disciplined karateka in a crisp white gi and black belt, front stance with chambered fist, transparent background" },
+        { "id": "wrestler", "linkedStyle": "Olympic Freestyle Wrestling", "prompt": "half-body portrait of a powerful freestyle wrestler in a singlet, hands-fighting level-change stance, transparent background" }
+      ]
+    },
+    "gis": {
+      "aspect": "2:3", "size": "896x1280", "transparent": true,
+      "note": "uniform/costume flats — equippable layers",
+      "items": [
+        { "id": "gi-white", "prompt": "clean white judo/BJJ gi uniform flat-lay with folded jacket and trousers, neatly tied belt, game item icon, transparent background" },
+        { "id": "gi-black", "prompt": "black competition gi uniform flat-lay, subtle gold trim, game item icon, transparent background" },
+        { "id": "rashguard", "prompt": "no-gi rashguard and fight shorts set, indigo and gold panels, game item icon, transparent background" },
+        { "id": "muaythai-shorts", "prompt": "traditional Muay Thai shorts with embroidered trim and Thai script motif, game item icon, transparent background" },
+        { "id": "kungfu-changshan", "prompt": "southern kung fu changshan jacket with frog-button closures, dark silk, game item icon, transparent background" }
+      ]
+    },
+    "locations": {
+      "aspect": "16:9", "size": "1536x864", "transparent": false,
+      "note": "fight stages / backdrops; for VR dojos render 360 panoramas in Blockade Labs Skybox AI instead",
+      "items": [
+        { "id": "dojo-interior", "prompt": "traditional Japanese dojo interior, tatami floor, shoji screens, hanging scroll and shrine, warm lantern light, empty fight space, atmospheric" },
+        { "id": "shaolin-courtyard", "prompt": "ancient Shaolin temple stone courtyard at dawn, mist, weathered training posts, mountains behind, cinematic" },
+        { "id": "pankration-arena", "prompt": "ancient Greek pankration arena, sand pit ringed by stone tiers and columns, dramatic sun, classical" },
+        { "id": "neon-rooftop", "prompt": "rain-slick neon cyberpunk rooftop fight ring at night, glowing signage, city skyline, moody" },
+        { "id": "senegal-sandpit", "prompt": "Senegalese laamb wrestling sand arena under bright sky, drummers and crowd suggested at edges, vivid" },
+        { "id": "vr-grid-void", "prompt": "abstract VR training void, dark space with a glowing indigo hex grid floor and soft gold horizon line, minimal sci-fi" }
+      ]
+    },
+    "weapons": {
+      "aspect": "1:1", "size": "1024x1024", "transparent": true,
+      "note": "prop icons; for a 3D game send these to Meshy/Tripo image-to-3D",
+      "items": [
+        { "id": "katana", "prompt": "single katana sword prop, gold tsuba and dark wrapped handle, three-quarter game item icon, soft rim light, transparent background" },
+        { "id": "bo-staff", "prompt": "wooden bo staff prop with carved grip rings, game item icon, transparent background" },
+        { "id": "nunchaku", "prompt": "pair of wooden nunchaku joined by a chain, game item icon, transparent background" },
+        { "id": "escrima-sticks", "prompt": "pair of crossed rattan escrima sticks, game item icon, transparent background" },
+        { "id": "longsword", "prompt": "HEMA cruciform longsword prop, leather-wrapped grip and round pommel, game item icon, transparent background" },
+        { "id": "spear", "prompt": "qiang spear prop with red horsehair tassel below the blade, game item icon, transparent background" },
+        { "id": "kerambit", "prompt": "curved Filipino/Indonesian kerambit blade with finger ring, game item icon, transparent background" },
+        { "id": "boxing-gloves", "prompt": "pair of red leather boxing gloves, game item icon, soft rim light, transparent background" }
+      ]
+    },
+    "animations": {
+      "type": "video",
+      "note": "image-to-video loops — set provider to runway/luma/kling; supply `from` = a generated avatar id. For sprite sheets use Scenario.gg; for real martial-arts motion use Mixamo/Cascadeur or video-to-3D mocap (DeepMotion/Plask/Rokoko).",
+      "items": [
+        { "id": "idle-ginga", "from": "capoeirista", "prompt": "looping idle: gentle capoeira ginga sway, weight shifting side to side, seamless loop, 3 seconds" },
+        { "id": "jab-cross", "from": "muaythai-striker", "prompt": "looping idle-to-jab-cross combination then return to guard, crisp, seamless loop, 3 seconds" },
+        { "id": "shoot-takedown", "from": "wrestler", "prompt": "level change into a double-leg shoot and recover to stance, seamless loop, 3 seconds" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Nunchaku">
+  <rect x="58" y="40" width="16" height="76" rx="8" fill="#23262f"/>
+  <rect x="58" y="40" width="16" height="76" rx="8" fill="url(#wood)" opacity="0"/>
+  <rect x="60" y="44" width="5" height="68" fill="#3a3f4b"/>
+  <g transform="rotate(46 132 120)"><rect x="124" y="78" width="16" height="76" rx="8" fill="#23262f"/><rect x="126" y="82" width="5" height="68" fill="#3a3f4b"/></g>
+  <path d="M70 50 q22 16 42 30" fill="none" stroke="#9aa0ad" stroke-width="3" stroke-dasharray="3 4"/>
+  <circle cx="66" cy="46" r="4" fill="#d9b46a"/>
+</svg>

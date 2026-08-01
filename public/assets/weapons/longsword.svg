@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="HEMA longsword">
+  <g transform="rotate(-45 100 100)">
+    <path d="M100 18 l7 8 v92 h-14 v-92z" fill="#dfe4ee"/>
+    <path d="M100 18 l7 8 v92 h-7z" fill="#bcc3cf"/>
+    <rect x="74" y="118" width="52" height="9" rx="3" fill="#6b7080"/>
+    <rect x="92" y="126" width="16" height="40" rx="5" fill="#3a2c11"/>
+    <g stroke="#d9b46a" stroke-width="1.6"><line x1="94" y1="130" x2="106" y2="134"/><line x1="94" y1="138" x2="106" y2="142"/><line x1="94" y1="146" x2="106" y2="150"/></g>
+    <circle cx="100" cy="172" r="8" fill="#d9b46a"/>
+  </g>
+</svg>

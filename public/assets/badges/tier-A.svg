@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 112" role="img" aria-label="Provenance tier A — measured">
+  <defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6c989"/><stop offset="1" stop-color="#b8923f"/></linearGradient></defs>
+  <path d="M50 4 92 22V58c0 26-18 40-42 50C26 98 8 84 8 58V22z" fill="url(#a)" stroke="#0a0a0f" stroke-width="3"/>
+  <path d="M50 4 92 22V58c0 26-18 40-42 50C26 98 8 84 8 58V22z" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1.5" transform="scale(.92)" transform-origin="50 58"/>
+  <text x="50" y="68" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="46" fill="#3a2c11">A</text>
+</svg>

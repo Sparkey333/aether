@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 112" role="img" aria-label="Provenance tier C — traditional">
+  <defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b97e6"/><stop offset="1" stop-color="#5462c0"/></linearGradient></defs>
+  <path d="M50 4 92 22V58c0 26-18 40-42 50C26 98 8 84 8 58V22z" fill="url(#c)" stroke="#0a0a0f" stroke-width="3"/>
+  <text x="50" y="68" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="46" fill="#1b2154">C</text>
+</svg>

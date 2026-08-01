@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 184" role="img" aria-label="Gi uniform with belt">
+  <defs><linearGradient id="cloth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6fa"/><stop offset="1" stop-color="#d3d8e2"/></linearGradient></defs>
+  <path d="M52 22 h56 l30 26 -18 22 -10 -8 v94 h-60 v-94 l-10 8 -18 -22z" fill="url(#cloth)" stroke="#aeb4c0" stroke-width="2"/>
+  <path d="M80 22 l-14 0 14 70 14 -70z" fill="#e7ebf2" stroke="#aeb4c0" stroke-width="2"/>
+  <path d="M80 24 v66" stroke="#c2c8d3" stroke-width="2"/>
+  <rect x="40" y="110" width="80" height="16" rx="3" fill="#7d5bb0" stroke="#0a0a0f" stroke-width="2"/>
+  <rect x="74" y="110" width="14" height="40" rx="3" fill="#7d5bb0" stroke="#0a0a0f" stroke-width="2"/>
+  <rect x="78" y="138" width="6" height="10" fill="#d9b46a"/>
+</svg>
