@@ -5,6 +5,8 @@
 
 This is the build target the whole Codex points at: a **safe, tongue-in-cheek, frustration-release** competition that mines the highest-ranked **fun + sparrable + spectacular** styles ([Fight-Club leaderboard](13-grading-and-rankings.md)), with a training ladder from couch → VR → real ring. It is *Fight Club* re-imagined as the opposite of Fight Club: consensual, padded, refereed, and joyful.
 
+> ▶ **Playable prototype:** a 2D sparring demo of this ruleset lives at [`public/play/index.html`](../../public/play/index.html) — pick a Codex style and fight the rank ladder to Loom-Keeper. Keyboard **and** on-screen touch controls; safe tap-out scoring (composure, not damage). Move A/D · Strike J · Kick K · Grab L · Guard S — where **Strike beats Grab · Grab beats Guard · Guard beats Strike**.
+
 ---
 
 ## Design north star

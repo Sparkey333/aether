@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Clone Studio: capture a turnaround + motion clips from the built-in
+       camera or an iPhone via Continuity Camera. Shown in the macOS prompt. -->
+  <key>NSCameraUsageDescription</key>
+  <string>Aether uses the camera in Clone Studio so you can capture reference photos and motion clips to build your own fighter. Frames stay on this Mac until you choose to export them.</string>
+
+  <!-- Continuity Camera surfaces an iPhone as an ordinary video input. -->
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Aether can record short motion clips with sound in Clone Studio. Audio is optional and never uploaded automatically.</string>
+</dict>
+</plist>

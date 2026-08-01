@@ -128,6 +128,18 @@ for (const [cat, c] of Object.entries(m.categories)) {
       const { buf, ext } = await IMAGE_PROVIDERS[provider](prompt, { aspect: c.aspect, size: c.size, transparent: c.transparent });
       const outPath = path.join(OUTDIR, cat, `${it.id}.${ext}`);
       fs.mkdirSync(path.dirname(outPath), { recursive: true });
+      // Never destroy a previous render: archive it first, stamped, so every
+      // generation is recoverable and you can A/B old vs new.
+      if (fs.existsSync(outPath)) {
+        const stamp = new Date(fs.statSync(outPath).mtime)
+          .toISOString()
+          .replace(/[:.]/g, "-")
+          .slice(0, 19);
+        const archived = path.join(OUTDIR, "_archive", cat, `${it.id}.${stamp}.${ext}`);
+        fs.mkdirSync(path.dirname(archived), { recursive: true });
+        fs.renameSync(outPath, archived);
+        process.stdout.write(`(archived prior → _archive/${cat}/${path.basename(archived)}) `);
+      }
       fs.writeFileSync(outPath, buf);
       console.log(`saved ${(buf.length / 1024).toFixed(0)}kb → public/assets/${cat}/../${path.basename(outPath)}`);
       made++; index.push({ cat, id: it.id, status: 'rendered', provider, file: `generated/${cat}/${it.id}.${ext}`, linkedStyle: it.linkedStyle });
