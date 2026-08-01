@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOLLOWMARK — Greybox Slice</title>
+  <style>
+    /*
+      One committed world: a Warden-tech instrument HUD reading corrupted
+      Vyre energy. No light theme — a corrupted-energy readout doesn't
+      flip with the OS, same as a letterpress invitation doesn't.
+    */
+    :root {
+      --void: #0b0a10;
+      --bone: #e9e4d9;
+      --bone-dim: #9b9a9e;
+      --iron: #4a3b33;
+      --plate: rgba(11, 10, 16, .74);
+      --hair: rgba(233, 228, 217, .16);
+      --teal: #35c9c2;
+      --violet: #8c33d9;
+      --violet-text: #c39bf2;
+      --red: #e0453a;
+      --amber: #ffcf5c;
+      --caution: #e08a3c;
+      --spit: #9fd42a;
+
+      --font-display: ui-sans-serif, "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+      --font-body: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-data: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--void); }
+    body { font-family: var(--font-body); color: var(--bone); }
+    #game { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+    /* Hollow form desaturates and sickens the world itself, not just the HUD. */
+    body.hollow-on #game { filter: saturate(.72) contrast(1.06) hue-rotate(-8deg); }
+
+    .eyebrow {
+      font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
+      letter-spacing: .32em; font-size: 11px; color: var(--bone-dim);
+    }
+
+    /* Welded instrument plate: clipped corners + inset hairline, not a rounded card. */
+    .plate {
+      position: relative; background: var(--plate); backdrop-filter: blur(2px);
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+      padding: 10px 14px;
+    }
+    .plate::before {
+      content: ""; position: absolute; inset: 0; clip-path: inherit;
+      box-shadow: inset 0 0 0 1px var(--hair); pointer-events: none;
+    }
+
+    .hud { position: absolute; pointer-events: none; }
+    .meter { position: relative; background: rgba(0, 0, 0, .55); border: 1px solid var(--hair); }
+    .meter > i { display: block; height: 100%; width: 100%; transition: width .08s linear; }
+
+    #vitals { left: 18px; bottom: 18px; display: flex; flex-direction: column; gap: 5px; }
+    #hp     { width: 300px; height: 18px; } #hp > i     { background: var(--red); }
+    #hollow { width: 300px; height: 11px; } #hollow > i { background: var(--violet); width: 0; }
+    #cor    { width: 300px; height: 5px; }  #cor > i    { background: var(--caution); width: 0; }
+    #dash   { width: 300px; height: 3px; }  #dash > i   { background: var(--teal); transition: width .05s linear; }
+    #vitals .eyebrow { margin-bottom: 1px; }
+
+    #weapon { right: 18px; bottom: 18px; text-align: right; }
+    #core-name {
+      font-family: var(--font-display); font-weight: 800; letter-spacing: .28em;
+      font-size: 15px; color: var(--teal);
+    }
+    #ammo {
+      font-family: var(--font-data); font-variant-numeric: tabular-nums;
+      font-size: 26px; margin-top: 2px; color: var(--bone);
+    }
+
+    #sparks { right: 18px; top: 16px; display: flex; align-items: baseline; gap: 8px; }
+    #sparks .eyebrow { color: var(--amber); }
+    #sparks-count {
+      font-family: var(--font-data); font-variant-numeric: tabular-nums;
+      font-size: 20px; color: var(--amber);
+    }
+
+    #objective { left: 18px; top: 16px; max-width: 340px; }
+    #objective .eyebrow { color: var(--teal); margin-bottom: 3px; }
+    #objective-text { font-family: var(--font-data); font-size: 13px; color: var(--bone); line-height: 1.45; }
+
+    #boss-wrap { left: 50%; top: 22px; transform: translateX(-50%); width: 480px; display: none; text-align: center; }
+    #boss-name {
+      font-family: var(--font-display); font-weight: 800; letter-spacing: .3em;
+      font-size: 13px; color: var(--red); margin-bottom: 5px;
+    }
+    #boss { width: 100%; height: 12px; } #boss > i { background: var(--red); }
+
+    /* ---------------------------------------------------------- crosshair */
+    #crosshair {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 26px; height: 26px; pointer-events: none; display: none;
+    }
+    body.playing #crosshair { display: block; }
+    #crosshair .ring {
+      position: absolute; inset: 0; border: 1px solid rgba(233, 228, 217, .55);
+      border-radius: 50%; transition: transform .06s linear, border-color .1s;
+    }
+    #crosshair .dot {
+      position: absolute; left: 50%; top: 50%; width: 3px; height: 3px;
+      transform: translate(-50%, -50%); background: var(--bone); border-radius: 50%;
+    }
+    #crosshair.hit .ring { border-color: var(--teal); }
+    #crosshair.kill .ring { border-color: var(--amber); }
+    #crosshair.hit .dot { background: var(--teal); }
+    #crosshair.kill .dot { background: var(--amber); }
+
+    /* ------------------------------------------------------- screen states */
+    #vignette-hurt, #vignette-hollow { position: absolute; inset: 0; pointer-events: none; }
+    #vignette-hurt { box-shadow: inset 0 0 120px 40px rgba(224, 69, 58, .85); opacity: 0; }
+    #vignette-hollow {
+      box-shadow: inset 0 0 140px 50px rgba(140, 51, 217, .55);
+      opacity: 0; transition: opacity .5s;
+    }
+    body.hollow-on #vignette-hollow { opacity: 1; }
+
+    /* ------------------------------------------------------- announcements */
+    #announce {
+      position: absolute; left: 50%; top: 28%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      pointer-events: none; text-align: center;
+    }
+    .announce-line {
+      font-family: var(--font-display); font-weight: 800; font-size: 28px;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--bone);
+      text-shadow: 0 0 16px rgba(140, 51, 217, .75);
+      opacity: 0; transition: opacity .35s;
+    }
+
+    #death {
+      position: absolute; inset: 0; background: rgba(0, 0, 0, 0); display: flex;
+      align-items: center; justify-content: center; pointer-events: none; transition: background .5s;
+    }
+    #death span {
+      font-family: var(--font-display); font-weight: 800; font-size: 48px;
+      letter-spacing: .3em; color: var(--red); opacity: 0; transition: opacity .5s;
+    }
+    #death.on { background: rgba(0, 0, 0, .74); } #death.on span { opacity: 1; }
+
+    /* ---------------------------------------------------------- overlay */
+    #overlay {
+      position: absolute; inset: 0; z-index: 10; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        linear-gradient(rgba(6, 5, 10, .82), rgba(6, 5, 10, .9)),
+        radial-gradient(ellipse at 50% 30%, rgba(140, 51, 217, .18), transparent 60%);
+    }
+    #overlay .console {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      padding: 40px 56px; text-align: center;
+    }
+    #overlay .eyebrow { color: var(--violet-text); }
+    #overlay h1 {
+      font-family: var(--font-display); font-weight: 800; font-size: 46px;
+      letter-spacing: .22em; color: var(--bone); text-wrap: balance;
+      text-shadow: 0 0 1px var(--teal), 0 0 22px rgba(53, 201, 194, .35), 0 0 40px rgba(140, 51, 217, .3);
+    }
+    #overlay .sub { font-size: 13px; color: var(--bone-dim); max-width: 46ch; line-height: 1.6; }
+
+    .keys {
+      display: grid; grid-template-columns: auto auto; gap: 6px 22px;
+      font-family: var(--font-data); font-size: 12.5px; color: var(--bone);
+      text-align: left; padding: 16px 22px;
+    }
+    .keys kbd {
+      font-family: var(--font-data); font-size: 11px; color: var(--teal);
+      border: 1px solid var(--hair); padding: 1px 6px; margin-right: 6px;
+    }
+    .keys span { color: var(--bone-dim); }
+
+    #overlay .go {
+      font-family: var(--font-display); font-weight: 800; font-size: 15px;
+      letter-spacing: .3em; color: var(--teal);
+      animation: sync-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes sync-pulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) {
+      #overlay .go { animation: none; opacity: 1; }
+    }
+
+    #overlay .caption {
+      font-family: var(--font-data); font-size: 10.5px; letter-spacing: .05em;
+      color: var(--bone-dim); opacity: .7;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="vignette-hollow"></div>
+  <div id="vignette-hurt"></div>
+
+  <div id="crosshair"><div class="ring"></div><div class="dot"></div></div>
+
+  <div class="hud plate" id="vitals">
+    <div class="eyebrow">Vitals</div>
+    <div class="meter" id="hp"><i></i></div>
+    <div class="meter" id="hollow"><i></i></div>
+    <div class="meter" id="cor"><i></i></div>
+    <div class="meter" id="dash"><i></i></div>
+  </div>
+
+  <div class="hud plate" id="weapon">
+    <div id="core-name">MAW</div>
+    <div id="ammo">24 / 24</div>
+  </div>
+
+  <div class="hud plate" id="sparks">
+    <span class="eyebrow">Sparks</span>
+    <span id="sparks-count">0</span>
+  </div>
+
+  <div class="hud plate" id="objective">
+    <div class="eyebrow">Objective</div>
+    <div id="objective-text">Sync in progress…</div>
+  </div>
+
+  <div class="hud plate" id="boss-wrap">
+    <div id="boss-name"></div>
+    <div class="meter" id="boss"><i></i></div>
+  </div>
+
+  <div id="announce"></div>
+  <div id="death"><span>DOWNED</span></div>
+
+  <div id="overlay">
+    <div class="console">
+      <div class="eyebrow">Vertical-slice sync</div>
+      <h1>HOLLOWMARK</h1>
+      <p class="sub">Ashes of the Warden Crown — Rook, before the list. A feel test of movement, the Splitfang, and the Hollow.</p>
+      <div class="keys plate">
+        <div><kbd>WASD</kbd><span>move</span></div>
+        <div><kbd>MOUSE</kbd><span>look</span></div>
+        <div><kbd>SPACE</kbd><span>jump · double-jump</span></div>
+        <div><kbd>SHIFT</kbd><span>dash</span></div>
+        <div><kbd>LMB</kbd><span>fire · hold to charge Sunder</span></div>
+        <div><kbd>Q / E</kbd><span>swap core</span></div>
+        <div><kbd>F</kbd><span>melee</span></div>
+        <div><kbd>T</kbd><span>hollow form</span></div>
+        <div><kbd>R</kbd><span>refill ammo</span></div>
+        <div><kbd>ESC</kbd><span>release mouse</span></div>
+      </div>
+      <div class="go">CLICK TO SYNC</div>
+      <div class="caption">greybox slice · sound on · vertical-slice feel test, not the shipping game</div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

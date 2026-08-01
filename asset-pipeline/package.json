@@ -1,0 +1,11 @@
+{
+  "name": "hollowmark-asset-pipeline",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Pluggable AI image/video generation pipeline for HOLLOWMARK concept art — Higgsfield, Runway, Pika, Luma, Kling, Stability, Leonardo, plus a keyless mock provider.",
+  "scripts": {
+    "generate": "node cli.mjs",
+    "list": "node cli.mjs --list"
+  }
+}
