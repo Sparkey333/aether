@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "ingest": "node ./scripts/ingest.mjs",
     "heartbeat:run": "node ./scripts/heartbeat.mjs",
+    "lyfe:sync": "node ./scripts/lyfe-sync.mjs",
     "assets:plan": "node ./scripts/generate-assets.mjs --plan",
     "assets:generate": "node ./scripts/generate-assets.mjs",
     "tauri": "tauri",

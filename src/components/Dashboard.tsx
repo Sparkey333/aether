@@ -1,10 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import poiData from "@/data/poi.seed.json";
 import ingestedData from "@/data/poi.ingested.json";
 import actionsData from "@/data/actions.seed.json";
+import lyfeData from "@/data/lyfe/projects.seed.json";
+import LeafMark from "@/components/lyfe/LeafMark";
+import type { LyfeProject } from "@/lib/lyfe/types";
 import { planetaryGrid } from "@/lib/engine";
 import { loadHypotheses, runPulse, saveHypotheses, type PulseResult } from "@/lib/loom";
 import { TIERS } from "@/lib/tiers";
@@ -30,6 +34,9 @@ interface ActionsFile {
   foundation: { label: string; url: string; tier: Tier }[];
 }
 const ACTIONS = actionsData as unknown as ActionsFile;
+
+const LYFE_PROJECTS = (lyfeData as unknown as { projects: LyfeProject[] }).projects;
+const LYFE_ACTIVE = LYFE_PROJECTS.filter((p) => p.state === "active").length;
 
 const CHECKED_KEY = "aether.checked.v1";
 const KEY_KEY = "aether.anthropicKey";
@@ -127,6 +134,57 @@ export default function Dashboard() {
           }
         />
       </div>
+
+      <section>
+        <div className="section-title">The organs</div>
+        <div className="organs">
+          <Link href="/atlas" className="organ atlas">
+            <div className="organ-top">
+              <span style={{ fontSize: 22, color: "var(--gold)" }}>✦</span>
+              <span className="organ-name">The Atlas</span>
+              <span className="organ-tag">the land</span>
+            </div>
+            <p className="organ-line">
+              Sacred, ancient and anomalous places; the synthesized planetary grid; the
+              Loom hunting alignments against an honest chance baseline.
+            </p>
+            <div className="organ-nums">
+              <span className="organ-num">
+                <b>{ALL_POIS.length}</b> sites
+              </span>
+              <span className="organ-num">
+                <b>{nodeCount}</b> grid nodes
+              </span>
+              <span className="organ-num">
+                <b>{pulse?.hypotheses.length ?? 0}</b> hypotheses
+              </span>
+            </div>
+          </Link>
+
+          <Link href="/lyfe" className="organ lyfe">
+            <div className="organ-top">
+              <LeafMark size={24} gradId="hubLeaf" />
+              <span className="organ-name">Lyfe · Projekt Z</span>
+              <span className="organ-tag">the person</span>
+            </div>
+            <p className="organ-line">
+              Your whole life gathered into one tree — six pillars, the Water-Line of
+              urgency · priority · soul, and the Vacuum tidying what scattered.
+            </p>
+            <div className="organ-nums">
+              <span className="organ-num">
+                <b>{LYFE_PROJECTS.length}</b> projects
+              </span>
+              <span className="organ-num">
+                <b>{LYFE_ACTIVE}</b> active
+              </span>
+              <span className="organ-num">
+                <b>6</b> pillars
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
 
       <section>
         <div className="section-title">Action items — go from here</div>

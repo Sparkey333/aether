@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "title": "Time-Waves — dated commitments",
+    "capturedFrom": "Google Drive · TODO#1 (AECOM) + TODO#2 (Ansom Outdoor) per-area sheets",
+    "capturedAt": "2026-06-16",
+    "yearNote": "The sheets record dates as M/D with no year; year inferred as 2025 (the sheets' own period). Live, year-accurate urgency arrives with the Todoist connector.",
+    "doctrine": "Open commitments only (done items omitted). Facts verbatim; the 'urgent' flag is the author's own note ('urgent')."
+  },
+  "commitments": [
+    { "id": "tw-1", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Summary table of design from Appendix G memo (to Tony)", "due": "6/18", "dueISO": "2025-06-18", "urgent": true, "note": "Author marked: urgent" },
+    { "id": "tw-2", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Verify 12\" outfall at R8-FW14 w/ in-line check valve", "due": "6/18", "dueISO": "2025-06-18", "urgent": false, "note": "Jake request on Teams, 4pm" },
+    { "id": "tw-3", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Complete the headloss tables for all FW tabs", "due": "6/18", "dueISO": "2025-06-18", "urgent": false },
+    { "id": "tw-4", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Compile headloss table", "due": "6/18", "dueISO": "2025-06-18", "urgent": false },
+    { "id": "tw-5", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Revise headloss section, blend into BP section of report", "due": "6/18", "dueISO": "2025-06-18", "urgent": false },
+    { "id": "tw-6", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Check flows for all calcs / outfall sizes, confirm", "due": "6/16", "dueISO": "2025-06-16", "urgent": false },
+    { "id": "tw-7", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Check with Tony on other partial flow (weir) besides orifice", "due": "6/16", "dueISO": "2025-06-16", "urgent": false },
+    { "id": "tw-8", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Update all reviews with group Teams meetings", "due": "6/16", "dueISO": "2025-06-16", "urgent": false },
+    { "id": "tw-9", "project": "Baptist-Hodgen", "source": "TODO#1 · AECOM", "task": "Follow up with Doug for needs with Nicole", "due": "6/16", "dueISO": "2025-06-16", "urgent": false },
+    { "id": "tw-10", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Review Deeper DI with Tony, Jake", "due": "6/24", "dueISO": "2025-06-24", "urgent": false },
+    { "id": "tw-11", "project": "Coyote Creek", "source": "TODO#1 · AECOM", "task": "Project A files from Stoney — waiting on approval", "due": "6/24", "dueISO": "2025-06-24", "urgent": false },
+    { "id": "tw-12", "project": "Fishtail RV Resorts", "source": "TODO#2 · Ansom", "task": "Sewer design finalize (email Ameren)", "due": "5/12", "dueISO": "2025-05-12", "urgent": false },
+    { "id": "tw-13", "project": "Fishtail RV Resorts", "source": "TODO#2 · Ansom", "task": "PG surface and earthwork quantities", "due": "4/4", "dueISO": "2025-04-04", "urgent": false }
+  ]
+}

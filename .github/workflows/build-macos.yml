@@ -1,0 +1,70 @@
+name: Build macOS app (.dmg)
+
+# The "keep rollin" loop: every push to a working branch builds a .dmg on a real
+# macOS runner (Tauri can't cross-compile a Mac bundle from Linux) and publishes
+# it to a rolling prerelease Release. Download from the repo's Releases page,
+# click, test, repeat.
+#
+# Why a Release and not an artifact: GitHub Actions *artifact* storage has a
+# quota that filled up; Release assets don't draw on it and give a stable URL.
+
+on:
+  push:
+    branches:
+      - main
+      - "claude/**"
+  workflow_dispatch: {}
+
+# Serialize builds per ref so two close pushes can't both publish to the shared
+# mac-latest release — a slower older run could otherwise overwrite the newer
+# .dmg. A newer push cancels the in-flight older one (newest wins; saves minutes).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write # needed to create/update the Release
+
+jobs:
+  build:
+    runs-on: macos-14 # Apple-silicon runner → aarch64 .dmg
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build the Mac app (.dmg + .app)
+        run: npm run tauri:build
+
+      - name: Publish .dmg to a rolling prerelease Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: mac-latest
+          name: Aether — latest Mac build
+          prerelease: true
+          fail_on_unmatched_files: true
+          body: |
+            Rolling Apple-silicon (aarch64) build of Aether — includes the **Lyfe** tab.
+            Built from `${{ github.sha }}` on ${{ github.ref_name }}.
+            Download the `.dmg`, drag to Applications, open, and click **Lyfe**.
+          files: src-tauri/target/release/bundle/dmg/*.dmg
