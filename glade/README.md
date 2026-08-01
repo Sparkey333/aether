@@ -2,6 +2,11 @@
 
 > *A quiet garden, and one small life that grows into whoever you help it become.*
 
+> **📦 GLADE has its own home now:**
+> **[Sparkey333/Sonic2-Adventure-Chao-Unchained](https://github.com/Sparkey333/Sonic2-Adventure-Chao-Unchained)**
+> — that repo is the active one (game at the root, `npm test`, CI, and the macOS `.dmg` build).
+> This copy remains as the original prototype's home inside `aether`.
+
 A spiritual successor to the **Chao Garden** of *Sonic Adventure 2: Battle* and the **Tiny
 Chao Garden** of the GBA *Sonic Advance* games — but it takes the part that was once a side
 mode (the creature you raised, the garden you raised it in) and makes it the **whole game**.
