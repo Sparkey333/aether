@@ -19,6 +19,20 @@
       "controls": "kbm-pointer-lock",
       "controlsNote": "WASD move, mouse look (click to lock pointer), Space jump, Shift dash, LMB fire, Q/E swap core, F melee, T Hollow form, R reload.",
       "vrNote": "Camera look is driven by real pointer-lock mouse movement. A VR room's laser pointer or gaze cursor can hit the cabinet UI and the in-game HUD buttons, but it cannot drive the look camera — a player needs a physical mouse (or the room's controller-to-mouse bridge) to move the camera once inside the game."
+    },
+    {
+      "id": "jak-project-fork",
+      "title": "JAK PROJECT",
+      "tagline": "OpenGOAL engine — the studio's fork, rebuilt from source.",
+      "blurb": "Our fork of the OpenGOAL reverse-engineered Jak & Daxter engine: the GOAL compiler (goalc), decompiler, and native game runtime (gk), built as desktop binaries. The engine is open source; in-game assets are extracted from a player's own legally-owned copy of the game — none ship with this fork.",
+      "status": "native-engine-fork",
+      "type": "native",
+      "poster": "posters/jak-fork.png",
+      "accent": "#ffb02e",
+      "repoUrl": "https://github.com/Sparkey333/jak-project",
+      "upstreamUrl": "https://github.com/open-goal/jak-project",
+      "buildNote": "cmake --preset Release-linux-gcc && cmake --build build/Release/bin. Needs gcc/g++, cmake, ninja, nasm, and X11/GL/pulse dev headers (docs/setup/system/linux.md).",
+      "vrNote": "Native desktop app, not a browser page — a VR room cannot load it as a browser texture. To play it inside Amber Den or a similar room, run gk on the host machine and mirror it onto a room surface via a desktop-capture/stream panel. HOLLOWMARK stays the studio's own IP and evolves in parallel; nothing from this fork's world merges into it."
     }
   ]
 }

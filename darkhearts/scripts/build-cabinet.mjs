@@ -28,20 +28,34 @@ const games = library.games.map((game, i) => {
   const posterMime = mimeByExt[path.extname(posterPath).toLowerCase()] || 'application/octet-stream';
   const poster = `data:${posterMime};base64,${posterData.toString('base64')}`;
 
-  const launchSrc = local
-    ? path.relative(path.dirname(outPath), path.join(repoRoot, game.build.output)).split(path.sep).join('/')
-    : game.demoUrl;
+  // Native titles (type: "native") are desktop binaries, not web pages —
+  // they get repo links instead of an inline launch.
+  const isNative = game.type === 'native';
+  const launchSrc = isNative
+    ? null
+    : local
+      ? path.relative(path.dirname(outPath), path.join(repoRoot, game.build.output)).split(path.sep).join('/')
+      : game.demoUrl;
 
-  return { slot: i + 1, ...game, poster, launchSrc };
+  return { slot: i + 1, ...game, poster, launchSrc, isNative };
 });
 
-const OPEN_SLOTS = 2;
+const OPEN_SLOTS = 1;
 
 function esc(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-const cartridgeCards = games.map((g) => `
+const cartridgeCards = games.map((g) => {
+  const midLine = g.isNative
+    ? `<p class="cart-controls"><span class="label">build</span> ${esc(g.buildNote)}</p>`
+    : `<p class="cart-controls"><span class="label">controls</span> ${esc(g.controlsNote)}</p>`;
+  const actions = g.isNative
+    ? `<a class="btn btn-launch" href="${esc(g.repoUrl)}" target="_blank" rel="noopener">Fork repo ↗</a>
+            <a class="btn btn-open" href="${esc(g.upstreamUrl)}" target="_blank" rel="noopener">Upstream ↗</a>`
+    : `<button class="btn btn-launch" data-launch="${esc(g.launchSrc)}" data-title="${esc(g.title)}">Launch inline</button>
+            <a class="btn btn-open" href="${esc(g.launchSrc)}" target="_blank" rel="noopener">Open ↗</a>`;
+  return `
       <article class="cart" style="--accent:${g.accent}">
         <div class="cart-poster"><img src="${g.poster}" alt="" width="96" height="96" /></div>
         <div class="cart-body">
@@ -52,14 +66,14 @@ const cartridgeCards = games.map((g) => `
           <h2 class="cart-title">${esc(g.title)}</h2>
           <p class="cart-tagline">${esc(g.tagline)}</p>
           <p class="cart-blurb">${esc(g.blurb)}</p>
-          <p class="cart-controls"><span class="label">controls</span> ${esc(g.controlsNote)}</p>
+          ${midLine}
           <p class="cart-vr"><span class="label">vr note</span> ${esc(g.vrNote)}</p>
           <div class="cart-actions">
-            <button class="btn btn-launch" data-launch="${esc(g.launchSrc)}" data-title="${esc(g.title)}">Launch inline</button>
-            <a class="btn btn-open" href="${esc(g.launchSrc)}" target="_blank" rel="noopener">Open ↗</a>
+            ${actions}
           </div>
         </div>
-      </article>`).join('\n');
+      </article>`;
+}).join('\n');
 
 const openSlotCards = Array.from({ length: OPEN_SLOTS }, (_, i) => `
       <article class="cart cart-empty">
@@ -229,6 +243,7 @@ ${openSlotCards}
       <li data-n="A"><b>One screen, one game.</b> Point a room surface's browser-texture straight at a game's URL (see <code>launchSrc</code> in <code>library.json</code>) — no cabinet needed.</li>
       <li data-n="B"><b>One screen, the whole shelf.</b> Point a lobby surface at this cabinet file so players browse and launch any cataloged game in place.</li>
       <li data-n="C"><b>Input caveat.</b> Pointer-lock games need real mouse movement for camera look. A laser pointer or gaze cursor can hit this shelf's buttons, but can't drive an in-game camera unless the room bridges controller input to synthetic mouse events.</li>
+      <li data-n="D"><b>Native titles.</b> Bays marked as native builds are desktop binaries, not web pages — they reach a room screen via a desktop-capture/stream panel on the host machine, never a browser texture.</li>
     </ol>
   </section>
 

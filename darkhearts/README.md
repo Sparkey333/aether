@@ -13,6 +13,8 @@ dependencies, makes no network calls after it loads, and works as a plain
 |---|---|
 | `library.json` | The catalog — one entry per game, hand-maintained |
 | `scripts/build-cabinet.mjs` | Reads the catalog, inlines poster art, emits the single-file shelf |
+| `scripts/gen-jak-poster.mjs` | Zero-dep PNG generator for the jak-project bay art |
+| `posters/` | Generated bay art for titles that live outside this repo |
 | `dist/cabinet.html` | Build output (gitignored) — the file you actually deploy |
 
 ## Adding a game
@@ -28,6 +30,20 @@ dependencies, makes no network calls after it loads, and works as a plain
    `controls`, `controlsNote`, and `vrNote` — be honest in `vrNote` about
    what does and doesn't work with laser-pointer/gaze input.
 3. Rebuild the cabinet: `npm run darkhearts:cabinet` from the repo root.
+
+### Native titles
+
+Titles that are desktop binaries rather than web pages (e.g. the studio's
+[OpenGOAL jak-project fork](https://github.com/Sparkey333/jak-project)) get
+`"type": "native"` plus `repoUrl`, `upstreamUrl`, and `buildNote` instead of
+`demoUrl`/`build`/`controlsNote`. The cabinet renders repo links for them
+instead of an inline launch — a browser can't run them, and the card
+shouldn't pretend otherwise. The engine fork is cloned and built as a
+**sibling checkout** (`../jak-project`), never merged into this repo:
+OpenGOAL's code is open source, but in-game assets must be extracted from a
+player's own legally-owned copy of the game, and none are stored here.
+HOLLOWMARK remains the studio's original IP and evolves in parallel —
+nothing from the fork's world crosses into it.
 
 ## Building
 
@@ -55,6 +71,9 @@ Two patterns, pick per screen:
   inline** to load a game into the same surface (or **Open ↗** to pop it out
   to a new tab/window, which is also the safe fallback anywhere iframing a
   cross-origin page is blocked, e.g. inside a published Claude Artifact).
+- **Native titles on a screen** — run the binary on the host machine and
+  mirror it onto a room surface with a desktop-capture/stream panel. A
+  browser texture can't run a desktop app; don't wire one to a native bay.
 
 **Input caveat, stated plainly:** games on this shelf that use pointer-lock
 mouse-look (HOLLOWMARK does) need real relative-mouse-movement input to
