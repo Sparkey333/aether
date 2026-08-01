@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import seed from "@/data/lyfe/projects.seed.json";
 import timewaves from "@/data/lyfe/timewaves.seed.json";
 import {
@@ -12,74 +12,78 @@ import {
   waterLine,
 } from "@/lib/lyfe/engine";
 import { byDue, seededUrgency, type Commitment } from "@/lib/lyfe/timewaves";
+import { loadOverrides, saveOverrides, withOverrides, type PillarOverrides } from "@/lib/lyfe/store";
 import type { LyfeProject, Pillar } from "@/lib/lyfe/types";
+import LeafMark from "@/components/lyfe/LeafMark";
 import VacuumPanel from "@/components/lyfe/VacuumPanel";
 
 const PROJECTS = (seed as unknown as { projects: LyfeProject[] }).projects;
 const META = (seed as unknown as { meta: { completeness: string } }).meta;
 const COMMITS = (timewaves as unknown as { commitments: Commitment[] }).commitments;
 
-function LeafMark() {
-  return (
-    <svg className="leaf" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-      <defs>
-        <linearGradient id="lyfeLeaf" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#3ee08f" />
-          <stop offset="1" stopColor="#0c8a4f" />
-        </linearGradient>
-      </defs>
-      <path d="M21 3C9 3 3 9 3 21c12 0 18-6 18-18Z" fill="url(#lyfeLeaf)" />
-      <path
-        d="M6.5 17.5C9 12 13 8 18.5 5.5"
-        fill="none"
-        stroke="#06311e"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        opacity="0.55"
-      />
-    </svg>
-  );
-}
-
 export default function LyfeShell() {
-  // The Water-Line. Urgency starts seeded from real dated commitments (Time-Waves);
-  // priority and soul start centered, for the person to set.
+  // The person's own re-sorts — their judgment outranks the classifier's guess.
+  // Loaded after mount so the server and first client render agree.
+  const [overrides, setOverrides] = useState<PillarOverrides>({});
+  const [selected, setSelected] = useState<LyfeProject | null>(null);
+
+  useEffect(() => setOverrides(loadOverrides()), []);
+
+  // The Water-Line. Urgency starts seeded from real dated commitments.
   const [urgency, setUrgency] = useState(() => seededUrgency(COMMITS));
   const [priority, setPriority] = useState(0.55);
   const [soul, setSoul] = useState(0.4);
 
-  const order = useMemo(() => orderScore(PROJECTS), []);
-  const balance = useMemo(() => balanceByPillar(PROJECTS), []);
-  const snags = useMemo(() => detectSnags(PROJECTS), []);
+  const projects = useMemo(() => withOverrides(PROJECTS, overrides), [overrides]);
+  const order = useMemo(() => orderScore(projects), [projects]);
+  const balance = useMemo(() => balanceByPillar(projects), [projects]);
+  const snags = useMemo(() => detectSnags(projects), [projects]);
   const commitments = useMemo(() => byDue(COMMITS), []);
   const water = useMemo(() => waterLine({ urgency, priority, soul }), [urgency, priority, soul]);
 
-  const active = PROJECTS.filter((p) => p.state === "active").length;
-  const shells = PROJECTS.length - active;
+  const active = projects.filter((p) => p.state === "active").length;
+  const shells = projects.length - active;
+  const movedCount = Object.keys(overrides).length;
   const seededU = useMemo(() => Math.round(seededUrgency(COMMITS) * 100), []);
+
+  const move = (id: string, to: Pillar) => {
+    const original = PROJECTS.find((p) => p.id === id);
+    const next = { ...overrides };
+    // moving back to where it started is an un-override, not a new fact
+    if (original && original.pillar === to) delete next[id];
+    else next[id] = to;
+    setOverrides(next);
+    saveOverrides(next);
+    setSelected(null);
+  };
+
+  const resetAll = () => {
+    setOverrides({});
+    saveOverrides({});
+    setSelected(null);
+  };
 
   return (
     <div className="dashboard">
       <header className="dash-head">
         <div className="lyfe-brand-row">
-          <LeafMark />
+          <LeafMark size={38} gradId="shellLeaf" />
           <div>
-            <h1 className="brand lyfe-brand" style={{ fontSize: 26 }}>
+            <h1 className="brand lyfe-brand" style={{ fontSize: 27 }}>
               Lyfe · Projekt Z
             </h1>
-            <p className="brand-sub">The harmony organ — your life, gathered into one honest tree</p>
+            <p className="brand-sub" style={{ margin: 0 }}>
+              The harmony organ — your life, gathered into one honest tree
+            </p>
           </div>
         </div>
-        <div className="score-badge" title="Order Score — how gathered your life is right now">
-          <div className="score-num">{order.score}</div>
-          <div className="score-cap">order</div>
-        </div>
+        <OrderRing score={order.score} />
       </header>
 
       <div className="stats">
-        <Stat label="Projects in the tree" value={String(PROJECTS.length)} hint={META.completeness} />
+        <Stat em label="Projects in the tree" value={String(projects.length)} hint={META.completeness} />
         <Stat label="Active branches" value={String(active)} />
-        <Stat label="Empty shells (seeds)" value={String(shells)} hint="named, not yet planted" />
+        <Stat label="Seeds (empty shells)" value={String(shells)} hint="named, not yet planted" />
         <Stat label="Dated commitments" value={String(COMMITS.length)} hint="from your TODO sheets" />
       </div>
 
@@ -89,15 +93,20 @@ export default function LyfeShell() {
         <div className="waterline">
           <p className="wl-mantra">
             “Maintain a fluid balance, like a shifting wave at the water line — between
-            one extreme, the other, and the places in between. With time-waves,
-            balancing <em>urgency</em>, <em>priority</em>, and <em>soul</em> is the key.”
+            one extreme, the other, and the places in between. With time-waves, balancing{" "}
+            <em>urgency</em>, <em>priority</em>, and <em>soul</em> is the key.”
           </p>
           <Tide name="Urgency" value={urgency} set={setUrgency} hex="#e6a45a" />
           <Tide name="Priority" value={priority} set={setPriority} hex="#50c8ff" />
           <Tide name="Soul / Spirit" value={soul} set={setSoul} hex="#ebbe5a" />
           <div className="wl-read">
-            <div className="bar" style={{ marginTop: 14 }}>
-              <span style={{ width: `${Math.round(water.balance * 100)}%` }} />
+            <div className="bar" style={{ marginTop: 16 }}>
+              <span
+                style={{
+                  width: `${Math.round(water.balance * 100)}%`,
+                  background: "linear-gradient(90deg, var(--emerald), var(--gold))",
+                }}
+              />
             </div>
             <div className="wl-line">
               <strong>{Math.round(water.balance * 100)}% centered</strong>
@@ -136,19 +145,60 @@ export default function LyfeShell() {
         </p>
       </section>
 
-      {/* ── The Life Tree (pillars) ────────────────────────── */}
+      {/* ── The Life Tree ──────────────────────────────────── */}
       <section>
-        <div className="section-title">The Life Tree — by pillar</div>
+        <div className="section-title">
+          The Life Tree — click any project to re-sort it
+        </div>
         <div className="lyfe-tree">
           {PILLARS.map((pillar) => (
             <PillarColumn
               key={pillar}
               pillar={pillar}
-              projects={PROJECTS.filter((p) => p.pillar === pillar)}
+              projects={projects.filter((p) => p.pillar === pillar)}
+              overrides={overrides}
               share={balance.find((b) => b.pillar === pillar)?.share ?? 0}
+              selected={selected}
+              onSelect={setSelected}
+              onDrop={move}
             />
           ))}
         </div>
+
+        {selected && (
+          <div className="resort">
+            <span className="resort-what">{selected.name}</span>
+            <span className="resort-hint">move to →</span>
+            {PILLARS.map((p) => (
+              <button
+                key={p}
+                className={`chip${p === selected.pillar ? " current" : ""}`}
+                style={p === selected.pillar ? undefined : { color: PILLAR_META[p].hex }}
+                disabled={p === selected.pillar}
+                onClick={() => move(selected.id, p)}
+              >
+                {PILLAR_META[p].glyph} {PILLAR_META[p].label}
+              </button>
+            ))}
+            <button className="btn resort-close" onClick={() => setSelected(null)}>
+              done
+            </button>
+          </div>
+        )}
+
+        <p className="legend-note">
+          The pillar is the one <em>derived</em> field — a first-pass guess. Your re-sorts
+          outrank it, save on this device only, and recompute your Order Score live.
+          {movedCount > 0 && (
+            <>
+              {" "}
+              <strong style={{ color: "var(--emerald)" }}>{movedCount} moved by you.</strong>{" "}
+              <button className="btn" style={{ padding: "3px 10px", fontSize: 12 }} onClick={resetAll}>
+                reset to derived
+              </button>
+            </>
+          )}
+        </p>
       </section>
 
       {/* ── Order Score breakdown ──────────────────────────── */}
@@ -159,10 +209,18 @@ export default function LyfeShell() {
             <div key={part.label} className="card">
               <div className="card-body">
                 <div className="card-title">
-                  {part.label} <span style={{ color: "var(--gold)" }}>{part.value}/{part.of}</span>
+                  {part.label}{" "}
+                  <span style={{ color: "var(--emerald)" }}>
+                    {part.value}/{part.of}
+                  </span>
                 </div>
                 <div className="bar" style={{ margin: "8px 0" }}>
-                  <span style={{ width: `${(part.value / part.of) * 100}%` }} />
+                  <span
+                    style={{
+                      width: `${(part.value / part.of) * 100}%`,
+                      background: "linear-gradient(90deg, var(--emerald-lo), var(--emerald-hi))",
+                    }}
+                  />
                 </div>
                 <div className="card-detail">{part.hint}</div>
               </div>
@@ -192,33 +250,97 @@ export default function LyfeShell() {
   );
 }
 
+/** The Order Score as a ring — 0..100 drawn as an arc you can read at a glance. */
+function OrderRing({ score }: { score: number }) {
+  const R = 40;
+  const C = 2 * Math.PI * R;
+  const offset = C * (1 - Math.max(0, Math.min(100, score)) / 100);
+  return (
+    <div className="ring-wrap" title="Order Score — how gathered your life is right now">
+      <svg width="92" height="92" viewBox="0 0 92 92">
+        <defs>
+          <linearGradient id="lyfeRing" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#3ee08f" />
+            <stop offset="1" stopColor="#0c8a4f" />
+          </linearGradient>
+        </defs>
+        <circle className="ring-track" cx="46" cy="46" r={R} fill="none" strokeWidth="6" />
+        <circle
+          className="ring-fill"
+          cx="46"
+          cy="46"
+          r={R}
+          fill="none"
+          strokeWidth="6"
+          strokeDasharray={C}
+          strokeDashoffset={offset}
+        />
+      </svg>
+      <div className="ring-mid">
+        <div className="ring-num">{score}</div>
+        <div className="ring-cap">order</div>
+      </div>
+    </div>
+  );
+}
+
 function PillarColumn({
   pillar,
   projects,
+  overrides,
   share,
+  selected,
+  onSelect,
+  onDrop,
 }: {
   pillar: Pillar;
   projects: LyfeProject[];
+  overrides: PillarOverrides;
   share: number;
+  selected: LyfeProject | null;
+  onSelect: (p: LyfeProject | null) => void;
+  onDrop: (id: string, to: Pillar) => void;
 }) {
   const meta = PILLAR_META[pillar];
+  const isTarget = !!selected && selected.pillar !== pillar;
   return (
-    <div className="pillar-col">
+    <div
+      className={`pillar-col${isTarget ? " drop-target" : ""}`}
+      onClick={isTarget ? () => onDrop(selected.id, pillar) : undefined}
+    >
       <div className="pillar-head" style={{ color: meta.hex }}>
         <span className="pillar-glyph">{meta.glyph}</span>
         <span className="pillar-name">{meta.label}</span>
         <span className="pillar-count">{projects.length}</span>
       </div>
-      <div className="bar" style={{ marginBottom: 10 }}>
+      <div className="bar" style={{ marginTop: 8 }}>
         <span style={{ width: `${Math.round(share * 100)}%`, background: meta.hex }} />
       </div>
       <div className="pillar-blurb">{meta.blurb}</div>
       <div className="pillar-list">
         {projects.map((p) => (
-          <div key={p.id} className={`proj${p.state === "shell" ? " shell" : ""}`}>
+          <button
+            key={p.id}
+            className={[
+              "proj",
+              p.state === "shell" ? "shell" : "",
+              selected?.id === p.id ? "selected" : "",
+              overrides[p.id] ? "moved" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(selected?.id === p.id ? null : p);
+            }}
+            title={overrides[p.id] ? "moved here by you" : "click to re-sort"}
+          >
             <span
               className="proj-dot"
-              style={{ background: p.state === "shell" ? "transparent" : meta.hex, borderColor: meta.hex }}
+              style={{
+                background: p.state === "shell" ? "transparent" : meta.hex,
+                borderColor: meta.hex,
+              }}
             />
             <span className="proj-name">{p.name}</span>
             {p.totalItems ? (
@@ -226,7 +348,7 @@ function PillarColumn({
             ) : (
               <span className="proj-n shell-tag">seed</span>
             )}
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -258,14 +380,25 @@ function Tide({
         value={value}
         onChange={(e) => set(parseFloat(e.target.value))}
         style={{ accentColor: hex }}
+        aria-label={name}
       />
     </div>
   );
 }
 
-function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Stat({
+  label,
+  value,
+  hint,
+  em,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  em?: boolean;
+}) {
   return (
-    <div className="stat">
+    <div className={`stat${em ? " em" : ""}`}>
       <div className="stat-value">{value}</div>
       <div className="stat-label">{label}</div>
       {hint && <div className="stat-hint">{hint}</div>}
