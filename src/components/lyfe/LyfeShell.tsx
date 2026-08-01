@@ -15,6 +15,7 @@ import { byDue, seededUrgency, type Commitment } from "@/lib/lyfe/timewaves";
 import { loadOverrides, saveOverrides, withOverrides, type PillarOverrides } from "@/lib/lyfe/store";
 import type { LyfeProject, Pillar } from "@/lib/lyfe/types";
 import LeafMark from "@/components/lyfe/LeafMark";
+import TrajectoryPanel from "@/components/lyfe/TrajectoryPanel";
 import VacuumPanel from "@/components/lyfe/VacuumPanel";
 
 const PROJECTS = (seed as unknown as { projects: LyfeProject[] }).projects;
@@ -43,6 +44,10 @@ export default function LyfeShell() {
 
   const active = projects.filter((p) => p.state === "active").length;
   const shells = projects.length - active;
+  const openItems = useMemo(
+    () => projects.reduce((a, p) => a + (p.totalItems ?? 0), 0),
+    [projects],
+  );
   const movedCount = Object.keys(overrides).length;
   const seededU = useMemo(() => Math.round(seededUrgency(COMMITS) * 100), []);
 
@@ -243,6 +248,9 @@ export default function LyfeShell() {
           </div>
         ))}
       </section>
+
+      {/* ── Trajectory ─────────────────────────────────────── */}
+      <TrajectoryPanel openProjects={active} openItems={openItems} />
 
       {/* ── The Vacuum ─────────────────────────────────────── */}
       <VacuumPanel />

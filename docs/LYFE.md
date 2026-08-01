@@ -67,15 +67,35 @@ a measure of how scattered things are. Nothing broke.
 
 - **Now (built)** — Life Tree (138) + Order Score + Water-Line + Snags +
   **Time-Waves** (real dated commitments seeding the urgency tide) + **the
-  Vacuum** (read-only clutter findings from the Drive scan, each with a
-  backup-first safe action). Emerald-leaf brand.
-- **Next** — re-sort pillars by hand; per-project drill-in; the per-area
-  `TODO#3–6` sheets into Time-Waves.
+  Vacuum** (read-only clutter findings) + **Trajectory** (projection from
+  measured completion counters). One emerald design system; the leaf as brand.
+- **Now (built)** — **hand re-sorting**: click any project to move it between
+  pillars. The person's judgment outranks the classifier, persists locally, and
+  recomputes the Order Score live (`src/lib/lyfe/store.ts`).
+- **Next** — per-project drill-in; `TODO#3–6` *dated* rows into Time-Waves (their
+  completion counters are already in `history.seed.json`).
 - **Vacuum execution** — local folder scan (Tauri fs): turn the findings into
   actual backup-first safe moves with approval + a Drive backup target. Mirrors
   the VACUUM-app spirit. Ships in the Mac build only.
-- **Connectors** — Google Drive / Todoist read + safe organize.
-- **Trajectory** — résumé/LinkedIn → life-points timeline → projected paths,
-  gentle popup nudges.
-- **Boosted intelligence** — optional BYOK (Anthropic key, OS keychain) to let
-  Lyfe narrate balance reads and suggest re-sorts. Never bundled into the app.
+- **Connectors** — Google Drive / Todoist read + safe organize. Todoist is the
+  big unlock: it turns the completion *ratio* into a velocity over time.
+- **Trajectory, deepened** — résumé/LinkedIn import to add career points to the
+  projection (named as a gap in `MISSING_INPUTS` until it lands), then gentle
+  nudges.
+- **Boosted intelligence** — optional BYOK (Anthropic key, **OS keychain** — see
+  [`SECURITY.md`](../SECURITY.md)) to let Lyfe narrate balance reads and suggest
+  re-sorts. Never bundled into the app.
+
+## The first real finding (2026-06)
+
+Lyfe's first honest read of its own owner, from the TODO#1–6 completion counters:
+
+> **59.1%** of items get finished where someone else is waiting (26/44).
+> **8.3%** get finished where only you are (1/12). A **50.8-point** gap.
+
+Not a discipline problem — the external number is strong. A *structural* one:
+follow-through is wired to other people, so self-directed work is the only work
+that arrives with nobody waiting for it. The lever Lyfe suggests is small and
+testable: give one soul-project a witness. The caveat is stated with it — this
+is drawn from board counters, not time logs, so work finished outside these
+sheets is invisible to it.

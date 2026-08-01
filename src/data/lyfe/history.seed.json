@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "title": "Completion history — the measured points",
+    "capturedFrom": "Google Drive · the per-area TODO#1–6 sheets (AECOM, Ansom Outdoor, Side Projects, Research/Learn, Music/Writing, Travel/Fun)",
+    "capturedAt": "2026-06-16",
+    "doctrine": "Verbatim from each sheet's own 'N/M completed' counter. No estimation, no inference. Where a sheet showed 0/0 it is recorded as 0/0, not omitted — an empty tracker is itself a fact.",
+    "accountability": "Each board is tagged by whether its deadlines come from someone else (external) or only from the self (internal). This is the one derived field, and it is the axis the projection turns on.",
+    "gap": "Career history (résumé / LinkedIn) is NOT in this dataset. Until it is imported, the trajectory projects from throughput only — not from titles, salary, or tenure."
+  },
+  "boards": [
+    { "id": "h-coyote", "board": "Coyote Creek", "sheet": "TODO#1 · AECOM", "done": 21, "total": 33, "accountability": "external", "note": "Client work with named reviewers (Tony, Tom, Jake) and dated hand-offs." },
+    { "id": "h-fountain", "board": "Fountain Creek Ajacks", "sheet": "TODO#1 · AECOM", "done": 1, "total": 3, "accountability": "external" },
+    { "id": "h-offutt", "board": "Offutt AFB NE", "sheet": "TODO#1 · AECOM", "done": 0, "total": 0, "accountability": "external", "note": "Opened, never populated." },
+    { "id": "h-baptist", "board": "Baptist-Hodgen", "sheet": "TODO#1 · AECOM", "done": 1, "total": 3, "accountability": "external" },
+    { "id": "h-fishtail", "board": "Fishtail RV Resorts", "sheet": "TODO#2 · Ansom", "done": 3, "total": 5, "accountability": "external", "note": "Own LLC, but a real client (John) on the other side." },
+    { "id": "h-waterloo", "board": "EXACT Waterloo IA", "sheet": "TODO#2 · Ansom", "done": 0, "total": 0, "accountability": "external" },
+    { "id": "h-youtube", "board": "YouTube Channels", "sheet": "TODO#3 · Side Projects", "done": 0, "total": 1, "accountability": "internal" },
+    { "id": "h-digital", "board": "Digital Business", "sheet": "TODO#3 · Side Projects", "done": 0, "total": 6, "accountability": "internal", "note": "Coursera / WIX / marketing — all self-paced." },
+    { "id": "h-forcefield", "board": "Forcefields / Energy", "sheet": "TODO#3 · Side Projects", "done": 0, "total": 0, "accountability": "internal" },
+    { "id": "h-phd", "board": "PhD Education & Degrees", "sheet": "TODO#4 · Research/Learn", "done": 0, "total": 0, "accountability": "internal" },
+    { "id": "h-ceu", "board": "CEU Engineer Credits", "sheet": "TODO#4 · Research/Learn", "done": 0, "total": 0, "accountability": "internal", "note": "PE licence upkeep — external in consequence, self-paced in practice." },
+    { "id": "h-band", "board": "Band — Damaged Justice", "sheet": "TODO#5 · Music/Writing", "done": 0, "total": 1, "accountability": "internal" },
+    { "id": "h-suno", "board": "Music — Suno AI", "sheet": "TODO#5 · Music/Writing", "done": 1, "total": 2, "accountability": "internal" },
+    { "id": "h-travel", "board": "Travel / YouTube", "sheet": "TODO#6 · Travel/Fun", "done": 0, "total": 1, "accountability": "internal" },
+    { "id": "h-pokemon", "board": "Pokemon Cards", "sheet": "TODO#6 · Travel/Fun", "done": 0, "total": 1, "accountability": "internal" }
+  ]
+}

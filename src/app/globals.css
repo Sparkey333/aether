@@ -568,6 +568,63 @@ section { margin-bottom: 30px; }
 .vac-size { font-size: 11px; color: var(--emerald); font-family: var(--mono); margin-left: auto; flex: 0 0 auto; }
 .vac-where { font-size: 11px; color: var(--ink-faint); margin-top: 6px; }
 
+/* trajectory */
+.traj-split { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 14px; }
+.rate-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 15px 17px;
+}
+.rate-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.rate-label { font-size: 14px; font-weight: 600; }
+.rate-pct { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rate-meta { font-size: 11.5px; color: var(--ink-faint); margin-top: 9px; }
+
+.finding {
+  background: linear-gradient(180deg, rgba(25, 195, 125, 0.07), transparent 70%), var(--panel);
+  border: 1px solid rgba(25, 195, 125, 0.4);
+  border-radius: var(--r-md);
+  padding: 17px 19px;
+  margin-bottom: 14px;
+}
+.finding-head { font-size: 15.5px; font-weight: 600; color: var(--emerald-hi); margin-bottom: 7px; line-height: 1.4; }
+.finding-ev { font-size: 12px; color: var(--ink-dim); font-family: var(--mono); line-height: 1.6; }
+.finding-read { font-size: 13px; line-height: 1.6; margin: 11px 0 0; }
+.finding-caveat { font-size: 11.5px; color: var(--ink-faint); line-height: 1.55; margin: 11px 0 0; font-style: italic; }
+
+.traj-load {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 15px 17px;
+}
+
+.missing { display: flex; flex-direction: column; gap: 6px; }
+.miss {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--panel);
+  border: 1px dashed var(--line);
+  border-radius: 9px;
+  padding: 10px 13px;
+}
+.miss-dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--ink-faint); flex: 0 0 auto; }
+.miss-body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.miss-name { font-size: 13px; }
+.miss-unlocks { font-size: 11px; color: var(--ink-faint); }
+.miss-status {
+  flex: 0 0 auto;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
 /* organ cards on the home hub */
 .organs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 .organ {
